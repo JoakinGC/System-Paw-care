@@ -77,7 +77,6 @@ export const Home = () => {
               <Link to="/account/register" className="alert-link">
                 <Translate contentKey="global.messages.info.register.link">Regístrate para obtener una nueva cuenta</Translate>
               </Link>
-              <Translate contentKey="global.messages.info.register.suffix">!</Translate>
             </Alert>
           </div>
         )}

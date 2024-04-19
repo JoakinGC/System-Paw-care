@@ -24,6 +24,16 @@ public class UsuarioDTO implements Serializable {
 
     private DuenoDTO dueno;
 
+    private UserDTO userDTO;
+
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
+    }
+
     public Long getId() {
         return id;
     }

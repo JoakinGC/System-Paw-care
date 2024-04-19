@@ -2,9 +2,13 @@ package com.veterinary.sistema.service;
 
 import com.veterinary.sistema.config.Constants;
 import com.veterinary.sistema.domain.Authority;
+import com.veterinary.sistema.domain.Dueno;
 import com.veterinary.sistema.domain.User;
+import com.veterinary.sistema.domain.Usuario;
 import com.veterinary.sistema.repository.AuthorityRepository;
+import com.veterinary.sistema.repository.DuenoRepository;
 import com.veterinary.sistema.repository.UserRepository;
+import com.veterinary.sistema.repository.UsuarioRepository;
 import com.veterinary.sistema.security.AuthoritiesConstants;
 import com.veterinary.sistema.security.SecurityUtils;
 import com.veterinary.sistema.service.dto.AdminUserDTO;
@@ -41,16 +45,21 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UsuarioRepository usuarioRepository;
+    private final DuenoRepository duenoRepository;
+
     public UserService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            AuthorityRepository authorityRepository,
+            CacheManager cacheManager, UsuarioService usuarioService, DuenoService duenoService, UsuarioRepository usuarioRepository, DuenoRepository duenoRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.usuarioRepository = usuarioRepository;
+        this.duenoRepository = duenoRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -132,6 +141,25 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setUser(newUser);
+        usuario.setNombreUsuario(newUser.getFirstName());
+        usuario.setRol("veterinario");
+
+        Dueno dueno = new Dueno();
+        dueno.setNombre(newUser.getFirstName());
+        dueno.setUsuario(usuario);
+
+        // Guardar el Dueno antes de guardar el Usuario
+        duenoRepository.save(dueno);
+
+        usuario.setDueno(dueno);
+
+        // Guardar el Usuario después de guardar el Dueno
+        usuarioRepository.save(usuario);
+
         return newUser;
     }
 

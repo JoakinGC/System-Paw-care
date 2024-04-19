@@ -14,6 +14,16 @@ public class UserDTO implements Serializable {
 
     private String login;
 
+    private UserDTO userDTO;
+
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
+    }
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
