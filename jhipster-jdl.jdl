@@ -1,0 +1,168 @@
+application{
+	config{
+    	baseName veterinarySystem
+        serverPort 8081
+        clientFramework react
+        authenticationType jwt
+        databaseType sql
+        enableSwaggerCodegen true
+        prodDatabaseType mysql
+        nativeLanguage es
+        languages [en,es]
+        packageName com.veterinary.sistema
+        testFrameworks [cypress,gatling]
+    }
+  	entities *
+    
+    
+ 	
+    use serviceImpl, pagination, microservice  for all
+    dto all with mapstruct
+
+}	
+	
+    entity Terapia{
+    	nombre String maxlength(20)
+        descripcion String maxlength(100)
+    }
+    
+	entity Factores{
+    	nombre String maxlength(20)
+        tipo String maxlength(40)
+        descripcion String maxlength(100)
+    }
+
+	entity Enfermedad{
+    	nombre String maxlength(20)
+        descripcion String maxlength(200)
+    }
+
+	entity Especie{
+    	nombre String maxlength(20)
+        nombreCientifico String maxlength(50)
+    }
+    
+    entity Raza{
+    	nombre String maxlength(20)
+        nombreCientifico String maxlength(50)
+    }
+
+	entity Mascota{
+    	nIdentificacionCarnet Integer required
+        foto String maxlength(255) required
+        fechaNacimiento LocalDate required
+    }
+	entity Dueno{
+    	nombre String maxlength(20)
+        apellido String maxlength(20)
+        direccion String maxlength(50)
+        telefono String maxlength(9)
+    }
+    
+    entity Cita{
+    	hora LocalDate
+        fecha LocalDate
+        motivo String maxlength(100)
+    }
+
+	entity Veterinario{
+    	nombre String maxlength(20)
+        apellido String maxlength(20)
+        direccion String maxlength(50)
+        telefono String maxlength(9)
+        especilidad String maxlength(20)
+    }
+    entity Estudios{
+    	nombre String maxlength(20)
+        fechaCursado LocalDate required
+        nombreInsituto String maxlength(50)
+    }
+	
+    
+    entity Estetica{
+    	nombre String maxlength(20)
+        direcion String maxlength(50)
+        telefono String maxlength(9)
+    }
+    
+    
+    entity CuidadoraHotel{
+    	nombre String maxlength(20)
+        direccion String maxlength(50)
+        telefono String maxlength(9)
+        servicioOfrecido String maxlength(100)
+    }
+    
+	/**
+    *Esta clase contiene la informacion es la encargada de manejar
+    *el historial de una mascota
+    *@autor Joaquin
+    */
+    entity  Historial{
+    	fechaConsulta LocalDate required
+        diagnostico String maxlength(200) required 
+    }
+    
+    entity Tratamiento{
+    	fechaInicio LocalDate required
+        fechaFin LocalDate required
+        notas String maxlength(200) 
+    }
+    
+    entity Medicamento{
+    	nombre String maxlength(50) required
+        descripcion String
+    }
+    
+    
+   entity Usuario{	
+   		nombreUsuario String maxlength(20)
+        rol String maxlength(255)
+   }
+   
+   entity Compra{
+   	fechaCompra LocalDate required
+    total Float required
+   }
+   entity DatelleCompra{
+   	cantidad Float required
+    precioUnitario Float required
+    totalProducto Float required
+   }
+    
+    entity Producto{
+    	nombre String maxlength(20) required
+        descripcion String maxlength(100) 
+        nombre Float required
+    }
+    relationship OneToMany {
+        Veterinario to Historial
+        Historial to @OnDelete("CASCADE") Tratamiento
+        Mascota to Historial
+        Estetica to Cita
+        CuidadoraHotel to Cita
+        Veterinario to Cita
+        Dueno to Mascota
+        Especie to Mascota
+        Raza to Mascota
+        Usuario to Compra
+        Compra to DatelleCompra
+        Producto to DatelleCompra
+	}
+    
+    relationship OneToOne{
+        Usuario to Estetica
+        Usuario to Veterinario
+        Usuario to Dueno
+    }
+    
+    relationship ManyToMany {
+    	Mascota to Cita
+  		Historial to Medicamento
+        Historial to Enfermedad
+        Estudios to Veterinario
+		Enfermedad to Raza
+        Enfermedad to Especie
+        Enfermedad to Terapia
+        Enfermedad to Factores
+	}

@@ -1,0 +1,27 @@
+{
+  "veterinarySystemApp": {
+    "estudios": {
+      "home": {
+        "title": "Estudios",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Estudios",
+        "createOrEditLabel": "Crear o editar Estudios",
+        "notFound": "Ningún Estudios encontrado"
+      },
+      "created": "Un nuevo Estudios ha sido creado con el identificador {{ param }}",
+      "updated": "Un Estudios ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Estudios ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Estudios {{ id }}?"
+      },
+      "detail": {
+        "title": "Estudios"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "fechaCursado": "Fecha Cursado",
+      "nombreInsituto": "Nombre Insituto",
+      "veterinario": "Veterinario"
+    }
+  }
+}

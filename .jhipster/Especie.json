@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20240418215537"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "nombreCientifico",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    }
+  ],
+  "name": "Especie",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "mascota",
+      "otherEntityRelationshipName": "especie",
+      "relationshipName": "mascota",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "enfermedad",
+      "otherEntityRelationshipName": "especie",
+      "relationshipName": "enfermedad",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20240418215337"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "40"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "Factores",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "enfermedad",
+      "otherEntityRelationshipName": "factores",
+      "relationshipName": "enfermedad",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

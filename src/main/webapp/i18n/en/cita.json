@@ -1,0 +1,30 @@
+{
+  "veterinarySystemApp": {
+    "cita": {
+      "home": {
+        "title": "Citas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Cita",
+        "createOrEditLabel": "Create or edit a Cita",
+        "notFound": "No Citas found"
+      },
+      "created": "A new Cita is created with identifier {{ param }}",
+      "updated": "A Cita is updated with identifier {{ param }}",
+      "deleted": "A Cita is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Cita {{ id }}?"
+      },
+      "detail": {
+        "title": "Cita"
+      },
+      "id": "ID",
+      "hora": "Hora",
+      "fecha": "Fecha",
+      "motivo": "Motivo",
+      "estetica": "Estetica",
+      "cuidadoraHotel": "Cuidadora Hotel",
+      "veterinario": "Veterinario",
+      "mascota": "Mascota"
+    }
+  }
+}

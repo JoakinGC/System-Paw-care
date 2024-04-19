@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20240418215937"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "hora",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "fecha",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "motivo",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "Cita",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "estetica",
+      "otherEntityRelationshipName": "cita",
+      "relationshipName": "estetica",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "cuidadoraHotel",
+      "otherEntityRelationshipName": "cita",
+      "relationshipName": "cuidadoraHotel",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "veterinario",
+      "otherEntityRelationshipName": "cita",
+      "relationshipName": "veterinario",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "mascota",
+      "otherEntityRelationshipName": "cita",
+      "relationshipName": "mascota",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,29 @@
+{
+  "veterinarySystemApp": {
+    "dueno": {
+      "home": {
+        "title": "Duenos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Dueno",
+        "createOrEditLabel": "Crear o editar Dueno",
+        "notFound": "Ningún Duenos encontrado"
+      },
+      "created": "Un nuevo Dueno ha sido creado con el identificador {{ param }}",
+      "updated": "Un Dueno ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Dueno ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Dueno {{ id }}?"
+      },
+      "detail": {
+        "title": "Dueno"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "direccion": "Direccion",
+      "telefono": "Telefono",
+      "mascota": "Mascota",
+      "usuario": "Usuario"
+    }
+  }
+}

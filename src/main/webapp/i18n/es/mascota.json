@@ -1,0 +1,31 @@
+{
+  "veterinarySystemApp": {
+    "mascota": {
+      "home": {
+        "title": "Mascotas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Mascota",
+        "createOrEditLabel": "Crear o editar Mascota",
+        "notFound": "Ningún Mascotas encontrado"
+      },
+      "created": "Un nuevo Mascota ha sido creado con el identificador {{ param }}",
+      "updated": "Un Mascota ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Mascota ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Mascota {{ id }}?"
+      },
+      "detail": {
+        "title": "Mascota"
+      },
+      "id": "ID",
+      "nIdentificacionCarnet": "N Identificacion Carnet",
+      "foto": "Foto",
+      "fechaNacimiento": "Fecha Nacimiento",
+      "historial": "Historial",
+      "cita": "Cita",
+      "dueno": "Dueno",
+      "especie": "Especie",
+      "raza": "Raza"
+    }
+  }
+}

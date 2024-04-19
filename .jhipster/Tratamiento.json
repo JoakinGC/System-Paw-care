@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20240418220537"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fechaInicio",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaFin",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "notas",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    }
+  ],
+  "name": "Tratamiento",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "historial",
+      "otherEntityRelationshipName": "tratamiento",
+      "relationshipName": "historial",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

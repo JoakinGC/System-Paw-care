@@ -1,0 +1,26 @@
+{
+  "veterinarySystemApp": {
+    "terapia": {
+      "home": {
+        "title": "Terapias",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Terapia",
+        "createOrEditLabel": "Crear o editar Terapia",
+        "notFound": "Ningún Terapias encontrado"
+      },
+      "created": "Un nuevo Terapia ha sido creado con el identificador {{ param }}",
+      "updated": "Un Terapia ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Terapia ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Terapia {{ id }}?"
+      },
+      "detail": {
+        "title": "Terapia"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "descripcion": "Descripcion",
+      "enfermedad": "Enfermedad"
+    }
+  }
+}

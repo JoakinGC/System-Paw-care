@@ -1,0 +1,55 @@
+{
+  "annotations": {
+    "changelogDate": "20240418220737"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombreUsuario",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "rol",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    }
+  ],
+  "name": "Usuario",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "estetica",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "estetica",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "veterinario",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "veterinario",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "dueno",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "dueno",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "compra",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "compra",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

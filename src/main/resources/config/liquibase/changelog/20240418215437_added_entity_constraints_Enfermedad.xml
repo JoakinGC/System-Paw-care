@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Enfermedad.
+    -->
+    <changeSet id="20240418215437-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="enfermedad_id"
+                                 baseTableName="rel_enfermedad__raza"
+                                 constraintName="fk_rel_enfermedad__raza__enfermedad_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="enfermedad"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="raza_id"
+                                 baseTableName="rel_enfermedad__raza"
+                                 constraintName="fk_rel_enfermedad__raza__raza_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="raza"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="enfermedad_id"
+                                 baseTableName="rel_enfermedad__especie"
+                                 constraintName="fk_rel_enfermedad__especie__enfermedad_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="enfermedad"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="especie_id"
+                                 baseTableName="rel_enfermedad__especie"
+                                 constraintName="fk_rel_enfermedad__especie__especie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="especie"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="enfermedad_id"
+                                 baseTableName="rel_enfermedad__terapia"
+                                 constraintName="fk_rel_enfermedad__terapia__enfermedad_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="enfermedad"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="terapia_id"
+                                 baseTableName="rel_enfermedad__terapia"
+                                 constraintName="fk_rel_enfermedad__terapia__terapia_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="terapia"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="enfermedad_id"
+                                 baseTableName="rel_enfermedad__factores"
+                                 constraintName="fk_rel_enfermedad__factores__enfermedad_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="enfermedad"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="factores_id"
+                                 baseTableName="rel_enfermedad__factores"
+                                 constraintName="fk_rel_enfermedad__factores__factores_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="factores"
+                                 />
+    </changeSet>
+</databaseChangeLog>

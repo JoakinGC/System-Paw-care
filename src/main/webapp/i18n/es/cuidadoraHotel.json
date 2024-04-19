@@ -1,0 +1,28 @@
+{
+  "veterinarySystemApp": {
+    "cuidadoraHotel": {
+      "home": {
+        "title": "Cuidadora Hotels",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Cuidadora Hotel",
+        "createOrEditLabel": "Crear o editar Cuidadora Hotel",
+        "notFound": "Ningún Cuidadora Hotels encontrado"
+      },
+      "created": "Un nuevo Cuidadora Hotel ha sido creado con el identificador {{ param }}",
+      "updated": "Un Cuidadora Hotel ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Cuidadora Hotel ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Cuidadora Hotel {{ id }}?"
+      },
+      "detail": {
+        "title": "Cuidadora Hotel"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "direccion": "Direccion",
+      "telefono": "Telefono",
+      "servicioOfrecido": "Servicio Ofrecido",
+      "cita": "Cita"
+    }
+  }
+}

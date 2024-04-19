@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20240418220637"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Medicamento",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "historial",
+      "otherEntityRelationshipName": "medicamento",
+      "relationshipName": "historial",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

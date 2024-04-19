@@ -1,0 +1,53 @@
+/* ==========================================================================
+Main page styles
+========================================================================== */
+.hipster {
+  display: inline-block;
+  width: 100%;
+  height: 500px;
+  background: url('/content/images/jhipster_family_member_0.svg') no-repeat center top;
+  background-size: contain;
+}
+
+.panel-home {
+  padding: 0;
+  background: linear-gradient(to right, #FFFFFF, #009688);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.logo-home{
+  width: 20vw;
+  height: 40vh;
+}
+
+.logo-home:hover {
+  transform: scale(1.1); /* Aumenta el tamaño de la imagen al 110% */
+  transition: transform 0.3s ease; /* Agrega una transición suave para el efecto */
+}
+
+.panel-services {
+  margin-top: 20px;
+  background-color: #009688;
+}
+
+.panel-service{
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 18rem;
+  width: 20vw;
+  height: 20vh;
+}
+
+.panel-secondary{
+  padding-top: 20vh;
+  padding-bottom: 20vh;
+}
+
+.panel-contact{
+  margin-top: 40px;
+}
+

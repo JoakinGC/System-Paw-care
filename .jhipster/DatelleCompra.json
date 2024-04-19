@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20240418220937"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "cantidad",
+      "fieldType": "Float",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "precioUnitario",
+      "fieldType": "Float",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalProducto",
+      "fieldType": "Float",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "DatelleCompra",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "compra",
+      "otherEntityRelationshipName": "datelleCompra",
+      "relationshipName": "compra",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "producto",
+      "otherEntityRelationshipName": "datelleCompra",
+      "relationshipName": "producto",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

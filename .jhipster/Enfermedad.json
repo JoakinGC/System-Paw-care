@@ -1,0 +1,62 @@
+{
+  "annotations": {
+    "changelogDate": "20240418215437"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    }
+  ],
+  "name": "Enfermedad",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "raza",
+      "otherEntityRelationshipName": "enfermedad",
+      "relationshipName": "raza",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "especie",
+      "otherEntityRelationshipName": "enfermedad",
+      "relationshipName": "especie",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "terapia",
+      "otherEntityRelationshipName": "enfermedad",
+      "relationshipName": "terapia",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "factores",
+      "otherEntityRelationshipName": "enfermedad",
+      "relationshipName": "factores",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "historial",
+      "otherEntityRelationshipName": "enfermedad",
+      "relationshipName": "historial",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

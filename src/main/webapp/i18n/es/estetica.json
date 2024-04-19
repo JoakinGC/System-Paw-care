@@ -1,0 +1,28 @@
+{
+  "veterinarySystemApp": {
+    "estetica": {
+      "home": {
+        "title": "Esteticas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Estetica",
+        "createOrEditLabel": "Crear o editar Estetica",
+        "notFound": "Ningún Esteticas encontrado"
+      },
+      "created": "Un nuevo Estetica ha sido creado con el identificador {{ param }}",
+      "updated": "Un Estetica ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Estetica ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Estetica {{ id }}?"
+      },
+      "detail": {
+        "title": "Estetica"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "direcion": "Direcion",
+      "telefono": "Telefono",
+      "cita": "Cita",
+      "usuario": "Usuario"
+    }
+  }
+}

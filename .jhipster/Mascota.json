@@ -1,0 +1,66 @@
+{
+  "annotations": {
+    "changelogDate": "20240418215737"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nIdentificacionCarnet",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "foto",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "fechaNacimiento",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Mascota",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "historial",
+      "otherEntityRelationshipName": "mascota",
+      "relationshipName": "historial",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "cita",
+      "otherEntityRelationshipName": "mascota",
+      "relationshipName": "cita",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "dueno",
+      "otherEntityRelationshipName": "mascota",
+      "relationshipName": "dueno",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "especie",
+      "otherEntityRelationshipName": "mascota",
+      "relationshipName": "especie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "raza",
+      "otherEntityRelationshipName": "mascota",
+      "relationshipName": "raza",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

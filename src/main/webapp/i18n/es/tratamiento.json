@@ -1,0 +1,27 @@
+{
+  "veterinarySystemApp": {
+    "tratamiento": {
+      "home": {
+        "title": "Tratamientos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Tratamiento",
+        "createOrEditLabel": "Crear o editar Tratamiento",
+        "notFound": "Ningún Tratamientos encontrado"
+      },
+      "created": "Un nuevo Tratamiento ha sido creado con el identificador {{ param }}",
+      "updated": "Un Tratamiento ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Tratamiento ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Tratamiento {{ id }}?"
+      },
+      "detail": {
+        "title": "Tratamiento"
+      },
+      "id": "ID",
+      "fechaInicio": "Fecha Inicio",
+      "fechaFin": "Fecha Fin",
+      "notas": "Notas",
+      "historial": "Historial"
+    }
+  }
+}

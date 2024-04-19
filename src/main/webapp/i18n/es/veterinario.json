@@ -1,0 +1,32 @@
+{
+  "veterinarySystemApp": {
+    "veterinario": {
+      "home": {
+        "title": "Veterinarios",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Veterinario",
+        "createOrEditLabel": "Crear o editar Veterinario",
+        "notFound": "Ningún Veterinarios encontrado"
+      },
+      "created": "Un nuevo Veterinario ha sido creado con el identificador {{ param }}",
+      "updated": "Un Veterinario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Veterinario ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Veterinario {{ id }}?"
+      },
+      "detail": {
+        "title": "Veterinario"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "direccion": "Direccion",
+      "telefono": "Telefono",
+      "especilidad": "Especilidad",
+      "historial": "Historial",
+      "cita": "Cita",
+      "estudios": "Estudios",
+      "usuario": "Usuario"
+    }
+  }
+}

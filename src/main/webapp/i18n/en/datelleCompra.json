@@ -1,0 +1,28 @@
+{
+  "veterinarySystemApp": {
+    "datelleCompra": {
+      "home": {
+        "title": "Datelle Compras",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Datelle Compra",
+        "createOrEditLabel": "Create or edit a Datelle Compra",
+        "notFound": "No Datelle Compras found"
+      },
+      "created": "A new Datelle Compra is created with identifier {{ param }}",
+      "updated": "A Datelle Compra is updated with identifier {{ param }}",
+      "deleted": "A Datelle Compra is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Datelle Compra {{ id }}?"
+      },
+      "detail": {
+        "title": "Datelle Compra"
+      },
+      "id": "ID",
+      "cantidad": "Cantidad",
+      "precioUnitario": "Precio Unitario",
+      "totalProducto": "Total Producto",
+      "compra": "Compra",
+      "producto": "Producto"
+    }
+  }
+}

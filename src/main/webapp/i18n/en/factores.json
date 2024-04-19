@@ -1,0 +1,27 @@
+{
+  "veterinarySystemApp": {
+    "factores": {
+      "home": {
+        "title": "Factores",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Factores",
+        "createOrEditLabel": "Create or edit a Factores",
+        "notFound": "No Factores found"
+      },
+      "created": "A new Factores is created with identifier {{ param }}",
+      "updated": "A Factores is updated with identifier {{ param }}",
+      "deleted": "A Factores is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Factores {{ id }}?"
+      },
+      "detail": {
+        "title": "Factores"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "tipo": "Tipo",
+      "descripcion": "Descripcion",
+      "enfermedad": "Enfermedad"
+    }
+  }
+}

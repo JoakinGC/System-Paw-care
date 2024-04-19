@@ -1,0 +1,27 @@
+{
+  "veterinarySystemApp": {
+    "raza": {
+      "home": {
+        "title": "Razas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Raza",
+        "createOrEditLabel": "Crear o editar Raza",
+        "notFound": "Ningún Razas encontrado"
+      },
+      "created": "Un nuevo Raza ha sido creado con el identificador {{ param }}",
+      "updated": "Un Raza ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Raza ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Raza {{ id }}?"
+      },
+      "detail": {
+        "title": "Raza"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "nombreCientifico": "Nombre Cientifico",
+      "mascota": "Mascota",
+      "enfermedad": "Enfermedad"
+    }
+  }
+}

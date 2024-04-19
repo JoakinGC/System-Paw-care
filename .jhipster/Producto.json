@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20240418221037"
+  },
+  "applications": ["veterinarySystem"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "Float",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "Producto",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "datelleCompra",
+      "otherEntityRelationshipName": "producto",
+      "relationshipName": "datelleCompra",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

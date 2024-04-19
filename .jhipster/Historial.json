@@ -1,0 +1,65 @@
+{
+  "annotations": {
+    "changelogDate": "20240418220437"
+  },
+  "applications": ["veterinarySystem"],
+  "documentation": "Esta clase contiene la informacion es la encargada de manejar\\nel historial de una mascota\\n@autor Joaquin",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fechaConsulta",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "diagnostico",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "200"
+    }
+  ],
+  "name": "Historial",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "options": {
+        "onDelete": "CASCADE"
+      },
+      "otherEntityName": "tratamiento",
+      "otherEntityRelationshipName": "historial",
+      "relationshipName": "tratamiento",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "medicamento",
+      "otherEntityRelationshipName": "historial",
+      "relationshipName": "medicamento",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "enfermedad",
+      "otherEntityRelationshipName": "historial",
+      "relationshipName": "enfermedad",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "veterinario",
+      "otherEntityRelationshipName": "historial",
+      "relationshipName": "veterinario",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "mascota",
+      "otherEntityRelationshipName": "historial",
+      "relationshipName": "mascota",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

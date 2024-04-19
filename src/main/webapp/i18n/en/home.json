@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Welcome to PawCare!",
+    "subtitle": "Caring for the paws that fill our lives with joy",
+    "logged": {
+      "message": "You are logged in as \"{{username}}\"."
+    },
+    "title-secondary": "Take care of your best friend with PawCare!",
+    "subtitle-secondary": "Discover PawCare, the comprehensive veterinary system designed to ensure the well-being of your pet. With PawCare, not only will you have access to top-quality veterinary care, but you'll also enjoy a full range of services including regular check-ups, vaccinations, personalized treatments, and expert advice for daily care. Our highly trained and animal-loving team is committed to providing the highest level of attention, ensuring that your furry friend leads a happy and healthy life.",
+    "service1": "Closest caregivers anywhere in the world",
+    "service2": "Styling service for your pets",
+    "service3": "Specialist veterinarians",
+    "contact": "Don't hesitate to get in touch with us"
+  }
+}

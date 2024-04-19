@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Historial.
+    -->
+    <changeSet id="20240418220437-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="historial_id"
+                                 baseTableName="rel_historial__medicamento"
+                                 constraintName="fk_rel_historial__medicamento__historial_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="historial"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="medicamento_id"
+                                 baseTableName="rel_historial__medicamento"
+                                 constraintName="fk_rel_historial__medicamento__medicamento_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="medicamento"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="historial_id"
+                                 baseTableName="rel_historial__enfermedad"
+                                 constraintName="fk_rel_historial__enfermedad__historial_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="historial"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="enfermedad_id"
+                                 baseTableName="rel_historial__enfermedad"
+                                 constraintName="fk_rel_historial__enfermedad__enfermedad_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="enfermedad"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="veterinario_id"
+                                 baseTableName="historial"
+                                 constraintName="fk_historial__veterinario_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="veterinario"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="mascota_id"
+                                 baseTableName="historial"
+                                 constraintName="fk_historial__mascota_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="mascota"
+                                 />
+    </changeSet>
+</databaseChangeLog>

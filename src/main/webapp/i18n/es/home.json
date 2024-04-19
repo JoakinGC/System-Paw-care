@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "¡Bienvenido, PawCare!",
+    "subtitle": "Cuidando las patitas que nos llenan de alegría",
+    "logged": {
+      "message": "Estás conectado como \"{{username}}\"."
+    },
+    "title-secondary": "¡Cuida a tu mejor amigo con PawCare!",
+    "subtitle-secondary": "Descubre PawCare, el sistema veterinario integral diseñado para garantizar el bienestar de tu mascota. Con PawCare, no solo tendrás acceso a atención veterinaria de primera calidad, sino que también disfrutarás de una gama completa de servicios que incluyen chequeos regulares, vacunas, tratamientos personalizados y consejos de expertos para el cuidado diario. Nuestro equipo altamente capacitado y amante de los animales está comprometido a proporcionar el más alto nivel de atención, asegurando que tu amigo peludo tenga una vida feliz y saludable.",
+    "service1": "Cuidadores más cercanos en cualquier parte del mundo",
+    "service2": "Servicio de estilismo para tus mascotas",
+    "service3": "Veterinarios especialistas",
+    "contacto": "No dudes en contactar con nosotros"
+  }
+}

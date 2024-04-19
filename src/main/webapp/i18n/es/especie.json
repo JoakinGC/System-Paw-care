@@ -1,0 +1,27 @@
+{
+  "veterinarySystemApp": {
+    "especie": {
+      "home": {
+        "title": "Especies",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Especie",
+        "createOrEditLabel": "Crear o editar Especie",
+        "notFound": "Ningún Especies encontrado"
+      },
+      "created": "Un nuevo Especie ha sido creado con el identificador {{ param }}",
+      "updated": "Un Especie ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Especie ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Especie {{ id }}?"
+      },
+      "detail": {
+        "title": "Especie"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "nombreCientifico": "Nombre Cientifico",
+      "mascota": "Mascota",
+      "enfermedad": "Enfermedad"
+    }
+  }
+}

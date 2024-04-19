@@ -1,0 +1,28 @@
+{
+  "veterinarySystemApp": {
+    "estetica": {
+      "home": {
+        "title": "Esteticas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Estetica",
+        "createOrEditLabel": "Create or edit a Estetica",
+        "notFound": "No Esteticas found"
+      },
+      "created": "A new Estetica is created with identifier {{ param }}",
+      "updated": "A Estetica is updated with identifier {{ param }}",
+      "deleted": "A Estetica is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Estetica {{ id }}?"
+      },
+      "detail": {
+        "title": "Estetica"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "direcion": "Direcion",
+      "telefono": "Telefono",
+      "cita": "Cita",
+      "usuario": "Usuario"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Mascota.
+    -->
+    <changeSet id="20240418215737-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="mascota_id"
+                                 baseTableName="rel_mascota__cita"
+                                 constraintName="fk_rel_mascota__cita__mascota_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="mascota"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="cita_id"
+                                 baseTableName="rel_mascota__cita"
+                                 constraintName="fk_rel_mascota__cita__cita_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cita"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="dueno_id"
+                                 baseTableName="mascota"
+                                 constraintName="fk_mascota__dueno_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dueno"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="especie_id"
+                                 baseTableName="mascota"
+                                 constraintName="fk_mascota__especie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="especie"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="raza_id"
+                                 baseTableName="mascota"
+                                 constraintName="fk_mascota__raza_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="raza"
+                                 />
+    </changeSet>
+</databaseChangeLog>
