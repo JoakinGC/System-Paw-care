@@ -202,6 +202,7 @@ public class Usuario implements Serializable {
             "id=" + getId() +
             ", nombreUsuario='" + getNombreUsuario() + "'" +
             ", rol='" + getRol() + "'" +
+            ", user=" + getUser() +
             "}";
     }
 }

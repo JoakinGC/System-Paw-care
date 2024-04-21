@@ -143,9 +143,10 @@ public class UsuarioResource {
      */
     @GetMapping("")
     public ResponseEntity<List<UsuarioDTO>> getAllUsuarios(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Usuarios");
+        log.debug("REST request to get a page of Usuarios: {}",usuarioService.findAll(pageable));
         Page<UsuarioDTO> page = usuarioService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

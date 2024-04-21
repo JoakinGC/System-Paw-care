@@ -22,13 +22,18 @@ import Usuario from './usuario';
 import Compra from './compra';
 import DatelleCompra from './datelle-compra';
 import Producto from './producto';
+import { Corrusel } from 'app/shared/layout/menus/menuUserClient';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
+
+
+
 
 export default () => {
   return (
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
+        <Route path='corrocel/*' element={<Corrusel/>}/>
         <Route path="terapia/*" element={<Terapia />} />
         <Route path="factores/*" element={<Factores />} />
         <Route path="enfermedad/*" element={<Enfermedad />} />

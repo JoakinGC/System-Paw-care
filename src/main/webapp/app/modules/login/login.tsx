@@ -18,7 +18,7 @@ export const Login = () => {
     setShowModal(true);
   }, []);
 
-  const handleLogin = (username, password, rememberMe = false) => dispatch(login(username, password, rememberMe));
+  const handleLogin = async(username, password, rememberMe = false) => await dispatch(login(username, password, rememberMe));
 
   const handleClose = () => {
     setShowModal(false);

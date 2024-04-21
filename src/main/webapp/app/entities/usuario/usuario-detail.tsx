@@ -12,7 +12,7 @@ export const UsuarioDetail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<'id'>();
-
+  console.log(id)
   useEffect(() => {
     dispatch(getEntity(id));
   }, []);

@@ -18,6 +18,12 @@ const apiUrl = 'api/usuarios';
 
 // Actions
 
+export const getUsuario = createAsyncThunk('usuario/fetch_entity_list', async ({ page, size, sort }: {page:string,size:string,sort:string}) => {
+  const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  return axios.get<IUsuario[]>(requestUrl);
+});
+
+
 export const getEntities = createAsyncThunk('usuario/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<IUsuario[]>(requestUrl);

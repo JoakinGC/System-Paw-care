@@ -143,23 +143,25 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
 
 
+
         Usuario usuario = new Usuario();
         usuario.setUser(newUser);
-        usuario.setNombreUsuario(newUser.getFirstName());
-        usuario.setRol("veterinario");
+        usuario.setNombreUsuario(newUser.getLogin());
+        usuario.setRol("dueno");
 
         Dueno dueno = new Dueno();
-        dueno.setNombre(newUser.getFirstName());
+        dueno.setNombre(newUser.getLogin());
         dueno.setUsuario(usuario);
 
-        // Guardar el Dueno antes de guardar el Usuario
+
         duenoRepository.save(dueno);
+        log.debug("Created Information for Dueno: {}", dueno);
 
         usuario.setDueno(dueno);
 
-        // Guardar el Usuario después de guardar el Dueno
-        usuarioRepository.save(usuario);
 
+        usuarioRepository.save(usuario);
+        log.debug("Created Information for Usuario: {}", usuario);
         return newUser;
     }
 

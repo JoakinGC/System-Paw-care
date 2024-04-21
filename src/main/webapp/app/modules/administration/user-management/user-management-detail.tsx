@@ -13,7 +13,7 @@ export const UserManagementDetail = () => {
   const dispatch = useAppDispatch();
 
   const { login } = useParams<'login'>();
-
+  console.log(login)
   useEffect(() => {
     dispatch(getUser(login));
   }, []);

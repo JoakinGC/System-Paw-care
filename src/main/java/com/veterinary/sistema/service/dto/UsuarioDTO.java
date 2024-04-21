@@ -24,14 +24,14 @@ public class UsuarioDTO implements Serializable {
 
     private DuenoDTO dueno;
 
-    private UserDTO userDTO;
+    private UserDTO user;
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUser(UserDTO userDTO) {
+        this.user = userDTO;
     }
 
     public Long getId() {
@@ -113,6 +113,7 @@ public class UsuarioDTO implements Serializable {
             ", estetica=" + getEstetica() +
             ", veterinario=" + getVeterinario() +
             ", dueno=" + getDueno() +
+            ", user='"+ getUser()+
             "}";
     }
 }

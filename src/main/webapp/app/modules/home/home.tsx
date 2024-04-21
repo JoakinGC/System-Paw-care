@@ -8,6 +8,8 @@ import { useAppSelector } from 'app/config/store';
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
 
+  
+
   return (
     <div>
       <div className='panel-home container-fluid'> {/* Agrega la clase container-fluid */}
