@@ -14,6 +14,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
+import CorouselRouter from './componets/user';
 
 const loading = <div>loading ...</div>;
 
@@ -65,6 +66,7 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/carousel" element={<CorouselRouter />} />
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>
     </div>

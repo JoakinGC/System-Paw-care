@@ -1,10 +1,28 @@
-import React from "react";
+import React from 'react';
+import { Translate } from 'react-jhipster';
+
+import { NavItem, NavLink, NavbarBrand } from 'reactstrap';
+import { NavLink as Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArchive } from '@fortawesome/free-solid-svg-icons';
 
 const MenuStilist = () =>{
-    return(
-        <div>
-            <h1>Menu Estilista</h1>
-        </div>
+    return (
+        <NavItem>
+  
+      <NavLink tag={Link} to="/historial" className="d-flex align-items-center">
+        <FontAwesomeIcon icon={faArchive}  />
+        <span>
+          <Translate contentKey="global.menu.entities.historial">History</Translate>
+        </span>
+      </NavLink>
+      <NavLink tag={Link} to="corusel/" className="d-flex align-items-center">
+        <FontAwesomeIcon icon={faArchive}  />
+        <span>
+          <Translate contentKey="global.menu.entities.corusel">Tienda</Translate>
+        </span>
+      </NavLink>
+    </NavItem>
     );
 }
 

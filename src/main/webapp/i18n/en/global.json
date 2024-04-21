@@ -26,7 +26,8 @@
         "usuario": "Usuario",
         "compra": "Compra",
         "datelleCompra": "Datelle Compra",
-        "producto": "Producto"
+        "producto": "Producto",
+        "corousel":"Store"
       },
       "account": {
         "main": "Account",

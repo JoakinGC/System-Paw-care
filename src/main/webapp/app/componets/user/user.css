@@ -1,0 +1,56 @@
+.card-wrapper {
+    width: 200px; /* Ancho fijo para las tarjetas */
+    height: 300px; /* Altura fija para las tarjetas */
+    margin: 10px;
+}
+
+.card{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Crea columnas automáticas */
+    grid-gap: 20px; /* Espacio entre las tarjetas */
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    padding: 20px; /* Espaciado interno */
+    box-sizing: border-box; /* Incluye el padding en el tamaño total */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+}
+
+
+/* Elimina cualquier limitación de ancho para asegurar que ocupe todo el ancho disponible */
+.card-container > div {
+    width: 100%;
+}
+
+/* Estilos para las tarjetas */
+.card-wrapper {
+    transition: transform 0.3s;
+    margin: 10px;
+}
+
+.card {
+    transition: box-shadow 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card:hover .card-body {
+    background-color: #f8f9fa; /* Cambia el color de fondo al hacer hover */
+    transform: scale(1.05); /* Agranda la tarjeta al hacer hover */
+}
+
+.card-body {
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}

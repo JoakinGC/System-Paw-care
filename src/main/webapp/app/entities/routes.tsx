@@ -22,7 +22,9 @@ import Usuario from './usuario';
 import Compra from './compra';
 import DatelleCompra from './datelle-compra';
 import Producto from './producto';
-import { Corrusel } from 'app/shared/layout/menus/menuUserClient';
+import MenuVeterian from 'app/shared/layout/menus/menuVeterinaria';
+import MenuStilist from 'app/shared/layout/menus/menuStilist';
+import CorouselRouter from 'app/componets/user';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 
@@ -33,7 +35,9 @@ export default () => {
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
-        <Route path='corrocel/*' element={<Corrusel/>}/>
+        
+        <Route path='veterian/*' element={<MenuVeterian/>}/>
+        <Route path='stilist/*' element={<MenuStilist/>}/>
         <Route path="terapia/*" element={<Terapia />} />
         <Route path="factores/*" element={<Factores />} />
         <Route path="enfermedad/*" element={<Enfermedad />} />

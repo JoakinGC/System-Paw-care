@@ -12,9 +12,8 @@ import { setLocale } from 'app/shared/reducers/locale';
 import VeterianMenu from '../menus/veterian';
 import {  getEntities, getEntity } from 'app/entities/usuario/usuario.reducer';
 import { getAccount} from 'app/shared/reducers/authentication';
-import MenuVeterian from '../menus/menuVeterinaria';
 import MenuStilist from '../menus/menuStilist';
-import { Corrusel } from '../menus/menuUserClient';
+import { CorouselMenu } from '../menus/menuUserClient';
 
 
 
@@ -100,12 +99,12 @@ const Header = (props: IHeaderProps) => {
             )}
 
             {foundUser&&props.isAuthenticated&&foundUser.dueno?(
-              <Corrusel/>
+              <CorouselMenu/>
             ):(
               <></>
             )}
 
-            {foundUser&&props.isAuthenticated&&foundUser.veterinario?(
+            {foundUser&&props.isAuthenticated&&foundUser.estetica?(
               <MenuStilist/>
             ):(
               <></>
