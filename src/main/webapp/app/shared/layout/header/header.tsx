@@ -79,6 +79,7 @@ const Header = (props: IHeaderProps) => {
 
 
   console.log(foundUser?foundUser:"no encontrado");
+  console.log(foundUser);
   
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
@@ -115,7 +116,7 @@ const Header = (props: IHeaderProps) => {
             {props.isAuthenticated && props.isAdmin && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
-            <AccountMenu isAuthenticated={props.isAuthenticated} />
+            <AccountMenu isAuthenticated={props.isAuthenticated}  name={foundUser&&foundUser.nombreUsuario||props.isAdmin&&'Root'||''}/>
           </Nav>
         </Collapse>
       </Navbar>

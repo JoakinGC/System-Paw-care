@@ -1,6 +1,11 @@
 /* ==========================================================================
 Main page styles
 ========================================================================== */
+
+:root {
+  --gradient: linear-gradient(90deg, #ee6352, purple, #ee6352);
+
+}
 .hipster {
   display: inline-block;
   width: 100%;
@@ -9,9 +14,12 @@ Main page styles
   background-size: contain;
 }
 
+
+
+
 .panel-home {
-  padding: 0;
-  background: linear-gradient(to right, #FFFFFF, #009688);
+  padding-top: 40vh;
+  padding-bottom: 40vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,8 +43,8 @@ Main page styles
 }
 
 .panel-service{
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 40px;
+  margin-bottom: 40px;
   max-width: 18rem;
   width: 20vw;
   height: 20vh;
@@ -50,4 +58,6 @@ Main page styles
 .panel-contact{
   margin-top: 40px;
 }
+
+
 

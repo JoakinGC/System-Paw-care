@@ -115,11 +115,11 @@ export const Dueno = () => {
                   <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
                 <th className="hand" onClick={sort('nombre')}>
-                  <Translate contentKey="veterinarySystemApp.dueno.nombre">Nombre</Translate>{' '}
+                  <Translate contentKey="veterinarySystemApp.dueno.nombre"></Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('nombre')} />
                 </th>
                 <th className="hand" onClick={sort('apellido')}>
-                  <Translate contentKey="veterinarySystemApp.dueno.apellido">Apellido</Translate>{' '}
+                  <Translate contentKey="veterinarySystemApp.dueno.apellido"></Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('apellido')} />
                 </th>
                 <th className="hand" onClick={sort('direccion')}>

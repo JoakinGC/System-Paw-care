@@ -13,7 +13,7 @@ export const CorouselMenu = () =>{
   <NavLink tag={Link} to="/carousel" className="d-flex align-items-center">
     <FontAwesomeIcon icon={faStore} />
     <span>
-      <Translate contentKey="global.menu.entities.carousel">Carousel</Translate>
+      <Translate contentKey="global.menu.entities.corousel">Carousel</Translate>
     </span>
   </NavLink>
 </NavItem>

@@ -122,7 +122,8 @@
     },
     "detail": {
       "field": "Campo",
-      "value": "Valor"
+      "value": "Valor",
+      "see":"Datelle"
     },
     "delete": {
       "title": "Confirmar operación de borrado"

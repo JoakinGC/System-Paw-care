@@ -122,7 +122,8 @@
     },
     "detail": {
       "field": "Field",
-      "value": "Value"
+      "value": "Value",
+      "see":"Datelle"
     },
     "delete": {
       "title": "Confirm delete operation"

@@ -20,6 +20,11 @@
     width: 100%; /* Ocupa todo el ancho disponible */
     margin: 0 auto; /* Centra el contenedor horizontalmente */
 }
+.card-selected {
+    border: 2px solid #007bff; /* Borde resaltado para indicar selección */
+    /* Otros estilos adicionales para productos seleccionados */
+}
+
 
 
 /* Elimina cualquier limitación de ancho para asegurar que ocupe todo el ancho disponible */
