@@ -21,7 +21,7 @@ const CardProduct = ({ cardTitle, cardText, onClick, isSelected,link}: PropsCard
                 <img src={link} className="card-img-top" alt="..." />
                 <div className="card-body">
                     <h5 className="card-text">{cardText}</h5>
-                    <p className="card-title">{cardTitle}</p>
+                    <p className="card-title">{cardTitle}€</p>
                     
                 </div>
             </div>

@@ -33,12 +33,24 @@ public class Producto implements Serializable {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
+    @Size(max = 200)
+    @Column(name = "src", length = 200)
+    private String ruta;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "producto")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "compra", "producto" }, allowSetters = true)
     private Set<DatelleCompra> datelleCompras = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
 
     public Long getId() {
         return this.id;

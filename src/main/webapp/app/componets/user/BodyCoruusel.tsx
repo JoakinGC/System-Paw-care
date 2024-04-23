@@ -104,6 +104,9 @@ export const BodyCorousel = () => {
       return order === ASC ? faSortUp : faSortDown;
     }
   };
+
+  productoList.map((e) => console.log(e));
+  
     return (
         <>
           <h2 id="producto-heading" data-cy="ProductoHeading">
@@ -124,7 +127,7 @@ export const BodyCorousel = () => {
                     cardTitle={producto.nombre}
                     onClick={() => handleProductSelection(producto.id)}
                     isSelected={selectedProducts.includes(producto.id)}
-                    link='#'
+                    link={producto.ruta}
                 />
                 <Button tag={Link} to={`/datelle-compra/${producto.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}

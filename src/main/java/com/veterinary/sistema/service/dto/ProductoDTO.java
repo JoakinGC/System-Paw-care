@@ -18,6 +18,16 @@ public class ProductoDTO implements Serializable {
     @Size(max = 100)
     private String descripcion;
 
+    private String ruta;
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
     public Long getId() {
         return id;
     }

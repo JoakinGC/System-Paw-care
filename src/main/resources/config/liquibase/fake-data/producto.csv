@@ -1,11 +1,11 @@
-id;nombre;descripcion
-1;23726.49;though flimsy
-2;4612.2;yowza defragment
-3;6507.07;though marionberry
-4;15218.87;whiten sleepily sulk
-5;31684.57;trivial as posture
-6;6910.71;rediscovery because kiddingly
-7;9907.5;knowingly enormously reaffirm
-8;20823.17;duh
-9;11209.02;gadzooks
-10;4560.62;strictly through
+id;nombre;descripcion;src
+1;26.49;correa para perros;../../../content/images/productos/correa.jpg
+2;12.2;pelota futbol perro Brasilero;../../../content/images/productos/pelota.jpg
+3;07.07;Mordelona la pelota indestructible;../../../content/images/productos/pelotaMorder.jpg
+4;18.87;Pelota copia china2;../../../content/images/productos/pelotaMorder.jpg
+5;84.57;Pelota copia china3;../../../content/images/productos/pelotaMorder.jpg
+6;10.71;Pelota copia china4;../../../content/images/productos/pelotaMorder.jpg
+7;07.5;Pelota copia china5;../../../content/images/productos/pelotaMorder.jpg
+8;23.17;Pelota copia china6;../../../content/images/productos/pelotaMorder.jpg
+9;9.02;Pelota copia china7;../../../content/images/productos/pelotaMorder.jpg
+10;60.62;Pelota copia china8;../../../content/images/productos/pelotaMorder.jpg
