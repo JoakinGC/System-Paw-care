@@ -1,4 +1,4 @@
-id;nombre_usuario;rol
-1;prueba3;veterinario
-2;prueb4;veterinario
-3;prueb4;estilista
+id;nombre_usuario;rol;estetica_id;veterinario_id;dueno_id;id_user
+1;veterinarioExample;veterinario;;1;;2
+2;duenoExample;dueno;;;1;3
+3;estilistaExample;estilista;1;;;4
