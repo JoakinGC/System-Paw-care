@@ -32,7 +32,7 @@ export const getEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const createEntity = createAsyncThunk(
+export const createCompra = createAsyncThunk(
   'compra/create_entity',
   async (entity: ICompra, thunkAPI) => {
     const result = await axios.post<ICompra>(apiUrl, cleanEntity(entity));
@@ -99,7 +99,7 @@ export const CompraSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+      .addMatcher(isFulfilled(createCompra, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
@@ -110,7 +110,7 @@ export const CompraSlice = createEntitySlice({
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+      .addMatcher(isPending(createCompra, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;

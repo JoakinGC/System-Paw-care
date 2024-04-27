@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUsuario } from 'app/shared/model/usuario.model';
 import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
 import { ICompra } from 'app/shared/model/compra.model';
-import { getEntity, updateEntity, createEntity, reset } from './compra.reducer';
+import { getEntity, updateEntity, createCompra, reset } from './compra.reducer';
 
 export const CompraUpdate = () => {
   const dispatch = useAppDispatch();
@@ -63,7 +63,7 @@ export const CompraUpdate = () => {
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      dispatch(createCompra(entity));
     } else {
       dispatch(updateEntity(entity));
     }
