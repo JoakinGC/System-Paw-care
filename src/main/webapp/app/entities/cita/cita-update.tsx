@@ -117,7 +117,7 @@ export const CitaUpdate = () => {
                   validate={{ required: true }}
                 />
               ) : null}
-              <ValidatedField label={translate('veterinarySystemApp.cita.hora')} id="cita-hora" name="hora" data-cy="hora" type="date" />
+              <ValidatedField label={translate('veterinarySystemApp.cita.hora')} id="cita-hora" name="hora" data-cy="hora" type="time" />
               <ValidatedField
                 label={translate('veterinarySystemApp.cita.fecha')}
                 id="cita-fecha"

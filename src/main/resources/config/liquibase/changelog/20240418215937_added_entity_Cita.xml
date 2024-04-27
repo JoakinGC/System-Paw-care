@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="hora" type="date">
+            <column name="hora" type="time">
                 <constraints nullable="true" />
             </column>
             <column name="fecha" type="date">

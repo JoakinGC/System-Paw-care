@@ -3,6 +3,7 @@ package com.veterinary.sistema.service.dto;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class CitaDTO implements Serializable {
 
     private Long id;
 
-    private LocalDate hora;
+    private LocalTime hora;
 
     private LocalDate fecha;
 
@@ -38,11 +39,11 @@ public class CitaDTO implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(LocalDate hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 

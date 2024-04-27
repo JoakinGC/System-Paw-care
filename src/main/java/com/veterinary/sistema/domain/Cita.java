@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -27,7 +28,7 @@ public class Cita implements Serializable {
     private Long id;
 
     @Column(name = "hora")
-    private LocalDate hora;
+    private LocalTime hora;
 
     @Column(name = "fecha")
     private LocalDate fecha;
@@ -68,18 +69,20 @@ public class Cita implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getHora() {
-        return this.hora;
+    public LocalTime getHora() {
+        return hora;
     }
 
-    public Cita hora(LocalDate hora) {
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
+
+    public Cita hora(LocalTime hora) {
         this.setHora(hora);
         return this;
     }
 
-    public void setHora(LocalDate hora) {
-        this.hora = hora;
-    }
+
 
     public LocalDate getFecha() {
         return this.fecha;

@@ -25,6 +25,7 @@ import Producto from './producto';
 import MenuVeterian from 'app/shared/layout/menus/menuVeterinaria';
 import MenuStilist from 'app/shared/layout/menus/menuStilist';
 import CorouselRouter from 'app/componets/user/compra/index';
+import RoutesCalendarCita from 'app/componets/user/citas';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 
@@ -35,6 +36,7 @@ export default () => {
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
+        <Route path="citasCalendario/*" element={<RoutesCalendarCita />} />
         <Route path="carousel/*" element={<CorouselRouter />} />
         <Route path='veterian/*' element={<MenuVeterian/>}/>
         <Route path='stilist/*' element={<MenuStilist/>}/>

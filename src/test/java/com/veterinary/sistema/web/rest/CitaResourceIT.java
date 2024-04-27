@@ -15,6 +15,7 @@ import com.veterinary.sistema.service.dto.CitaDTO;
 import com.veterinary.sistema.service.mapper.CitaMapper;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -74,7 +75,7 @@ class CitaResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Cita createEntity(EntityManager em) {
-        Cita cita = new Cita().hora(DEFAULT_HORA).fecha(DEFAULT_FECHA).motivo(DEFAULT_MOTIVO);
+        Cita cita = new Cita().hora(LocalTime.from(DEFAULT_HORA)).fecha(DEFAULT_FECHA).motivo(DEFAULT_MOTIVO);
         return cita;
     }
 
@@ -85,7 +86,7 @@ class CitaResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Cita createUpdatedEntity(EntityManager em) {
-        Cita cita = new Cita().hora(UPDATED_HORA).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
+        Cita cita = new Cita().hora(LocalTime.from(UPDATED_HORA)).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
         return cita;
     }
 
@@ -187,7 +188,7 @@ class CitaResourceIT {
         Cita updatedCita = citaRepository.findById(cita.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCita are not directly saved in db
         em.detach(updatedCita);
-        updatedCita.hora(UPDATED_HORA).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
+        updatedCita.hora(LocalTime.from(UPDATED_HORA)).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
         CitaDTO citaDTO = citaMapper.toDto(updatedCita);
 
         restCitaMockMvc
@@ -269,7 +270,7 @@ class CitaResourceIT {
         Cita partialUpdatedCita = new Cita();
         partialUpdatedCita.setId(cita.getId());
 
-        partialUpdatedCita.hora(UPDATED_HORA);
+        partialUpdatedCita.hora(LocalTime.from(UPDATED_HORA));
 
         restCitaMockMvc
             .perform(
@@ -297,7 +298,7 @@ class CitaResourceIT {
         Cita partialUpdatedCita = new Cita();
         partialUpdatedCita.setId(cita.getId());
 
-        partialUpdatedCita.hora(UPDATED_HORA).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
+        partialUpdatedCita.hora(LocalTime.from(UPDATED_HORA)).fecha(UPDATED_FECHA).motivo(UPDATED_MOTIVO);
 
         restCitaMockMvc
             .perform(

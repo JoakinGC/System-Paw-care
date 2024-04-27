@@ -1,11 +1,11 @@
-id;hora;fecha;motivo
-1;2024-04-18;2024-04-18;yahoo best sparkling
-2;2024-04-18;2024-04-18;unbearably
-3;2024-04-18;2024-04-18;er which boatyard
-4;2024-04-18;2024-04-18;sever flexibility quizzically
-5;2024-04-18;2024-04-18;mmm forceful
-6;2024-04-18;2024-04-18;unto racing however
-7;2024-04-18;2024-04-18;beyond
-8;2024-04-18;2024-04-18;when
-9;2024-04-18;2024-04-18;incidentally
-10;2024-04-18;2024-04-17;armpit
+id;hora;fecha;motivo;veterinario_id
+1;2024-04-18;2024-04-18;yahoo best sparkling;1
+2;2024-04-28;2024-04-18;unbearably;1
+3;2024-04-29;2024-04-18;er which boatyard;1
+4;2024-04-29;2024-04-18;sever flexibility quizzically;1
+5;2024-04-30;2024-04-18;mmm forceful;1
+6;2024-04-10;2024-04-18;unto racing however;1
+7;2024-04-18;2024-04-18;beyond;1
+8;2024-04-18;2024-04-18;when;1
+9;2024-04-18;2024-04-18;incidentally;1
+10;2024-04-18;2024-04-17;armpit;1
