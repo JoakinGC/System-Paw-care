@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './mascota.reducer';
+import { getMascota } from './mascota.reducer';
 
 export const MascotaDetail = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export const MascotaDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getMascota(id));
   }, []);
 
   const mascotaEntity = useAppSelector(state => state.mascota.entity);

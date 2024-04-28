@@ -17,10 +17,10 @@ import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterin
 import { IMascota } from 'app/shared/model/mascota.model';
 import { getEntities, getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
 import { ICita } from 'app/shared/model/cita.model';
-import { getEntity, updateEntity, createEntity, reset } from './cita.reducer';
+import { getEntity, updateEntity, createEntity, reset } from '../../../entities/cita/cita.reducer';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-export const CitaUpdate = () => {
+export const AddCita = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -209,7 +209,7 @@ export const CitaUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/cita" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/citasCalendario" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -230,4 +230,4 @@ export const CitaUpdate = () => {
   );
 };
 
-export default CitaUpdate;
+export default AddCita;

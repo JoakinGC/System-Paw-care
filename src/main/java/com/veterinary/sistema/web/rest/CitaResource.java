@@ -2,7 +2,9 @@ package com.veterinary.sistema.web.rest;
 
 import com.veterinary.sistema.repository.CitaRepository;
 import com.veterinary.sistema.service.CitaService;
+import com.veterinary.sistema.service.MascotaService;
 import com.veterinary.sistema.service.dto.CitaDTO;
+import com.veterinary.sistema.service.dto.MascotaDTO;
 import com.veterinary.sistema.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +13,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +44,13 @@ public class CitaResource {
 
     private final CitaService citaService;
 
+    private final MascotaService mascotaService;
+
     private final CitaRepository citaRepository;
 
-    public CitaResource(CitaService citaService, CitaRepository citaRepository) {
+    public CitaResource(CitaService citaService, MascotaService mascotaService, CitaRepository citaRepository) {
         this.citaService = citaService;
+        this.mascotaService = mascotaService;
         this.citaRepository = citaRepository;
     }
 
@@ -60,7 +67,10 @@ public class CitaResource {
         if (citaDTO.getId() != null) {
             throw new BadRequestAlertException("A new cita cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         citaDTO = citaService.save(citaDTO);
+
+        System.out.println(citaDTO.toString());
         return ResponseEntity.created(new URI("/api/citas/" + citaDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, citaDTO.getId().toString()))
             .body(citaDTO);
@@ -93,6 +103,8 @@ public class CitaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+
+        System.out.println("Estoy actulizado");
         citaDTO = citaService.update(citaDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, citaDTO.getId().toString()))

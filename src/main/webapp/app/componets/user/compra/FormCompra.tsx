@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { IUser } from 'app/shared/model/user.model';
 import { IUsuario } from 'app/shared/model/usuario.model';
-import { getEntity, getUsuario } from 'app/entities/usuario/usuario.reducer';
+import { getEntities, getEntity, getUsuario } from 'app/entities/usuario/usuario.reducer';
 import { IDatelleCompra } from 'app/shared/model/datelle-compra.model';
 import ProductDetails from './ProductDetails';
 import "./productsDetails.css";
@@ -60,9 +60,12 @@ const FormCompra = ({productos,isForm}:PropsProduco) => {
   
     const user = await dispatch(getAccount());
     const { id } = (user.payload as any).data;
-    const usuario = await ((await dispatch(getEntity(id))).payload as any).data ;
+    const allUsarios = await dispatch(getEntities({}))
+    const usuarioActual = (allUsarios.payload as any).data.filter((e,i) => 
+    e.user.id==id);
+    
   
-    nuevaCompra['usuario'] = usuario;
+    nuevaCompra['usuario'] = usuarioActual[0];
   
     try {
       const compra = await dispatch(createCompra(nuevaCompra));

@@ -51,7 +51,6 @@ public class Mascota implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "cita_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "estetica", "cuidadoraHotel", "veterinario", "mascotas" }, allowSetters = true)
     private Set<Cita> citas = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

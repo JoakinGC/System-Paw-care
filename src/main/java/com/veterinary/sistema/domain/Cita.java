@@ -51,7 +51,6 @@ public class Cita implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "citas")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "historials", "citas", "dueno", "especie", "raza" }, allowSetters = true)
     private Set<Mascota> mascotas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -81,8 +80,6 @@ public class Cita implements Serializable {
         this.setHora(hora);
         return this;
     }
-
-
 
     public LocalDate getFecha() {
         return this.fecha;

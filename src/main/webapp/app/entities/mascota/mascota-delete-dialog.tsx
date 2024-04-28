@@ -5,7 +5,7 @@ import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './mascota.reducer';
+import { getMascota, deleteEntity } from './mascota.reducer';
 
 export const MascotaDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const MascotaDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getMascota(id));
     setLoadModal(true);
   }, []);
 

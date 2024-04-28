@@ -17,7 +17,7 @@ import { getEntities as getEspecies } from 'app/entities/especie/especie.reducer
 import { IRaza } from 'app/shared/model/raza.model';
 import { getEntities as getRazas } from 'app/entities/raza/raza.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
-import { getEntity, updateEntity, createEntity, reset } from './mascota.reducer';
+import { getMascota, updateEntity, createEntity, reset } from './mascota.reducer';
 
 export const MascotaUpdate = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +44,7 @@ export const MascotaUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getMascota(id));
     }
 
     dispatch(getCitas({}));
