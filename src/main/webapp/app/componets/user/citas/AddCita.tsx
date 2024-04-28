@@ -37,6 +37,17 @@ export const AddCita = () => {
   const updating = useAppSelector(state => state.cita.updating);
   const updateSuccess = useAppSelector(state => state.cita.updateSuccess);
 
+
+  //Crear una cita
+
+  // Editar animal
+
+  //Sacar codigo demas
+
+
+  //Agregar validaciones no se permite crear una cita si ya existe en esa hora
+
+
   const handleClose = () => {
     navigate('/cita' + location.search);
   };
@@ -217,7 +228,7 @@ export const AddCita = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" to="/citasCalendario" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
