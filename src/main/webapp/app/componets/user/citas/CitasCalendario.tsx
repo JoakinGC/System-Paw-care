@@ -1,8 +1,8 @@
 import React,{useEffect, useState} from "react";
 import Calendar from 'react-calendar';
 import './styleCalenda.css';
-import { AppDispatch } from "app/config/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "app/config/store";
+import { useDispatch, useSelector } from "react-redux";
 import { getAccount } from "app/shared/reducers/authentication";
 import { getEntities as getUsuarios, getEntity} from 'app/entities/usuario/usuario.reducer';
 import { getEntities as getAllCitas } from "app/entities/cita/cita.reducer";
@@ -10,6 +10,7 @@ import { getEntities } from "app/entities/mascota/mascota.reducer";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Translate } from "react-jhipster";
+import { updateMascotasWithCitas } from "./mascotaCita.reducer";
 
 
 interface Event {
@@ -24,7 +25,11 @@ const CitasCalendario = () =>{
     const [date, setDate] = useState(new Date());
     const dispatch = useDispatch<AppDispatch>();
     const [events, setEvents] = useState<Event[]>([]);
+    const mascotasWithCitas = useAppSelector((state) => state.mascotWithCitasReducer.entities);
 
+
+    console.log(mascotasWithCitas);
+    
 
     //Citas solo para usuario actual
     useEffect(() =>{
@@ -36,6 +41,7 @@ const CitasCalendario = () =>{
         e.user.id==id);
   
         console.log(usuarioActual);
+        console.log(usuarioActual[0].dueno.id);
         
   
         const todasLasCitas = await dispatch(getAllCitas({}));
@@ -43,6 +49,12 @@ const CitasCalendario = () =>{
   
         const todasLasMascotasYduenos = await dispatch(getEntities({}))
         console.log(todasLasMascotasYduenos);
+
+        //mascotas del usuario actual
+        const mascotasDelUsuarioActual = (todasLasMascotasYduenos.payload as any).data
+        .filter((e) => e.dueno.id === usuarioActual[0].dueno.id)
+        //este necesito guardarlo en estado grobal usando redux para acceder a la misma varible y tambien poder guardarla
+        dispatch(updateMascotasWithCitas(mascotasDelUsuarioActual));
   
         const citasConMascota = (todasLasCitas.payload as any).data.
         filter((ele) =>{
@@ -55,7 +67,6 @@ const CitasCalendario = () =>{
            return (ele.citas.length>0&&ele.dueno.id===usuarioActual[0].dueno.id)
         });
         console.log(mascotaConCita);
-        
 
         const mascotaUsuarioActualCitas = citasConMascota.filter((e,i) =>{
           const mascotasCitaIds = e.mascotas.map(mascota => mascota.id);

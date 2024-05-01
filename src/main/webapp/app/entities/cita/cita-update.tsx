@@ -72,6 +72,9 @@ export const CitaUpdate = () => {
 
     const mascotas =(allMascotas.payload as any).data.filter(mascota => values.mascotas.includes(mascota.id.toString())) ;
 
+
+    console.log(mascotas);
+    
     const entity = {
       ...citaEntity,
       ...values,

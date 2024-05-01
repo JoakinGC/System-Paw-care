@@ -17,6 +17,7 @@ import usuario from 'app/entities/usuario/usuario.reducer';
 import compra from 'app/entities/compra/compra.reducer';
 import datelleCompra from 'app/entities/datelle-compra/datelle-compra.reducer';
 import producto from 'app/entities/producto/producto.reducer';
+import mascotWithCitasReducer from 'app/componets/user/citas/mascotaCita.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -39,6 +40,7 @@ const entitiesReducers = {
   compra,
   datelleCompra,
   producto,
+  mascotWithCitasReducer
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
-import { IEstetica } from 'app/shared/model/estetica.model';
 import { getEntities as getEsteticas } from 'app/entities/estetica/estetica.reducer';
-import { ICuidadoraHotel } from 'app/shared/model/cuidadora-hotel.model';
 import { getEntities as getCuidadoraHotels } from 'app/entities/cuidadora-hotel/cuidadora-hotel.reducer';
-import { IVeterinario } from 'app/shared/model/veterinario.model';
 import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterinario.reducer';
+import {  getEntities as getMascotas, updateEntity as updateMascota } from 'app/entities/mascota/mascota.reducer';
+import { getEntity,  reset, createEntity as createCita, updateEntity as updateCita  } from '../../../entities/cita/cita.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
-import { getEntities, getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
-import { ICita } from 'app/shared/model/cita.model';
-import { getEntity, updateEntity, createEntity, reset } from '../../../entities/cita/cita.reducer';
-import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+
+interface PropsAddCita{
+    animales:any[];
+}
 
 export const AddCita = () => {
+  
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -36,21 +32,19 @@ export const AddCita = () => {
   const loading = useAppSelector(state => state.cita.loading);
   const updating = useAppSelector(state => state.cita.updating);
   const updateSuccess = useAppSelector(state => state.cita.updateSuccess);
+  const mascotasWithCitas = useAppSelector((state) => state.mascotWithCitasReducer.entities);
+  const [mascotasSeleccionadas,setMascotasSeleccionadas] = useState<any[]>([]);
 
 
-  //Crear una cita
-
-  // Editar animal
-
-  //Sacar codigo demas
-
-
-  //Agregar validaciones no se permite crear una cita si ya existe en esa hora
-
+  console.log(mascotasWithCitas);
 
   const handleClose = () => {
     navigate('/cita' + location.search);
   };
+
+  console.log(veterinarios);
+  console.log(esteticas);
+  
 
   useEffect(() => {
     if (isNew) {
@@ -77,11 +71,10 @@ export const AddCita = () => {
       values.id = Number(values.id);
     }
 
-
-    const allMascotas = await dispatch(getEntities({}));
-    
-
+    const allMascotas = await dispatch(getMascotas({}));
     const mascotas =(allMascotas.payload as any).data.filter(mascota => values.mascotas.includes(mascota.id.toString())) ;
+    console.log("values" , values);
+    
 
     const entity = {
       ...citaEntity,
@@ -91,15 +84,69 @@ export const AddCita = () => {
       veterinario: veterinarios.find(it => it.id.toString() === values.veterinario?.toString()),
       mascotas
     };
-    console.log(entity);
+    console.log("Entidad: " ,entity);
+
     
     if (isNew) {
-      const newEn = await dispatch(createEntity(entity));
+  
+      const newEn = await dispatch(createCita(entity));
       console.log(newEn);
+      if (newEn.payload) {
+      const nuevasMascotas = mascotas.map(mascota => {
+        // Clonar la mascota para evitar mutaciones inesperadas
+        const nuevaMascota = { ...mascota };
+        // Agregar la nueva cita a la lista de citas de la mascota
+        nuevaMascota.citas = [...nuevaMascota.citas, (newEn.payload as any).data];
+        return nuevaMascota;
+      });
+
+      nuevasMascotas.map(async m =>{
+        const mas = await dispatch(updateMascota(m));
+        console.log("Mascota Actualizada:", mas);
+      })
+    }
+      
     } else {
-      dispatch(updateEntity(entity));
+      
+      const newEn = await dispatch(updateCita(entity));
+      
+
+      if (newEn.payload) {
+      const nuevasMascotas = mascotas.map(mascota => {
+        // Clonar la mascota para evitar mutaciones inesperadas
+        const nuevaMascota = { ...mascota };
+        // Agregar la nueva cita a la lista de citas de la mascota
+        nuevaMascota.citas = [...nuevaMascota.citas, (newEn.payload as any).data];
+        return nuevaMascota;
+      });
+      nuevasMascotas.map(async m =>{
+        const mas = await dispatch(updateMascota(m));
+        console.log("Mascota Actualizada:", mas);
+      })        
+                      
+    }
+
+      
     }
   };
+
+
+  
+  const hadleMascotaSeleccionadas = (mascota: IMascota) => {
+    const index = mascotasSeleccionadas.findIndex((m) => m.id === mascota.id);
+    if (index === -1) {
+      // Si la mascota no está presente, agregarla al array
+      setMascotasSeleccionadas([...mascotasSeleccionadas, mascota]);
+    } else {
+      // Si la mascota ya está presente, eliminarla del array
+      const updatedMascotas = [...mascotasSeleccionadas];
+      updatedMascotas.splice(index, 1);
+      setMascotasSeleccionadas(updatedMascotas);
+    }
+    console.log("mascotas seleccioandas: ", mascotasSeleccionadas);
+    
+  };
+  
 
   const defaultValues = () =>
     isNew
@@ -166,7 +213,7 @@ export const AddCita = () => {
                 {esteticas
                   ? esteticas.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -182,7 +229,7 @@ export const AddCita = () => {
                 {cuidadoraHotels
                   ? cuidadoraHotels.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -198,7 +245,7 @@ export const AddCita = () => {
                 {veterinarios
                   ? veterinarios.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -212,15 +259,17 @@ export const AddCita = () => {
                 name="mascotas"
               >
                 <option value="" key="0" />
-                {mascotas
-                  ? mascotas.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                {mascotasWithCitas
+                  ? mascotasWithCitas.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}
+                      onClick={() => hadleMascotaSeleccionadas(otherEntity)}
+                      >
+                        {otherEntity.nIdentificacionCarnet}
                       </option>
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/citasCalendario" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/cita" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -228,7 +277,7 @@ export const AddCita = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" to="/citasCalendario" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -237,8 +286,7 @@ export const AddCita = () => {
           )}
         </Col>
       </Row>
-    </div>
-  );
+    </div>);
 };
 
 export default AddCita;
