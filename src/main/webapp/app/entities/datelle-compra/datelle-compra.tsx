@@ -89,6 +89,14 @@ export const DatelleCompra = () => {
     }
   };
 
+  /*
+  <Link to="/datelle-compra/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="veterinarySystemApp.datelleCompra.home.createLabel">Create new Datelle Compra</Translate>
+          </Link>
+  */
+
   return (
     <div>
       <h2 id="datelle-compra-heading" data-cy="DatelleCompraHeading">
@@ -98,11 +106,7 @@ export const DatelleCompra = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="veterinarySystemApp.datelleCompra.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/datelle-compra/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="veterinarySystemApp.datelleCompra.home.createLabel">Create new Datelle Compra</Translate>
-          </Link>
+          
         </div>
       </h2>
       <div className="table-responsive">
