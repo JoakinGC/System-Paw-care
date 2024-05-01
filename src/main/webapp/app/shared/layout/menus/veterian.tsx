@@ -20,6 +20,15 @@ const VeterianMenu = () =>{
           </span>
           </NavLink>
       </NavItem>
+      <NavItem>
+
+        <NavLink tag={Link} to="/vetirinarioMenu" className="d-flex align-items-center">
+          <FontAwesomeIcon icon={faArchive}  />
+          <span>
+            <Translate contentKey="global.menu.entities.historial">History</Translate>
+          </span>
+          </NavLink>
+      </NavItem>
 
   </>
     );
