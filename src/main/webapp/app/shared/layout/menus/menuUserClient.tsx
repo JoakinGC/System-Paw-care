@@ -18,15 +18,7 @@ export const CorouselMenu = () =>{
   </NavLink>
 </NavItem>
 
-    <NavItem>
-
-      <NavLink tag={Link} to="/historial" className="d-flex align-items-center">
-        <FontAwesomeIcon icon={faArchive}  />
-        <span>
-          <Translate contentKey="global.menu.entities.historial">History</Translate>
-        </span>
-        </NavLink>
-    </NavItem>
+    
     <NavItem>
     <NavLink tag={Link} to="/citasCalendario" className="d-flex align-items-center">
         <FontAwesomeIcon icon={faCalendarAlt}  />
@@ -35,6 +27,17 @@ export const CorouselMenu = () =>{
         </span>
         </NavLink>
     </NavItem>
+
+    <NavItem>
+
+      <NavLink tag={Link} to="/historyUser" className="d-flex align-items-center">
+        <FontAwesomeIcon icon={faArchive}  />
+        <span>
+          <Translate contentKey="global.menu.entities.historial">History</Translate>
+        </span>
+        </NavLink>
+    </NavItem>
+    
 
 </>
   );

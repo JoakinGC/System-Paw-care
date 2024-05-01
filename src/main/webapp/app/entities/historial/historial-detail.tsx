@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
@@ -8,17 +8,57 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './historial.reducer';
+import { getEntity as getEnfermedad } from '../enfermedad/enfermedad.reducer';
+import { getEntity as getMedicamento } from '../medicamento/medicamento.reducer';
 
 export const HistorialDetail = () => {
   const dispatch = useAppDispatch();
+  const [enfermedades, setEnfermedades] = useState<any[]>([])
+  const [medicamentos, setMedicamentos] = useState<any[]>([])
 
   const { id } = useParams<'id'>();
+  
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    const fetchHistorialData = async () => {
+      // Obtener el historial
+      await dispatch(getEntity(id));
+
+  };
+  
+    fetchHistorialData();
   }, []);
 
   const historialEntity = useAppSelector(state => state.historial.entity);
+  
+  useEffect(() => {
+    const fetchHistorialData = async () => {
+  
+
+      if(historialEntity.enfermedads&&historialEntity.enfermedads.length>1){
+        const enfermedadesData = historialEntity.enfermedads.map(async (enfermedad) => {
+          const enfermedadData = await dispatch(getEnfermedad(enfermedad.id));
+          return (enfermedadData.payload as any).data;
+        });
+        const enfermedadesResult = await Promise.all(enfermedadesData);
+        setEnfermedades(enfermedadesResult);
+      }
+      
+      // Obtener los medicamentos
+      if(historialEntity.medicamentos&&historialEntity.medicamentos.length>1){
+      const medicamentosData = historialEntity.medicamentos.map(async (medicamento) => {
+        const medicamentoData = await dispatch(getMedicamento(medicamento.id));
+        return (medicamentoData.payload as any).data;
+      });
+      const medicamentosResult = await Promise.all(medicamentosData);
+      setMedicamentos(medicamentosResult);
+    }
+  };
+  
+    fetchHistorialData();
+  }, [historialEntity]);
+  console.log(historialEntity);
+  
   return (
     <Row>
       <Col md="8">
@@ -52,10 +92,11 @@ export const HistorialDetail = () => {
             <Translate contentKey="veterinarySystemApp.historial.medicamento">Medicamento</Translate>
           </dt>
           <dd>
-            {historialEntity.medicamentos
-              ? historialEntity.medicamentos.map((val, i) => (
+            {medicamentos
+              ? medicamentos.map((val, i) => (
                   <span key={val.id}>
-                    <a>{val.id}</a>
+                    <p>{val.nombre}</p>
+                    <p>{val.descripcion}</p>
                     {historialEntity.medicamentos && i === historialEntity.medicamentos.length - 1 ? '' : ', '}
                   </span>
                 ))
@@ -65,10 +106,12 @@ export const HistorialDetail = () => {
             <Translate contentKey="veterinarySystemApp.historial.enfermedad">Enfermedad</Translate>
           </dt>
           <dd>
-            {historialEntity.enfermedads
-              ? historialEntity.enfermedads.map((val, i) => (
+            {enfermedades
+              ? enfermedades.map((val, i) => (
+                
                   <span key={val.id}>
-                    <a>{val.id}</a>
+                    <p>{val.nombre}</p>
+                    <p>{val.descripcion}</p>
                     {historialEntity.enfermedads && i === historialEntity.enfermedads.length - 1 ? '' : ', '}
                   </span>
                 ))
@@ -83,19 +126,13 @@ export const HistorialDetail = () => {
           </dt>
           <dd>{historialEntity.mascota ? historialEntity.mascota.id : ''}</dd>
         </dl>
-        <Button tag={Link} to="/historial" replace color="info" data-cy="entityDetailsBackButton">
+        <Button tag={Link} to="/historyUser" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.back">Back</Translate>
           </span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/historial/${historialEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" />{' '}
-          <span className="d-none d-md-inline">
-            <Translate contentKey="entity.action.edit">Edit</Translate>
-          </span>
-        </Button>
       </Col>
     </Row>
   );

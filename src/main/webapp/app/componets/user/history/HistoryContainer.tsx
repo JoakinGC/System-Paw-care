@@ -8,10 +8,12 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities as getUsuarios, getEntity} from 'app/entities/usuario/usuario.reducer';
+import { getEntities } from '../../../entities/historial/historial.reducer';
+import { getAccount } from 'app/shared/reducers/authentication';
+import { getEntities as getAllMascotas } from "app/entities/mascota/mascota.reducer";
 
-import { getEntities } from './cita.reducer';
-
-export const Cita = () => {
+export const HistoryContainer = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
@@ -21,9 +23,10 @@ export const Cita = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const citaList = useAppSelector(state => state.cita.entities);
-  const loading = useAppSelector(state => state.cita.loading);
-  const totalItems = useAppSelector(state => state.cita.totalItems);
+  const historialList = useAppSelector(state => state.historial.entities);
+  const loading = useAppSelector(state => state.historial.loading);
+  const totalItems = useAppSelector(state => state.historial.totalItems);
+  const [historyListUserActual,setHistoryListUserActual] = useState<any[]>([])
 
   const getAllEntities = () => {
     dispatch(
@@ -34,6 +37,9 @@ export const Cita = () => {
       }),
     );
   };
+
+
+
 
   const sortEntities = () => {
     getAllEntities();
@@ -90,104 +96,103 @@ export const Cita = () => {
     }
   };
 
-  console.log(citaList);
+
+  useEffect(() =>{
+    const citasFilterUserActual = async() =>{
+        const user = await dispatch(getAccount());
+        const { id } = (user.payload as any).data;
+        const allUsuarios = await dispatch(getUsuarios({}));
+        const usuarioActual = (allUsuarios.payload as any).data.find((e) => e.user.id === id);
+        const idDuenoActual = usuarioActual?.dueno?.id;
+  
+        // Obtener todas las mascotas
+        const todasLasMascotas = await dispatch(getAllMascotas({}));
+  
+        console.log(usuarioActual);
+        console.log(idDuenoActual);
+        
+        // Filtrar las mascotas por el ID del dueño actual
+        const mascotasUsuarioActual = (todasLasMascotas.payload as any).data.filter(mascota => mascota.dueno?.id === idDuenoActual);
+  
+        console.log(mascotasUsuarioActual);
+        console.log(historialList);
+        
+
+        const historialesMascotasUsuarioActual = historialList.filter(historial => {
+            return mascotasUsuarioActual.some(mascota => mascota.id === historial.mascota?.id);
+        });
+
+        console.log(historialesMascotasUsuarioActual);
+        
+
+        setHistoryListUserActual(historialesMascotasUsuarioActual)
+    };
+  
+    citasFilterUserActual();
+  }, [historialList]);
+  
   
   return (
     <div>
-      <h2 id="cita-heading" data-cy="CitaHeading">
-        <Translate contentKey="veterinarySystemApp.cita.home.title">Citas</Translate>
+      <h2 id="historial-heading" data-cy="HistorialHeading">
+        <Translate contentKey="veterinarySystemApp.historial.home.title">Historials</Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
-            <Translate contentKey="veterinarySystemApp.cita.home.refreshListLabel">Refresh List</Translate>
+            <Translate contentKey="veterinarySystemApp.historial.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/cita/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="veterinarySystemApp.cita.home.createLabel">Create new Cita</Translate>
-          </Link>
         </div>
       </h2>
-      <div className="table-responsive">
-        {citaList && citaList.length > 0 ? (
+      <div className="table-responsive d-flex flex-row justify-content-center">
+        {historialList && historialList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="veterinarySystemApp.cita.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                  <Translate contentKey="veterinarySystemApp.historial.id">ID</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('hora')}>
-                  <Translate contentKey="veterinarySystemApp.cita.hora">Hora</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('hora')} />
+                <th className="hand" onClick={sort('fechaConsulta')}>
+                  <Translate contentKey="veterinarySystemApp.historial.fechaConsulta">Fecha Consulta</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('fechaConsulta')} />
                 </th>
-                <th className="hand" onClick={sort('fecha')}>
-                  <Translate contentKey="veterinarySystemApp.cita.fecha">Fecha</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('fecha')} />
-                </th>
-                <th className="hand" onClick={sort('motivo')}>
-                  <Translate contentKey="veterinarySystemApp.cita.motivo">Motivo</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('motivo')} />
+                <th className="hand" onClick={sort('diagnostico')}>
+                  <Translate contentKey="veterinarySystemApp.historial.diagnostico">Diagnostico</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('diagnostico')} />
                 </th>
                 <th>
-                  <Translate contentKey="veterinarySystemApp.cita.estetica">Estetica</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="veterinarySystemApp.historial.veterinario">Veterinario</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="veterinarySystemApp.cita.cuidadoraHotel">Cuidadora Hotel</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="veterinarySystemApp.cita.veterinario">Veterinario</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="veterinarySystemApp.historial.mascota">Mascota</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {citaList.map((cita, i) => (
+              {historyListUserActual.map((historial, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`/cita/${cita.id}`} color="link" size="sm">
-                      {cita.id}
+                    <Button tag={Link} to={`/historial/${historial.id}`} color="link" size="sm">
+                      {historial.id}
                     </Button>
                   </td>
-                  <td>{cita.hora ? <TextFormat type="date" value={cita.hora} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{cita.fecha ? <TextFormat type="date" value={cita.fecha} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{cita.motivo}</td>
-                  <td>{cita.estetica ? <Link to={`/estetica/${cita.estetica.id}`}>{cita.estetica.id}</Link> : ''}</td>
                   <td>
-                    {cita.cuidadoraHotel ? <Link to={`/cuidadora-hotel/${cita.cuidadoraHotel.id}`}>{cita.cuidadoraHotel.id}</Link> : ''}
+                    {historial.fechaConsulta ? (
+                      <TextFormat type="date" value={historial.fechaConsulta} format={APP_LOCAL_DATE_FORMAT} />
+                    ) : null}
                   </td>
-                  <td>{cita.veterinario ? <Link to={`/veterinario/${cita.veterinario.id}`}>{cita.veterinario.id}</Link> : ''}</td>
+                  <td>{historial.diagnostico}</td>
+                  <td>
+                    {historial.veterinario ? <Link to={`/veterinario/${historial.veterinario.id}`}>{historial.veterinario.id}</Link> : ''}
+                  </td>
+                  <td>{historial.mascota ? <Link to={`/mascota/${historial.mascota.id}`}>{historial.mascota.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/cita/${cita.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <Button tag={Link} to={`/historial/${historial.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`/cita/${cita.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.edit">Edit</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/cita/${cita.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
                         </span>
                       </Button>
                     </div>
@@ -199,13 +204,13 @@ export const Cita = () => {
         ) : (
           !loading && (
             <div className="alert alert-warning">
-              <Translate contentKey="veterinarySystemApp.cita.home.notFound">No Citas found</Translate>
+              <Translate contentKey="veterinarySystemApp.historial.home.notFound">No Historials found</Translate>
             </div>
           )
         )}
       </div>
       {totalItems ? (
-        <div className={citaList && citaList.length > 0 ? '' : 'd-none'}>
+        <div className={historialList && historialList.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>
@@ -226,4 +231,4 @@ export const Cita = () => {
   );
 };
 
-export default Cita;
+export default HistoryContainer;
