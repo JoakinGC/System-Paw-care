@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IHistorial } from 'app/shared/model/historial.model';
 import { getEntities as getHistorials } from 'app/entities/historial/historial.reducer';
 import { ITratamiento } from 'app/shared/model/tratamiento.model';
-import { getEntity, updateEntity, createEntity, reset } from './tratamiento.reducer';
+import { getEntity as getTratamiento, updateEntity as updateTratamiento, createEntity as createTratamiento, reset as resetTratamientos } from './tratamiento.reducer';
 
 export const TratamientoUpdate = () => {
   const dispatch = useAppDispatch();
@@ -23,9 +23,9 @@ export const TratamientoUpdate = () => {
 
   const historials = useAppSelector(state => state.historial.entities);
   const tratamientoEntity = useAppSelector(state => state.tratamiento.entity);
-  const loading = useAppSelector(state => state.tratamiento.loading);
-  const updating = useAppSelector(state => state.tratamiento.updating);
-  const updateSuccess = useAppSelector(state => state.tratamiento.updateSuccess);
+  const loadingTratamiento = useAppSelector(state => state.tratamiento.loading);
+  const updatingTratamiento = useAppSelector(state => state.tratamiento.updating);
+  const updateSuccessTratamiento = useAppSelector(state => state.tratamiento.updateSuccess);
 
   const handleClose = () => {
     navigate('/tratamiento' + location.search);
@@ -33,19 +33,19 @@ export const TratamientoUpdate = () => {
 
   useEffect(() => {
     if (isNew) {
-      dispatch(reset());
+      dispatch(resetTratamientos());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getTratamiento(id));
     }
 
     dispatch(getHistorials({}));
   }, []);
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccessTratamiento) {
       handleClose();
     }
-  }, [updateSuccess]);
+  }, [updateSuccessTratamiento]);
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {
@@ -53,16 +53,16 @@ export const TratamientoUpdate = () => {
       values.id = Number(values.id);
     }
 
-    const entity = {
+    const entityTratamiento = {
       ...tratamientoEntity,
       ...values,
       historial: historials.find(it => it.id.toString() === values.historial?.toString()),
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      dispatch(createTratamiento(entityTratamiento));
     } else {
-      dispatch(updateEntity(entity));
+      dispatch(updateTratamiento(entityTratamiento));
     }
   };
 
@@ -85,7 +85,7 @@ export const TratamientoUpdate = () => {
       </Row>
       <Row className="justify-content-center">
         <Col md="8">
-          {loading ? (
+          {loadingTratamiento ? (
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
@@ -153,7 +153,7 @@ export const TratamientoUpdate = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updatingTratamiento}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
 import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
@@ -17,9 +17,11 @@ import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterin
 import { IMascota } from 'app/shared/model/mascota.model';
 import { getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
 import { IHistorial } from 'app/shared/model/historial.model';
-import { getEntity, updateEntity, createEntity, reset } from './historial.reducer';
+import { getEntity as getHistorial, updateEntity as updateHistorial, createEntity as createHistorial, reset  as resetHistorial} from '../../entities/historial/historial.reducer';
+import { getEntity as getTratamiento, updateEntity as updateTratamiento, createEntity as createTratamiento, reset as resetTratamientos } from '../../entities/tratamiento/tratamiento.reducer';
+import { getEntities as getHistorials } from 'app/entities/historial/historial.reducer';
 
-export const HistorialUpdate = () => {
+const FormVeterian = () =>{
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -32,9 +34,15 @@ export const HistorialUpdate = () => {
   const veterinarios = useAppSelector(state => state.veterinario.entities);
   const mascotas = useAppSelector(state => state.mascota.entities);
   const historialEntity = useAppSelector(state => state.historial.entity);
-  const loading = useAppSelector(state => state.historial.loading);
-  const updating = useAppSelector(state => state.historial.updating);
-  const updateSuccess = useAppSelector(state => state.historial.updateSuccess);
+  const loadingHistorial = useAppSelector(state => state.historial.loading);
+  const updatingHistorial = useAppSelector(state => state.historial.updating);
+  const updateSuccessHistorial = useAppSelector(state => state.historial.updateSuccess);
+  const historials = useAppSelector(state => state.historial.entities);
+  const tratamientoEntity = useAppSelector(state => state.tratamiento.entity);
+  const loadingTratamiento = useAppSelector(state => state.tratamiento.loading);
+  const updatingTratamiento = useAppSelector(state => state.tratamiento.updating);
+  const updateSuccessTratamiento = useAppSelector(state => state.tratamiento.updateSuccess);
+
 
   const handleClose = () => {
     navigate('/historial' + location.search);
@@ -42,30 +50,37 @@ export const HistorialUpdate = () => {
 
   useEffect(() => {
     if (isNew) {
-      dispatch(reset());
+      dispatch(resetHistorial());
+      dispatch(resetTratamientos());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getHistorial(id));
+      dispatch(getTratamiento(id));
     }
 
     dispatch(getMedicamentos({}));
     dispatch(getEnfermedads({}));
     dispatch(getVeterinarios({}));
     dispatch(getMascotas({}));
+    dispatch(getHistorials({}));
   }, []);
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccessHistorial) {
       handleClose();
     }
-  }, [updateSuccess]);
+    if (updateSuccessTratamiento) {
+      handleClose();
+    }
+  }, [updateSuccessHistorial,updateSuccessTratamiento]);
 
   // eslint-disable-next-line complexity
-  const saveEntity = values => {
+  const saveEntity = async values => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
 
-    const entity = {
+
+    const entityHistorial = {
       ...historialEntity,
       ...values,
       medicamentos: mapIdList(values.medicamentos),
@@ -75,9 +90,21 @@ export const HistorialUpdate = () => {
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      const newHistorial = await dispatch(createHistorial(entityHistorial));
+      const entityTratamiento = {
+        ...tratamientoEntity,
+        ...values,
+        newHistorial
+      };
+      dispatch(createTratamiento(entityTratamiento));
     } else {
-      dispatch(updateEntity(entity));
+      const newHistorial = await dispatch(updateHistorial(entityHistorial));
+      const entityTratamiento = {
+        ...tratamientoEntity,
+        ...values,
+        newHistorial
+      };
+      dispatch(updateTratamiento(entityTratamiento));
     }
   };
 
@@ -92,6 +119,7 @@ export const HistorialUpdate = () => {
           mascota: historialEntity?.mascota?.id,
         };
 
+
   return (
     <div>
       <Row className="justify-content-center">
@@ -103,7 +131,7 @@ export const HistorialUpdate = () => {
       </Row>
       <Row className="justify-content-center">
         <Col md="8">
-          {loading ? (
+          {loadingHistorial ? (
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
@@ -204,6 +232,47 @@ export const HistorialUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
+              {!isNew ? (
+                <ValidatedField
+                  name="id"
+                  required
+                  readOnly
+                  id="tratamiento-id"
+                  label={translate('global.field.id')}
+                  validate={{ required: true }}
+                />
+              ) : null}
+              <ValidatedField
+                label={translate('veterinarySystemApp.tratamiento.fechaInicio')}
+                id="tratamiento-fechaInicio"
+                name="fechaInicio"
+                data-cy="fechaInicio"
+                type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={translate('veterinarySystemApp.tratamiento.fechaFin')}
+                id="tratamiento-fechaFin"
+                name="fechaFin"
+                data-cy="fechaFin"
+                type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={translate('veterinarySystemApp.tratamiento.notas')}
+                id="tratamiento-notas"
+                name="notas"
+                data-cy="notas"
+                type="text"
+                validate={{
+                  maxLength: { value: 200, message: translate('entity.validation.maxlength', { max: 200 }) },
+                }}
+              />
+
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/historial" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -212,7 +281,7 @@ export const HistorialUpdate = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updatingHistorial}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -223,6 +292,6 @@ export const HistorialUpdate = () => {
       </Row>
     </div>
   );
-};
+}
 
-export default HistorialUpdate;
+export default FormVeterian;

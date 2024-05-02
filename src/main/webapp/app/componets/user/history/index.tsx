@@ -10,7 +10,6 @@ import HistoryContainer from './HistoryContainer';
 const HistoryUserRouter = () => (
   <ErrorBoundaryRoutes>
     <Route index element={<HistoryContainer />} />
-
   </ErrorBoundaryRoutes>
 );
 

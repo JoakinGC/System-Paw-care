@@ -40,7 +40,7 @@ const VeterianMenu = () =>{
     </NavItem>
     <NavItem>
 
-      <NavLink tag={Link} to="/datelle-compra" className="d-flex align-items-center">
+      <NavLink tag={Link} to="/vetirinarioMenu/new" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faUserCheck}  />
       <span>
         Diagnostico
