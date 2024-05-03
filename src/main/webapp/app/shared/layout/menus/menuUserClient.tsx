@@ -7,6 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faCalendar, faCalendarAlt, faStore } from '@fortawesome/free-solid-svg-icons';
 
 export const CorouselMenu = () =>{
+  const handleNavLinkClick = (navItem) => {
+    const link = `http://localhost:5173/`;
+    window.location.href = link;
+  };
+
   return(
     <>
     <NavItem>
@@ -38,6 +43,18 @@ export const CorouselMenu = () =>{
         </NavLink>
     </NavItem>
     
+    <NavItem>
+  
+      <NavLink  className="d-flex align-items-center"  onClick={() => handleNavLinkClick('contenido-de-navitem')}>
+
+        <FontAwesomeIcon icon={faArchive}  />
+        <span>
+          <Translate contentKey="global.menu.entities.chat">History</Translate>
+        </span>
+        </NavLink>
+    </NavItem>
+
+  
 
 </>
   );

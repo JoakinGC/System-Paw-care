@@ -18,7 +18,7 @@ export const HistorialDetail = () => {
 
   const { id } = useParams<'id'>();
   
-
+  
   useEffect(() => {
     const fetchHistorialData = async () => {
       // Obtener el historial
@@ -38,6 +38,8 @@ export const HistorialDetail = () => {
       if(historialEntity.enfermedads&&historialEntity.enfermedads.length>1){
         const enfermedadesData = historialEntity.enfermedads.map(async (enfermedad) => {
           const enfermedadData = await dispatch(getEnfermedad(enfermedad.id));
+          console.log(enfermedadData);
+          console.log(enfermedad.id);
           return (enfermedadData.payload as any).data;
         });
         const enfermedadesResult = await Promise.all(enfermedadesData);
@@ -48,6 +50,8 @@ export const HistorialDetail = () => {
       if(historialEntity.medicamentos&&historialEntity.medicamentos.length>1){
       const medicamentosData = historialEntity.medicamentos.map(async (medicamento) => {
         const medicamentoData = await dispatch(getMedicamento(medicamento.id));
+        console.log(medicamentoData);
+        console.log(medicamento.id);
         return (medicamentoData.payload as any).data;
       });
       const medicamentosResult = await Promise.all(medicamentosData);
@@ -56,8 +60,10 @@ export const HistorialDetail = () => {
   };
   
     fetchHistorialData();
-  }, [historialEntity]);
+  }, []);
   console.log(historialEntity);
+  console.log(medicamentos);
+  console.log(enfermedades);
   
   return (
     <Row>

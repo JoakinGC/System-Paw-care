@@ -27,7 +27,8 @@
         "compra": "Compra",
         "datelleCompra": "Datelle Compra",
         "producto": "Producto",
-        "corousel":"Tienda"
+        "corousel":"Tienda",
+        "chat":"Descubrete"
       },
       "account": {
         "main": "Cuenta",
