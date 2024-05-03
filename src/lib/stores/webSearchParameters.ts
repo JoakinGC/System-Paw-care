@@ -4,6 +4,6 @@ export interface WebSearchParameters {
 	nItems: number;
 }
 export const webSearchParameters = writable<WebSearchParameters>({
-	useSearch: false,
+	useSearch: true,
 	nItems: 5,
 });

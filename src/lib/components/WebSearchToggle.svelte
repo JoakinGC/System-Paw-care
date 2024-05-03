@@ -1,4 +1,4 @@
-<script lang="ts">
+<!--<script lang="ts">
 	import { webSearchParameters } from "$lib/stores/webSearchParameters";
 	import CarbonInformation from "~icons/carbon/information";
 	import Switch from "./Switch.svelte";
@@ -29,3 +29,4 @@
 		</div>
 	</div>
 </div>
+-->

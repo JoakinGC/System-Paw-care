@@ -129,7 +129,7 @@
 		/>
 	{/if}
 	<div
-		class="scrollbar-custom mr-1 h-full overflow-y-auto"
+		class="body scrollbar-custom mr-1 h-full overflow-y-auto"
 		use:snapScrollToBottom={messages.length ? [...messages] : false}
 		bind:this={chatContainer}
 	>
@@ -201,8 +201,9 @@
 			scrollNode={chatContainer}
 		/>
 	</div>
+
 	<div
-		class="dark:via-gray-80 pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto flex w-full max-w-3xl flex-col items-center justify-center bg-gradient-to-t from-white via-white/80 to-white/0 px-3.5 py-4 max-md:border-t max-md:bg-white sm:px-5 md:py-8 xl:max-w-4xl dark:border-gray-800 dark:from-gray-900 dark:to-gray-900/0 max-md:dark:bg-gray-900 [&>*]:pointer-events-auto"
+		class="body pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto flex w-full max-w-3xl flex-col items-center justify-center bg-gradient-to-t from-white via-white/80 to-white/0 px-3.5 py-4 sm:px-5 md:py-8 xl:max-w-4xl [&>*]:pointer-events-auto"
 	>
 		{#if sources.length}
 			<div class="flex flex-row flex-wrap justify-center gap-2.5 max-md:pb-3">
@@ -325,20 +326,6 @@
 			<div
 				class="mt-2 flex justify-between self-stretch px-1 text-xs text-gray-400/90 max-md:mb-2 max-sm:gap-2"
 			>
-				<p>
-					Model:
-					{#if !assistant}
-						<a href="{base}/settings/{currentModel.id}" class="hover:underline"
-							>{currentModel.displayName}</a
-						>{:else}
-						{@const model = models.find((m) => m.id === assistant?.modelId)}
-						<a
-							href="{base}/settings/assistants/{assistant._id}"
-							class="inline-flex items-center border-b hover:text-gray-600 dark:border-gray-700 dark:hover:text-gray-300"
-							>{model?.displayName}<CarbonCaretDown class="text-xxs" /></a
-						>{/if} <span class="max-sm:hidden">·</span><br class="sm:hidden" /> Generated content may
-					be inaccurate or false.
-				</p>
 				{#if messages.length}
 					<button
 						class="flex flex-none items-center hover:text-gray-400 max-sm:rounded-lg max-sm:bg-gray-50 max-sm:px-2.5 dark:max-sm:bg-gray-800"
@@ -351,7 +338,7 @@
 							<CarbonCheckmark class="text-[.6rem] sm:mr-1.5 sm:text-green-600" />
 							<div class="text-green-600 max-sm:hidden">Link copied to clipboard</div>
 						{:else}
-							<CarbonExport class="text-[.6rem] sm:mr-1.5 sm:text-primary-500" />
+							<CarbonExport class="sm:text-primary-500 text-[.6rem] sm:mr-1.5" />
 							<div class="max-sm:hidden">Share this conversation</div>
 						{/if}
 					</button>
