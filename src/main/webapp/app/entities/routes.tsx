@@ -29,6 +29,7 @@ import RoutesCalendarCita from 'app/componets/user/citas';
 import HistorialRoutes from './historial';
 import HistoryUserRouter from 'app/componets/user/history';
 import VeterianRoutes from 'app/componets/veterian';
+import MascotaUserRouter from 'app/componets/user/mascotas';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 
@@ -39,6 +40,7 @@ export default () => {
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
+        <Route path='mascotasUser/*' element={<MascotaUserRouter/>}/>
         <Route path='vetirinarioMenu/*' element={<VeterianRoutes/>}/>
         <Route path='historyUser/*' element={<HistoryUserRouter/>}/>
         <Route path="citasCalendario/*" element={<RoutesCalendarCita />} />
