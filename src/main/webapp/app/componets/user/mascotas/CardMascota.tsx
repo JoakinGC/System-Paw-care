@@ -11,11 +11,12 @@ import { getEntity  as getRaza} from "app/entities/raza/raza.reducer";
 import { getEntity as getEspecie} from "app/entities/especie/especie.reducer";
 import { ICita } from "app/shared/model/cita.model";
 import { getEntity as getCita} from "app/entities/cita/cita.reducer";
+import { Dayjs } from "dayjs";
 
 interface PropsCardMascota {
     urlImg: string;
-    nCarnet: string;
-    fechaNacimiento: string;
+    nCarnet: number;
+    fechaNacimiento: Dayjs;
     dueno: any;
     especie: any;
     raza: any;
@@ -66,7 +67,7 @@ const CardMascota = ({ urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,ci
             </div>
             <div className="card-details">
                 <span><strong>Número de Carnet: </strong> {nCarnet}</span>
-                <span><strong>Fecha de Nacimiento :</strong> {fechaNacimiento}</span>
+                <span><strong>Fecha de Nacimiento :</strong> {fechaNacimiento.toString()}</span>
                 <span><strong>Dueño: </strong>{duenoMascota&&duenoMascota.nombre}</span>
                 <span><strong>Especie: </strong>{especieMacota&&especieMacota.nombre} </span>
                 <span><strong>Raza: </strong>{razaMascota&&razaMascota.nombre} </span>

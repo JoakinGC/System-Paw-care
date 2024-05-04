@@ -7,10 +7,13 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-
-import { getEntities } from '../../../entities/mascota/mascota.reducer';
+import { AppDispatch, useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities as getUsuarios, getEntity as getUsuario} from 'app/entities/usuario/usuario.reducer';
+import { getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
 import CardMascota from './CardMascota';
+import { getAccount } from 'app/shared/reducers/authentication';
+import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
+import { IMascota } from 'app/shared/model/mascota.model';
 
 
 const MascotaList = () =>{
@@ -26,10 +29,11 @@ const MascotaList = () =>{
     const mascotaList = useAppSelector(state => state.mascota.entities);
     const loading = useAppSelector(state => state.mascota.loading);
     const totalItems = useAppSelector(state => state.mascota.totalItems);
+    const [mascotasUser,setMascotasUser] = useState<IMascota[]>();
   
     const getAllEntities = () => {
       dispatch(
-        getEntities({
+        getMascotas({
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
@@ -62,41 +66,43 @@ const MascotaList = () =>{
           order: sortSplit[1],
         });
       }
+
     }, [pageLocation.search]);
   
-    const sort = p => () => {
-      setPaginationState({
-        ...paginationState,
-        order: paginationState.order === ASC ? DESC : ASC,
-        sort: p,
-      });
-    };
+   
+  useEffect(() =>{
+    const geMascotasUserActual = async() =>{
+        const user = await dispatch(getAccount());
+        const { id } = (user.payload as any).data;
+        const allUsarios = await dispatch(getUsuarios({}))
+        const usuarioActual = (allUsarios.payload as any).data.filter((e,i) => 
+        e.user.id==id);
   
-    const handlePagination = currentPage =>
-      setPaginationState({
-        ...paginationState,
-        activePage: currentPage,
-      });
-  
-    const handleSyncList = () => {
-      sortEntities();
-    };
-  
-    const getSortIconByFieldName = (fieldName: string) => {
-      const sortFieldName = paginationState.sort;
-      const order = paginationState.order;
-      if (sortFieldName !== fieldName) {
-        return faSort;
-      } else {
-        return order === ASC ? faSortUp : faSortDown;
+        console.log(usuarioActual);
+        console.log(usuarioActual[0].dueno.id);
+
+        const duenoMn = ((await (dispatch as AppDispatch)(getDueno(usuarioActual[0].dueno.id))).payload as any).data;
+        console.log("dueno" , duenoMn);
+        
+        if(mascotaList&&mascotaList.length>0){
+            const mascotaUserActual = mascotaList.filter((e) =>{
+                return (e.dueno.id===usuarioActual[0].dueno.id)
+            })
+            console.log(mascotaUserActual);
+            setMascotasUser(mascotaUserActual)
+        }
       }
-    };
+
+      geMascotasUserActual()
+  },[mascotaList])
+    
+  
     console.log(mascotaList);
     
     return (
         <div>
-        {mascotaList && mascotaList.length > 0 ? (
-          mascotaList.map((mascota,index) => (
+        {mascotasUser && mascotasUser.length > 0 ? (
+          mascotasUser.map((mascota,index) => (
             <CardMascota
               key={index} 
               dueno={mascota.dueno}
