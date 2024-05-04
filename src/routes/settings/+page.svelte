@@ -22,7 +22,7 @@
 
 <div class="flex w-full flex-col gap-5">
 	<div class="flex items-start justify-between text-xl font-semibold text-gray-800">
-		<h2>Application Settings</h2>
+		<h2>Configuracion</h2>
 	</div>
 
 	<div class="flex h-full flex-col gap-4 pt-4 max-sm:pt-0">
@@ -46,23 +46,16 @@
 		<label class="mt-6 flex items-center">
 			<Switch name="hideEmojiOnSidebar" bind:checked={$settings.hideEmojiOnSidebar} />
 			<div class="inline cursor-pointer select-none items-center gap-2 pl-2">
-				Hide emoticons in conversation topics
+				Esconde los Emojis
 			</div>
 		</label>
 
 		<div class="mt-12 flex flex-col gap-3">
-			<a
-				href="https://huggingface.co/spaces/huggingchat/chat-ui/discussions"
-				target="_blank"
-				rel="noreferrer"
-				class="flex items-center underline decoration-gray-300 underline-offset-2 hover:decoration-gray-700"
-				><CarbonArrowUpRight class="mr-1.5 shrink-0 text-sm " /> Share your feedback on HuggingChat</a
-			>
 			<button
 				on:click|preventDefault={() => (isConfirmingDeletion = true)}
 				type="submit"
 				class="flex items-center underline decoration-gray-300 underline-offset-2 hover:decoration-gray-700"
-				><CarbonTrashCan class="mr-2 inline text-sm text-red-500" />Delete all conversations</button
+				><CarbonTrashCan class="mr-2 inline text-sm text-red-500" />Elimina todas las conversaciones</button
 			>
 		</div>
 	</div>
@@ -78,7 +71,7 @@
 				class="flex w-full flex-col gap-5 p-6"
 			>
 				<div class="flex items-start justify-between text-xl font-semibold text-gray-800">
-					<h2>Are you sure?</h2>
+					<h2>¿Estas seguro?</h2>
 					<button
 						type="button"
 						class="group"

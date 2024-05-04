@@ -31,13 +31,8 @@
 	<div class="lg:col-span-1">
 		<div>
 			<div class="mb-3 flex items-center text-2xl font-semibold">
-				<Logo classNames="mr-1 flex-none" />
+				<img src="https://i.postimg.cc/Cdf9qGDh/icon.png" width="40" height="40" alt="icon" />
 				{PUBLIC_APP_NAME}
-				<div
-					class="ml-3 flex h-6 items-center rounded-lg border border-gray-100 bg-gray-50 px-2 text-base text-gray-400 dark:border-gray-700/60 dark:bg-gray-800"
-				>
-					v{PUBLIC_VERSION}
-				</div>
 			</div>
 			<p class="text-base text-gray-600 dark:text-gray-400">
 				{PUBLIC_APP_DESCRIPTION ||
@@ -45,31 +40,7 @@
 			</p>
 		</div>
 	</div>
-	<div class="lg:col-span-2 lg:pl-24">
-		{#each announcementBanners as banner}
-			<AnnouncementBanner classNames="mb-4" title={banner.title}>
-				<a
-					target="_blank"
-					href={banner.linkHref}
-					class="mr-2 flex items-center underline hover:no-underline">{banner.linkTitle}</a
-				>
-			</AnnouncementBanner>
-		{/each}
-		<div class="overflow-hidden rounded-xl border dark:border-gray-800">
-			<div class="flex p-3">
-				<div>
-					<div class="text-sm text-gray-600 dark:text-gray-400">Current Model</div>
-					<div class="font-semibold">{currentModel.displayName}</div>
-				</div>
-				<a
-					href="{base}/settings/{currentModel.id}"
-					class="btn ml-auto flex h-7 w-7 self-start rounded-full bg-gray-100 p-1 text-xs hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-600"
-					><IconGear /></a
-				>
-			</div>
-			<ModelCardMetadata variant="dark" model={currentModel} />
-		</div>
-	</div>
+
 	{#if currentModelMetadata.promptExamples}
 		<div class="lg:col-span-3 lg:mt-6">
 			<p class="mb-3 text-gray-600 dark:text-gray-300">Examples</p>

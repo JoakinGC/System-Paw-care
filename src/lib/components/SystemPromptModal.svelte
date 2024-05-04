@@ -8,6 +8,7 @@
 	let isOpen = false;
 </script>
 
+<!--
 <button
 	type="button"
 	class="mx-auto flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-3 py-1 text-xs text-gray-500 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -16,7 +17,7 @@
 >
 	<CarbonBlockchain class="text-xxs" /> Using Custom System Prompt
 </button>
-
+-->
 {#if isOpen}
 	<Modal on:close={() => (isOpen = false)} width="w-full max-w-2xl">
 		<div class="flex w-full flex-col gap-5 p-6">

@@ -36,10 +36,10 @@
 	};
 
 	const titles: { [key: string]: string } = {
-		today: "Today",
-		week: "This week",
-		month: "This month",
-		older: "Older",
+		today: "Hoy",
+		week: "Esta semana",
+		month: "Este mes",
+		older: "Antiguos",
 	} as const;
 </script>
 
@@ -51,7 +51,7 @@
 	<a
 		href={`${base}/`}
 		on:click={handleNewChatClick}
-		class="flex rounded-lg border bg-white px-2 py-0.5 text-center shadow-sm hover:shadow-none dark:border-gray-600 dark:bg-gray-700"
+		class="flex rounded-lg border bg-white px-2 py-0.5 text-center text-sm shadow-sm hover:shadow-none dark:border-gray-600 dark:bg-gray-700"
 	>
 		Nueva Conversación
 	</a>
@@ -106,7 +106,7 @@
 		type="button"
 		class="flex h-9 flex-none items-center gap-1.5 rounded-lg pl-2.5 pr-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
 	>
-		Theme
+		Modo
 	</button>
 	{#if $page.data.enableAssistants}
 		<a
@@ -122,24 +122,16 @@
 	{/if}
 
 	<a
-		href="{base}/settings"
-		class="flex h-9 flex-none items-center gap-1.5 rounded-lg pl-2.5 pr-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-	>
-		Settings
-	</a>
-	<a
 		href="http://localhost:9000/"
 		class="flex h-9 flex-none items-center gap-1.5 rounded-lg pl-2.5 pr-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
 	>
-		Back to Homepage
+		Volver al Homepage
 	</a>
 
-	{#if PUBLIC_APP_NAME === "HuggingChat"}
-		<a
-			href="{base}/privacy"
-			class="flex h-9 flex-none items-center gap-1.5 rounded-lg pl-2.5 pr-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-		>
-			About & Privacy
-		</a>
-	{/if}
+	<a
+		href="{base}/privacy"
+		class="flex h-9 flex-none items-center gap-1.5 rounded-lg pl-2.5 pr-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+	>
+		Sobre la privacidad
+	</a>
 </div>

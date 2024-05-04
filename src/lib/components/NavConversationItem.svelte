@@ -77,7 +77,7 @@
 			class="flex h-5 w-5 items-center justify-center rounded md:hidden md:group-hover:flex"
 			title="Edit conversation title"
 			on:click|preventDefault={() => {
-				const newTitle = prompt("Edit this conversation title:", conv.title);
+				const newTitle = prompt("Edita el título de esta conversación:", conv.title);
 				if (!newTitle) return;
 				dispatch("editConversationTitle", { id: conv.id, title: newTitle });
 			}}

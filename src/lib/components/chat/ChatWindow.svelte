@@ -282,10 +282,10 @@
 				{:else}
 					<div class="flex w-full flex-1 border-none bg-transparent">
 						{#if lastIsError}
-							<ChatInput value="Sorry, something went wrong. Please try again." disabled={true} />
+							<ChatInput value="Perdón, algo salió mal. Inténtalo de nuevo." disabled={true} />
 						{:else}
 							<ChatInput
-								placeholder="Ask anything"
+								placeholder="Pregunta cualquier cosa"
 								bind:value={message}
 								on:submit={handleSubmit}
 								on:beforeinput={(ev) => {

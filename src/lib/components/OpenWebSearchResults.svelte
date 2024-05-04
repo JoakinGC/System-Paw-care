@@ -42,12 +42,12 @@
 			<IconInternet classNames="relative fill-current text-xl" />
 		</div>
 		<dl class="leading-4">
-			<dd class="text-sm">Web Search</dd>
+			<dd class="text-sm">Búsqueda Web</dd>
 			<dt class="flex items-center gap-1 truncate whitespace-nowrap text-[.82rem] text-gray-400">
 				{#if error}
 					{error.message}
 				{:else if sources}
-					Completed
+					Completado
 				{:else}
 					{webSearchMessages[webSearchMessages.length - 1].message}
 				{/if}
