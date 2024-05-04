@@ -35,9 +35,13 @@ export const MascotaUpdate = () => {
   const loading = useAppSelector(state => state.mascota.loading);
   const updating = useAppSelector(state => state.mascota.updating);
   const updateSuccess = useAppSelector(state => state.mascota.updateSuccess);
+  const [razasList,setListRaza] = useState<IRaza[]>()
+  const [especiesList,setListEspecies] = useState<IEspecie[]>()
+  const [citasList,setListCitas] = useState<ICita[]>()
+  
 
   const handleClose = () => {
-    navigate('/mascota' + location.search);
+    navigate('/mascotasUser' + location.search);
   };
 
   useEffect(() => {
@@ -51,6 +55,9 @@ export const MascotaUpdate = () => {
     dispatch(getDuenos({}));
     dispatch(getEspecies({}));
     dispatch(getRazas({}));
+
+    
+
   }, []);
 
   useEffect(() => {
@@ -67,6 +74,8 @@ export const MascotaUpdate = () => {
     if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number') {
       values.nIdentificacionCarnet = Number(values.nIdentificacionCarnet);
     }
+
+
 
     const entity = {
       ...mascotaEntity,
@@ -180,7 +189,7 @@ export const MascotaUpdate = () => {
                 {duenos
                   ? duenos.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -196,7 +205,7 @@ export const MascotaUpdate = () => {
                 {especies
                   ? especies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -212,12 +221,12 @@ export const MascotaUpdate = () => {
                 {razas
                   ? razas.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/mascota" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/mascotasUser" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">

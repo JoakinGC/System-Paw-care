@@ -105,6 +105,7 @@ const MascotaList = () =>{
           mascotasUser.map((mascota,index) => (
             <CardMascota
               key={index} 
+              id={mascota.id}
               dueno={mascota.dueno}
               especie={mascota.especie}
               fechaNacimiento={mascota.fechaNacimiento}

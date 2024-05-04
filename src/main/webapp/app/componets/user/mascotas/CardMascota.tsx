@@ -12,8 +12,15 @@ import { getEntity as getEspecie} from "app/entities/especie/especie.reducer";
 import { ICita } from "app/shared/model/cita.model";
 import { getEntity as getCita} from "app/entities/cita/cita.reducer";
 import { Dayjs } from "dayjs";
+import { Button } from "reactstrap";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Translate } from "react-jhipster";
+import { ITratamiento } from "app/shared/model/tratamiento.model";
+import { IMedicamento } from "app/shared/model/medicamento.model";
 
 interface PropsCardMascota {
+    id:number;
     urlImg: string;
     nCarnet: number;
     fechaNacimiento: Dayjs;
@@ -23,12 +30,14 @@ interface PropsCardMascota {
     citas: any[]
 }
 
-const CardMascota = ({ urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
+const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
     const dispatch = useDispatch()
     const [duenoMascota,setDuenoMascota] = useState<IDueno>({nombre:""});
     const [especieMacota,setEspecieMacota] = useState<IEspecie>();
     const [razaMascota,setRazaMascota] = useState<IRaza>();
     const [citasMascota,setCitasMascotas] = useState<ICita[]>(); 
+    const [medicamentoMascotas,setMedicamentosMascotas] = useState<IMedicamento[]>(); 
+    const [tratamientosMascotas,setTratamientosMascotas] = useState<ITratamiento[]>(); 
 
     useEffect(() => {
         const fetchDetailsMascota = async () => {
@@ -48,7 +57,7 @@ const CardMascota = ({ urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,ci
                 const citasResults = await Promise.all(citasPromises);
                 const citasData = citasResults.map(result => (result.payload as any).data);
                 console.log(citasData);
-                
+
                 setCitasMascotas(citasData);
             } catch (error) {
                 console.error("Error: ", error);
@@ -72,6 +81,31 @@ const CardMascota = ({ urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,ci
                 <span><strong>Especie: </strong>{especieMacota&&especieMacota.nombre} </span>
                 <span><strong>Raza: </strong>{razaMascota&&razaMascota.nombre} </span>
             </div>
+            <Button
+                        tag={Link}
+                        to={`/mascota/${id}/edit`}
+                        color="primary"
+                        size="sm"
+                        data-cy="entityEditButton"
+                      >
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          (window.location.href = `/mascota/${id}/delete`)
+                        }
+                        color="danger"
+                        size="sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
+                      </Button>
         </div>
         <div className="container-card-citas">
             <h2>Citas</h2>
@@ -86,6 +120,7 @@ const CardMascota = ({ urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,ci
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    
         }
         </div>
+
         </div>
     )
 }
