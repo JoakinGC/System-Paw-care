@@ -4,7 +4,7 @@ import { Translate } from 'react-jhipster';
 import { NavItem, NavLink, NavbarBrand } from 'reactstrap';
 import { NavLink as Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faCalendar, faCalendarAlt, faCamera, faCar, faPaw, faStore, fas } from '@fortawesome/free-solid-svg-icons';
+import { faArchive,  faCalendarAlt, faCamera,   faGlobe, faPaw, faStore } from '@fortawesome/free-solid-svg-icons';
 
 export const CorouselMenu = () =>{
   const handleNavLinkClick = (navItem) => {
@@ -47,7 +47,7 @@ export const CorouselMenu = () =>{
   
       <NavLink  className="d-flex align-items-center"  onClick={() => handleNavLinkClick('contenido-de-navitem')}>
 
-        <FontAwesomeIcon icon={faCar}  />
+        <FontAwesomeIcon icon={faGlobe}  />
         <span>
           <Translate contentKey="global.menu.entities.chat">History</Translate>
         </span>
