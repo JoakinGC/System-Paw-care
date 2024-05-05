@@ -18,6 +18,7 @@ import { IRaza } from 'app/shared/model/raza.model';
 import { getEntities as getRazas } from 'app/entities/raza/raza.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
 import { getMascota, updateEntity, createEntity, reset } from './mascota.reducer';
+import axios from 'axios';
 
 export const MascotaUpdate = () => {
   const dispatch = useAppDispatch();
@@ -74,6 +75,7 @@ export const MascotaUpdate = () => {
     if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number') {
       values.nIdentificacionCarnet = Number(values.nIdentificacionCarnet);
     }
+
 
 
 
@@ -145,12 +147,12 @@ export const MascotaUpdate = () => {
                 id="mascota-foto"
                 name="foto"
                 data-cy="foto"
-                type="text"
+                type="file"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
-                  maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
                 }}
               />
+
               <ValidatedField
                 label={translate('veterinarySystemApp.mascota.fechaNacimiento')}
                 id="mascota-fechaNacimiento"
@@ -248,3 +250,6 @@ export const MascotaUpdate = () => {
 };
 
 export default MascotaUpdate;
+
+
+

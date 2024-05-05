@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class MascotaResourceIT {
+class  MascotaResourceIT {
 
     private static final Integer DEFAULT_N_IDENTIFICACION_CARNET = 1;
     private static final Integer UPDATED_N_IDENTIFICACION_CARNET = 2;

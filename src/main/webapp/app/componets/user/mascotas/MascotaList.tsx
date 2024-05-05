@@ -14,6 +14,8 @@ import CardMascota from './CardMascota';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
+import axios from 'axios';
+import ImageUploadForm from 'app/entities/image/ImageUploadForm';
 
 
 const MascotaList = () =>{
@@ -120,6 +122,10 @@ const MascotaList = () =>{
             <Translate contentKey="veterinarySystemApp.mascota.home.notFound">No Mascotas found</Translate>
           </div>
         ) : null}
+
+
+
+        <ImageUploadForm/>
       </div>
       
     );
@@ -127,3 +133,15 @@ const MascotaList = () =>{
 
 
 export default MascotaList;
+
+
+
+
+
+
+
+
+
+
+
+
