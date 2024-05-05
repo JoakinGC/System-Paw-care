@@ -43,7 +43,13 @@ module.exports = async options =>
             },
           ],
         },
+        {
+          test: /\.json$/,
+          use: 'json-loader',
+          type: 'javascript/auto'
+        },
       ],
+  
     },
     devServer: {
       hot: true,

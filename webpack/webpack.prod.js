@@ -47,6 +47,10 @@ module.exports = async () =>
             },
           ],
         },
+        {
+          test: /\.json$/,
+          type: 'module'
+        }
       ],
     },
     optimization: {
