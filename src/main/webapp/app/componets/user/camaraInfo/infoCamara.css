@@ -1,0 +1,24 @@
+.container-info-cam{
+    text-align: center;
+    padding-left: 30vw;
+    padding-right: 30vw;
+    padding-top: 30vh;
+}
+
+.title-info-cam{
+    text-align: center;
+    font-size: 10vh;
+    margin-bottom: 10vh;
+}
+
+.subtitle-info-cam{
+    text-align: center;
+    font-size: 7vh;
+    margin-bottom: 10vh;
+    margin-top: 10vh;
+}
+
+.paragraph{
+    font-size: 5vh;
+    text-align: left;
+}
