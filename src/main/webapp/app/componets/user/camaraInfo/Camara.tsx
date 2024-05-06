@@ -14,7 +14,7 @@ const CamaraUso = () => {
   const canvasRef = useRef(null);
   const otroCanvasRef = useRef(null);
   const [resultado, setResultado] = useState("");
-
+  console.log(modeloEntrenado)
   let modelo = null;
   let currentStream = null;
   let facingMode = "user";
@@ -23,9 +23,12 @@ const CamaraUso = () => {
     const cargarModelo = async () => {
       console.log("Cargando modelo...");
       try {
-        const modelo = await tf.loadLayersModel('../../../model.json');
+        const modelTopology = modeloEntrenado.modelTopology;
+        const weightsManifest = modeloEntrenado.weightsManifest;
+        modelo = await tf.loadLayersModel(
+            tf.io.fromMemory(modelTopology, weightsManifest)
+        );
         console.log("Modelo cargado exitosamente");
-        return modelo;
       } catch (error) {
         console.error("Error al cargar el modelo:", error);
         throw error;
@@ -111,37 +114,49 @@ const CamaraUso = () => {
       const canvas = canvasRef.current;
       const ctx2 = otroCanvas.getContext("2d");
       const ctx = canvas.getContext("2d");
-      const imgData = ctx2.getImageData(0, 0, 100, 100);
 
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+
+      console.log(canvas);
+      const imgData = ctx2.getImageData(0, 0, canvasWidth, canvasHeight);
       // Hacer la predicción
-      var arr = [];
-      var arr100 = [];
+     // Preparación de los datos de entrada para el modelo
+     const arr = [];
 
-      for (var p = 0; p < imgData.data.length; p += 4) {
-        var rojo = imgData.data[p] / 255;
-        var verde = imgData.data[p + 1] / 255;
-        var azul = imgData.data[p + 2] / 255;
+     for (let i = 0; i < 100; i++) {
+         const row = [];
+         for (let j = 0; j < 100; j++) {
+             const pixelIndex = (i * 100 + j) * 4; // Cálculo del índice del píxel
+             const rojo = imgData.data[pixelIndex] / 255;
+             const verde = imgData.data[pixelIndex + 1] / 255;
+             const azul = imgData.data[pixelIndex + 2] / 255;
+             const gris = (rojo + verde + azul) / 3;
+             row.push(gris);
+         }
+         arr.push(row);
+     }
+     
+     // Convertimos el arreglo en un TypedArray plano
+      const flatArr = arr.flat();
 
-        var gris = (rojo + verde + azul) / 3;
 
-        arr100.push([gris]);
-        if (arr100.length === 100) {
-          arr.push(arr100);
-          arr100 = [];
-        }
-      }
+      // Creamos el tensor 4D
+      const tensor = tf.tensor4d(flatArr, [1, 100, 100, 1]);
 
-      arr = [arr];
 
-      var tensor = window.tf.tensor4d(arr);
-      var resultadoPrediccion = modelo.predict(tensor).dataSync();
 
-      var respuesta;
-      if (resultadoPrediccion <= 0.5) {
+      const resultadoPrediccion = modelo.predict(tensor).dataSync();
+
+
+      let respuesta;
+      if (resultadoPrediccion[0] <= 0.5) {
         respuesta = "Gato";
       } else {
         respuesta = "Perro";
       }
+
+      console.log(respuesta);
       setResultado(respuesta);
     }
 
