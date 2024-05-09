@@ -37,7 +37,7 @@ public class Factores implements Serializable {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "factores")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "factores")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "razas", "especies", "terapias", "factores", "historials" }, allowSetters = true)
     private Set<Enfermedad> enfermedads = new HashSet<>();

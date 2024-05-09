@@ -39,12 +39,12 @@ public class Mascota implements Serializable {
     @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mascota")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "mascota")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tratamientos", "medicamentos", "enfermedads", "veterinario", "mascota" }, allowSetters = true)
     private Set<Historial> historials = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_mascota__cita",
         joinColumns = @JoinColumn(name = "mascota_id"),
@@ -53,15 +53,15 @@ public class Mascota implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Cita> citas = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "mascotas", "usuario" }, allowSetters = true)
     private Dueno dueno;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "mascotas", "enfermedads" }, allowSetters = true)
     private Especie especie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "mascotas", "enfermedads" }, allowSetters = true)
     private Raza raza;
 

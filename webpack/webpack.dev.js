@@ -48,6 +48,18 @@ module.exports = async options =>
           use: 'json-loader',
           type: 'javascript/auto'
         },
+        {
+          test: /\.(bin)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[contenthash:8].[ext]',
+              }
+            }
+          ]
+        }
+        
       ],
   
     },

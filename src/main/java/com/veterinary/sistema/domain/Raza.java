@@ -33,12 +33,12 @@ public class Raza implements Serializable {
     @Column(name = "nombre_cientifico", length = 50)
     private String nombreCientifico;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "raza")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "raza")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "historials", "citas", "dueno", "especie", "raza" }, allowSetters = true)
     private Set<Mascota> mascotas = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "razas")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "razas")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "razas", "especies", "terapias", "factores", "historials" }, allowSetters = true)
     private Set<Enfermedad> enfermedads = new HashSet<>();

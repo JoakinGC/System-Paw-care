@@ -1,252 +1,253 @@
-import React, { useEffect, useRef, useState } from "react";
-import modeloEntrenado from '../../../model.json'
-import * as tf from '@tensorflow/tfjs';
+import React, { useRef, useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
+import { fetchDiseases, usePredictionsAnimal, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
 
-
-declare global {
-  interface Window {
-    tf: any;
-  }
-}
-
-const CamaraUso = () => {
+const CamaraUser = () => {
+  const [modelo, setModelo] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const otroCanvasRef = useRef(null);
-
-  const [resultado, setResultado] = useState("");
-  let modelo = null;
-  let currentStream = null;
-  let facingMode = "user";
+  const [result, setResult] = useState<any>({});
+  const [facingMode, setFacingMode] = useState("user");
+  const [stream, setStream] = useState(null);
 
   useEffect(() => {
-    const cargarModelo = async () => {
+    const cargarModeloInterno = async () => {
       console.log("Cargando modelo...");
       try {
-        const modelTopology = modeloEntrenado.modelTopology;
-        const weightsManifest = modeloEntrenado.weightsManifest;
-        modelo = await tf.loadLayersModel(
-            tf.io.fromMemory(modelTopology, weightsManifest)
-        );
-        console.log("Modelo cargado exitosamente");
+        const modeloCargado = await tf.loadLayersModel("model.json");
+        setModelo(modeloCargado);
+        console.log("Modelo cargado");
       } catch (error) {
         console.error("Error al cargar el modelo:", error);
-        throw error;
       }
     };
-    
-    cargarModelo();
+
+    cargarModeloInterno();
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const mostrarCamara = async () => {
+      try {
+        const newStream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: { width: 400, height: 400 },
+        });
+        setStream(newStream);
+        videoRef.current.srcObject = newStream;
+      } catch (error) {
+        console.error("No se pudo utilizar la cámara:", error);
+      }
+    };
+
     mostrarCamara();
 
     return () => {
-      if (currentStream) {
-        currentStream.getTracks().forEach((track) => {
-          track.stop();
-        });
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, []);
 
-  const mostrarCamara = () => {
-    const opciones = {
-      audio: false,
-      video: {
-        width: 400,
-        height: 400,
-      },
+  useEffect(() => {
+    if (!canvasRef.current || !videoRef.current) return;
+  
+    const procesarCamara = () => {
+      const ctx = canvasRef.current.getContext("2d");
+      ctx.drawImage(
+        videoRef.current,
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
     };
-
-    navigator.mediaDevices
-      .getUserMedia(opciones)
-      .then((stream) => {
-        currentStream = stream;
-        videoRef.current.srcObject = currentStream;
-        procesarCamara();
-        predecir();
-      })
-      .catch((err) => {
-        alert("No se pudo utilizar la camara :(");
-        console.log(err);
-      });
-  };
-
-  const cambiarCamara = () => {
-    if (currentStream) {
-      currentStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-    }
-
-    facingMode = facingMode === "user" ? "environment" : "user";
-
-    const opciones = {
-      audio: false,
-      video: {
-        facingMode: facingMode,
-        width: 400,
-        height: 400,
-      },
+  
+    const intervalId = setInterval(procesarCamara, 20);
+  
+    return () => {
+      clearInterval(intervalId); // Limpiar el intervalo al desmontar el componente
     };
-
-    navigator.mediaDevices
-      .getUserMedia(opciones)
-      .then((stream) => {
-        currentStream = stream;
-        videoRef.current.srcObject = currentStream;
-      })
-      .catch((err) => {
-        console.log("Oops, hubo un error", err);
-      });
-  };
-
-  const procesarCamara = () => {
-    const canvas = canvasRef.current;
-    const video = videoRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(video, 0, 0, 400, 400, 0, 0, 400, 400);
-    setTimeout(procesarCamara, 20);
-  };
-
-  const predecir = () => {
-    if (modelo !== null) {
-      const canvas = canvasRef.current;
-      const otroCanvas = otroCanvasRef.current;
-      const ctx = canvas.getContext("2d");
-      const ctx2 = otroCanvas.getContext("2d");
+  }, [canvasRef, videoRef]);
   
-      // Procesar la imagen antes de la predicción
-      resample_single();
-  
-      // Convertir la imagen a escala de grises
-      const imgData = ctx2.getImageData(0, 0, 100, 100);
-  
-      // Preparar los datos de entrada para el modelo
-      const arr = [];
-      let arr100 = [];
-      for (let p = 0; p < imgData.data.length; p += 4) {
-        const gris = imgData.data[p] / 255;
-        arr100.push([gris]);
-        if (arr100.length === 100) {
-          arr.push(arr100);
-          arr100 = [];
+
+  useEffect(() => {
+    const predecir = async () => {
+      if (modelo != null && canvasRef.current && otroCanvasRef.current) {
+        resample_single(
+          canvasRef.current,
+          100,
+          100,
+          otroCanvasRef.current
+        );
+
+        const image = canvasRef.current.toDataURL('image/jpeg');
+        const ctx2 = otroCanvasRef.current.getContext("2d");
+        const imgData = ctx2.getImageData(0, 0, 100, 100);
+        let arr = [];
+        let arr100 = [];
+
+        for (let p = 0; p < imgData.data.length; p += 4) {
+          const rojo = imgData.data[p] / 255;
+          const verde = imgData.data[p + 1] / 255;
+          const azul = imgData.data[p + 2] / 255;
+
+          const gris = (rojo + verde + azul) / 3;
+
+          arr100.push([gris]);
+          if (arr100.length === 100) {
+            arr.push(arr100);
+            arr100 = [];
+          }
         }
-      }
-      const tensor = tf.tensor4d([arr]);
-  
-      // Realizar la predicción
-      const resultadoPrediccion = modelo.predict(tensor).dataSync();
-      const respuesta = resultadoPrediccion <= 0.5 ? "Gato" : "Perro";
-      setResultado(respuesta);
-    }
-  
-    setTimeout(predecir, 150);
-  };
-  
 
-  const resample_single = () => {
-    const canvas = canvasRef.current;
-    const otroCanvas = otroCanvasRef.current;
-  
-    const width_source = canvas.width;
-    const height_source = canvas.height;
-    const width = 100;
-    const height = 100;
-  
-    const ratio_w = width_source / width;
-    const ratio_h = height_source / height;
-    const ratio_w_half = Math.ceil(ratio_w / 2);
-    const ratio_h_half = Math.ceil(ratio_h / 2);
-  
+        arr = [arr];
+
+        const tensor = tf.tensor4d(arr);
+        const resultado = modelo.predict(tensor).dataSync();
+        const resultBDogAndCat = await usePredictionsDogsAndCats(image);
+        console.log(resultBDogAndCat);
+
+        let respuesta:any;
+        if (resultado <= 0.5&&resultBDogAndCat&&resultBDogAndCat.includes("cat")) {
+          const breedCat = await usePredictionsBreedCat(image);
+          console.log(breedCat);
+          
+
+          respuesta = {
+            "especie": 'Gato',
+            "raza": breedCat
+          };
+        } else {
+          const breedDog = await usePredictionsBreedDog(image);
+          console.log(breedDog);
+          
+          respuesta = {
+            "especie": 'Perro',
+            "raza": breedDog
+          };
+        }
+        setResult(respuesta);
+      }
+
+      setTimeout(predecir, 10000);
+    };
+
+    predecir();
+
+    return () => {};
+  }, [modelo]);
+
+  const resample_single = (canvas, width, height, resizeCanvas) => {
+    const widthSource = canvas.width;
+    const heightSource = canvas.height;
+    width = Math.round(width);
+    height = Math.round(height);
+
+    const ratioW = widthSource / width;
+    const ratioH = heightSource / height;
+    const ratioWHalf = Math.ceil(ratioW / 2);
+    const ratioHHalf = Math.ceil(ratioH / 2);
     const ctx = canvas.getContext("2d");
-    const ctx2 = otroCanvas.getContext("2d");
-    const img = ctx.getImageData(0, 0, width_source, height_source);
+    const ctx2 = resizeCanvas.getContext("2d");
+    const img = ctx.getImageData(0, 0, widthSource, heightSource);
     const img2 = ctx2.createImageData(width, height);
     const data = img.data;
     const data2 = img2.data;
-  
+
     for (let j = 0; j < height; j++) {
       for (let i = 0; i < width; i++) {
         const x2 = (i + j * width) * 4;
         let weight = 0;
         let weights = 0;
-        let weights_alpha = 0;
-        let gx_r = 0;
-        let gx_g = 0;
-        let gx_b = 0;
-        let gx_a = 0;
-        const center_y = (j + 0.5) * ratio_h;
-        const yy_start = Math.floor(j * ratio_h);
-        const yy_stop = Math.ceil((j + 1) * ratio_h);
-        for (let yy = yy_start; yy < yy_stop; yy++) {
-          const dy = Math.abs(center_y - (yy + 0.5)) / ratio_h_half;
-          const center_x = (i + 0.5) * ratio_w;
-          const w0 = dy * dy; //pre-calc part of w
-          const xx_start = Math.floor(i * ratio_w);
-          const xx_stop = Math.ceil((i + 1) * ratio_w);
-          for (let xx = xx_start; xx < xx_stop; xx++) {
-            const dx = Math.abs(center_x - (xx + 0.5)) / ratio_w_half;
+        let weightsAlpha = 0;
+        let gxR = 0;
+        let gxG = 0;
+        let gxB = 0;
+        let gxA = 0;
+        const centerY = (j + 0.5) * ratioH;
+        const yyStart = Math.floor(j * ratioH);
+        const yyStop = Math.ceil((j + 1) * ratioH);
+
+        for (let yy = yyStart; yy < yyStop; yy++) {
+          const dy = Math.abs(centerY - (yy + 0.5)) / ratioHHalf;
+          const centerX = (i + 0.5) * ratioW;
+          const w0 = dy * dy;
+
+          const xxStart = Math.floor(i * ratioW);
+          const xxStop = Math.ceil((i + 1) * ratioW);
+
+          for (let xx = xxStart; xx < xxStop; xx++) {
+            const dx = Math.abs(centerX - (xx + 0.5)) / ratioWHalf;
             const w = Math.sqrt(w0 + dx * dx);
+
             if (w >= 1) {
-              //pixel too far
               continue;
             }
-            //hermite filter
+
             weight = 2 * w * w * w - 3 * w * w + 1;
-            const pos_x = 4 * (xx + yy * width_source);
-            //alpha
-            gx_a += weight * data[pos_x + 3];
-            weights_alpha += weight;
-            //colors
-            if (data[pos_x + 3] < 255) weight = weight * data[pos_x + 3] / 250;
-            gx_r += weight * data[pos_x];
-            gx_g += weight * data[pos_x + 1];
-            gx_b += weight * data[pos_x + 2];
+            const posX = 4 * (xx + yy * widthSource);
+            gxA += weight * data[posX + 3];
+            weightsAlpha += weight;
+
+            if (data[posX + 3] < 255) {
+              weight = weight * data[posX + 3] / 250;
+            }
+
+            gxR += weight * data[posX];
+            gxG += weight * data[posX + 1];
+            gxB += weight * data[posX + 2];
             weights += weight;
           }
         }
-        data2[x2] = gx_r / weights;
-        data2[x2 + 1] = gx_g / weights;
-        data2[x2 + 2] = gx_b / weights;
-        data2[x2 + 3] = gx_a / weights_alpha;
+
+        data2[x2] = gxR / weights;
+        data2[x2 + 1] = gxG / weights;
+        data2[x2 + 2] = gxB / weights;
+        data2[x2 + 3] = gxA / weightsAlpha;
       }
     }
-  
+
     ctx2.putImageData(img2, 0, 0);
   };
   
+  const cambiarCamara = () => {
+    if (videoRef.current.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
 
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: { facingMode: facingMode === "user" ? "environment" : "user", width: 400, height: 400 },
+      })
+      .then((newStream) => {
+        setStream(newStream);
+        videoRef.current.srcObject = newStream;
+      })
+      .catch((error) => {
+        console.log("Oops, hubo un error", error);
+      });
+  };
 
   return (
     <div>
+      <div className="b-example-divider"></div>
       <div className="container mt-5">
         <div className="row">
           <div className="col-12 col-md-4 offset-md-4 text-center">
-            <video
-              ref={videoRef}
-              playsInline
-              autoPlay
-              style={{ width: "1px" }}
-            ></video>
-            <button
-              className="btn btn-primary mb-2"
-              onClick={cambiarCamara}
-            >
-              Cambiar cámara
-            </button>
-            <canvas
-              ref={canvasRef}
-              width="400"
-              height="400"
-              style={{ maxWidth: "100%" }}
-            ></canvas>
-            <canvas
-              ref={otroCanvasRef}
-              width="150"
-              height="150"
-              style={{ display: "none" }}
-            ></canvas>
-            <div id="resultado">{resultado}</div>
+            <video ref={videoRef} id="video" playsInline autoPlay style={{ width: "1px" }} />
+            <button className="btn btn-primary mb-2" id="cambiar-camara" onClick={cambiarCamara}>Cambiar cámara</button>
+            <canvas ref={canvasRef} id="canvas" width="400" height="400" style={{ maxWidth: "100%" }}></canvas>
+            <canvas ref={otroCanvasRef} id="otrocanvas" width="150" height="150" style={{ display: "none" }}></canvas>
+            <div id="resultado">
+            {result&&result.especie}<br/>
+            {result&&result.raza}
+            </div>
           </div>
         </div>
       </div>
@@ -254,4 +255,4 @@ const CamaraUso = () => {
   );
 };
 
-export default CamaraUso;
+export default CamaraUser;

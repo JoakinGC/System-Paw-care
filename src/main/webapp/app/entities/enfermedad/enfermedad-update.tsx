@@ -155,11 +155,16 @@ export const EnfermedadUpdate = () => {
                 {razas
                   ? razas.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <Link to="/raza/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" />
+                  &nbsp;
+                  <Translate contentKey="veterinarySystemApp.raza.home.createLabel">Create new Raza</Translate>
+              </Link>
               <ValidatedField
                 label={translate('veterinarySystemApp.enfermedad.especie')}
                 id="enfermedad-especie"
@@ -172,7 +177,7 @@ export const EnfermedadUpdate = () => {
                 {especies
                   ? especies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -189,7 +194,7 @@ export const EnfermedadUpdate = () => {
                 {terapias
                   ? terapias.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}
@@ -206,7 +211,7 @@ export const EnfermedadUpdate = () => {
                 {factores
                   ? factores.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nombre}
                       </option>
                     ))
                   : null}

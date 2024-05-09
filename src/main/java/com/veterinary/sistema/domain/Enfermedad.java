@@ -33,7 +33,7 @@ public class Enfermedad implements Serializable {
     @Column(name = "descripcion", length = 200)
     private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_enfermedad__raza",
         joinColumns = @JoinColumn(name = "enfermedad_id"),
@@ -43,7 +43,7 @@ public class Enfermedad implements Serializable {
     @JsonIgnoreProperties(value = { "mascotas", "enfermedads" }, allowSetters = true)
     private Set<Raza> razas = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_enfermedad__especie",
         joinColumns = @JoinColumn(name = "enfermedad_id"),
@@ -53,7 +53,7 @@ public class Enfermedad implements Serializable {
     @JsonIgnoreProperties(value = { "mascotas", "enfermedads" }, allowSetters = true)
     private Set<Especie> especies = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_enfermedad__terapia",
         joinColumns = @JoinColumn(name = "enfermedad_id"),
@@ -63,7 +63,7 @@ public class Enfermedad implements Serializable {
     @JsonIgnoreProperties(value = { "enfermedads" }, allowSetters = true)
     private Set<Terapia> terapias = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_enfermedad__factores",
         joinColumns = @JoinColumn(name = "enfermedad_id"),
@@ -73,7 +73,7 @@ public class Enfermedad implements Serializable {
     @JsonIgnoreProperties(value = { "enfermedads" }, allowSetters = true)
     private Set<Factores> factores = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "enfermedads")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "enfermedads")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tratamientos", "medicamentos", "enfermedads", "veterinario", "mascota" }, allowSetters = true)
     private Set<Historial> historials = new HashSet<>();

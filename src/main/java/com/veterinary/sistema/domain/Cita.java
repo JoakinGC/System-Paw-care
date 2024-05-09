@@ -37,15 +37,15 @@ public class Cita implements Serializable {
     @Column(name = "motivo", length = 100)
     private String motivo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "citas", "usuario" }, allowSetters = true)
     private Estetica estetica;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "citas" }, allowSetters = true)
     private CuidadoraHotel cuidadoraHotel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "historials", "citas", "usuario", "estudios" }, allowSetters = true)
     private Veterinario veterinario;
 

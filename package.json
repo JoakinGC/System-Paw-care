@@ -139,6 +139,7 @@
     "eslint-plugin-cypress": "2.15.1",
     "eslint-plugin-react": "7.34.1",
     "eslint-webpack-plugin": "4.1.0",
+    "file-loader": "^6.2.0",
     "folder-hash": "4.0.4",
     "fork-ts-checker-webpack-plugin": "9.0.2",
     "generator-jhipster": "8.2.1",

@@ -37,12 +37,12 @@ public class Historial implements Serializable {
     @Column(name = "diagnostico", length = 200, nullable = false)
     private String diagnostico;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "historial")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "historial")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "historial" }, allowSetters = true)
     private Set<Tratamiento> tratamientos = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_historial__medicamento",
         joinColumns = @JoinColumn(name = "historial_id"),
@@ -52,7 +52,7 @@ public class Historial implements Serializable {
     @JsonIgnoreProperties(value = { "historials" }, allowSetters = true)
     private Set<Medicamento> medicamentos = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_historial__enfermedad",
         joinColumns = @JoinColumn(name = "historial_id"),
@@ -62,11 +62,11 @@ public class Historial implements Serializable {
     @JsonIgnoreProperties(value = { "razas", "especies", "terapias", "factores", "historials" }, allowSetters = true)
     private Set<Enfermedad> enfermedads = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "historials", "citas", "usuario", "estudios" }, allowSetters = true)
     private Veterinario veterinario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "historials", "citas", "dueno", "especie", "raza" }, allowSetters = true)
     private Mascota mascota;
 

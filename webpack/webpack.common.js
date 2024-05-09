@@ -128,6 +128,8 @@ module.exports = async options => {
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
             { from: './src/main/webapp/robots.txt', to: 'robots.txt' },
             { from: './src/main/webapp/app/model.json', to: 'model.json' },
+            { from: './src/main/webapp/app/assets/group1-shard1of2.bin', to: 'assets/' },
+            { from: './src/main/webapp/app/assets/group1-shard2of2.bin', to: 'assets/' },
           ],
         }),
         new HtmlWebpackPlugin({
