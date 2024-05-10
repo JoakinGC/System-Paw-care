@@ -65,5 +65,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="factores"
                                  />
+
+
     </changeSet>
 </databaseChangeLog>

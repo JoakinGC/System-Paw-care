@@ -49,7 +49,7 @@ public class Cita implements Serializable {
     @JsonIgnoreProperties(value = { "historials", "citas", "usuario", "estudios" }, allowSetters = true)
     private Veterinario veterinario;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "citas")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "citas")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Mascota> mascotas = new HashSet<>();
 

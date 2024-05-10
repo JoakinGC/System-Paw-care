@@ -1,15 +1,24 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import { fetchDiseases, usePredictionsAnimal, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
+import { getCatBreedInfo,getDogBreedInfo, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
+import { getEntities as getEnfermedads } from '../../../entities/enfermedad/enfermedad.reducer';
+import { useAppDispatch, useAppSelector } from "app/config/store";
+import { getEntities } from "app/entities/raza/raza.reducer";
+
 
 const CamaraUser = () => {
+  const dispatch = useAppDispatch();
   const [modelo, setModelo] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const otroCanvasRef = useRef(null);
-  const [result, setResult] = useState<any>({});
+  const [result, setResult] = useState<any>({"razaEncontrada":null});
   const [facingMode, setFacingMode] = useState("user");
   const [stream, setStream] = useState(null);
+  const enfermedades =  useAppSelector(state => state.enfermedad.entities)
+  const razas =  useAppSelector(state => state.raza.entities)
+
+  
 
   useEffect(() => {
     const cargarModeloInterno = async () => {
@@ -29,6 +38,8 @@ const CamaraUser = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(getEnfermedads({page:0,size:999,sort:`id,asc`}))
+    dispatch(getEntities({page:0,size:999,sort:`id,asc`}))
     const mostrarCamara = async () => {
       try {
         const newStream = await navigator.mediaDevices.getUserMedia({
@@ -73,8 +84,21 @@ const CamaraUser = () => {
   }, [canvasRef, videoRef]);
   
 
-  useEffect(() => {
+  
     const predecir = async () => {
+      console.log(razas);
+      console.log(enfermedades);
+      
+      const enfermedadesYRazas = razas.map(raza => {
+      const enfermedadesDeLaRaza = enfermedades.filter(enfermedad => enfermedad.razas.some(r => r.id === raza.id));
+        return {
+          ...raza,
+          enfermedades: enfermedadesDeLaRaza
+        };
+      });
+      console.log(enfermedadesYRazas);
+      
+
       if (modelo != null && canvasRef.current && otroCanvasRef.current) {
         resample_single(
           canvasRef.current,
@@ -120,6 +144,33 @@ const CamaraUser = () => {
             "especie": 'Gato',
             "raza": breedCat
           };
+
+          let razaEncontrada=null;
+          if(breedCat){
+            const breedLowerCase = breedCat.toLowerCase().replace(/_/g, ' ');
+            razaEncontrada = enfermedadesYRazas.find(raza => raza.nombre.toLowerCase() === breedLowerCase);
+          }
+
+          if (razaEncontrada) {
+            console.log('Datos de la raza:', razaEncontrada);
+            const informacionCat = await getCatBreedInfo(breedCat);
+            console.log(informacionCat);
+            
+            respuesta = {
+              ...respuesta,
+              razaEncontrada,
+              informacionCat
+            }
+
+          } else {
+            console.log('La raza no se encontró en el array proporcionado.');
+            const informacion = await getDogBreedInfo(breedCat);
+            respuesta = {
+              ...respuesta,
+              'razaEncontrada':'Lo sentimos parece que no tenemos suficiente información para brindarte más detalles de la enfermedades posibles que puede tener esta raza',
+              informacion
+            }
+          }     
         } else {
           const breedDog = await usePredictionsBreedDog(image);
           console.log(breedDog);
@@ -128,17 +179,43 @@ const CamaraUser = () => {
             "especie": 'Perro',
             "raza": breedDog
           };
+          
+
+          let razaEncontrada=null;
+          if(breedDog){
+            const breedLowerCase = breedDog.toLowerCase().replace(/_/g, ' ');
+            razaEncontrada = enfermedadesYRazas.find(raza => raza.nombre.toLowerCase() === breedLowerCase);
+          }
+
+          if (razaEncontrada) {
+            console.log('Datos de la raza:', razaEncontrada);
+            const informacion = await getDogBreedInfo(breedDog);
+            console.log(informacion);
+            
+            respuesta = {
+              ...respuesta,
+              razaEncontrada,
+              informacion
+            }
+
+          } else {
+            console.log('La raza no se encontró en el array proporcionado.');
+            const informacion = await getDogBreedInfo(breedDog);
+            respuesta = {
+              ...respuesta,
+              'razaEncontrada':'Lo sentimos parece que no tenemos suficiente información para brindarte más detalles de la enfermedades posibles que puede tener esta raza',
+              informacion
+            }
+          }     
         }
         setResult(respuesta);
       }
-
-      setTimeout(predecir, 10000);
     };
 
-    predecir();
-
-    return () => {};
-  }, [modelo]);
+    
+    const handlePredictButtonClick = () => {
+      predecir();
+    };
 
   const resample_single = (canvas, width, height, resizeCanvas) => {
     const widthSource = canvas.width;
@@ -233,7 +310,7 @@ const CamaraUser = () => {
         console.log("Oops, hubo un error", error);
       });
   };
-
+  
   return (
     <div>
       <div className="b-example-divider"></div>
@@ -242,11 +319,28 @@ const CamaraUser = () => {
           <div className="col-12 col-md-4 offset-md-4 text-center">
             <video ref={videoRef} id="video" playsInline autoPlay style={{ width: "1px" }} />
             <button className="btn btn-primary mb-2" id="cambiar-camara" onClick={cambiarCamara}>Cambiar cámara</button>
+            <button className="btn btn-primary mb-2" id="predecir" onClick={handlePredictButtonClick}>Predecir</button>
             <canvas ref={canvasRef} id="canvas" width="400" height="400" style={{ maxWidth: "100%" }}></canvas>
             <canvas ref={otroCanvasRef} id="otrocanvas" width="150" height="150" style={{ display: "none" }}></canvas>
             <div id="resultado">
-            {result&&result.especie}<br/>
-            {result&&result.raza}
+              {result && result.especie}<br/>
+              {result && result.raza}<br/>
+              {(result.razaEncontrada && result.razaEncontrada.enfermedades) ? 
+                result.razaEncontrada.enfermedades.map((e, index) => 
+                  <p key={index}>{e.nombre}: {e.descripcion}</p>
+                  )  
+                : <p>{result.razaEncontrada}</p>
+                }
+            <br/>
+            Grupo: {result.informacion && result.informacion.breed_group}   <br/>
+            Caracteristicas: {result.informacion && result.informacion.temperament}
+            {result.informacionCat && result.informacionCat.temperament}
+            <br/>
+            weight: {result.informacion && result.informacion.weight.imperial}, 
+            height: {result.informacion && result.informacion.height.imperial}<br></br>
+            Life Span: {result.informacionCat && result.informacionCat.life_span}<br/>
+            Description: {result.informacionCat && result.informacionCat.description}<br/>
+            Origin: {result.informacionCat && result.informacionCat.origin}<br/>
             </div>
           </div>
         </div>

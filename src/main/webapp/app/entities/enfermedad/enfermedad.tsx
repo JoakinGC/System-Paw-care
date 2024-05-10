@@ -19,7 +19,7 @@ export const Enfermedad = () => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
-
+  
   const enfermedadList = useAppSelector(state => state.enfermedad.entities);
   const loading = useAppSelector(state => state.enfermedad.loading);
   const totalItems = useAppSelector(state => state.enfermedad.totalItems);
@@ -33,6 +33,14 @@ export const Enfermedad = () => {
       }),
     );
   };
+  console.log("Valores de paginación:");
+  console.log(paginationState.activePage);
+  console.log(paginationState.itemsPerPage);
+  console.log(`${paginationState.sort},${paginationState.order}`);
+  console.log(totalItems);
+  console.log("________________________________________________");
+  
+  
 
   const sortEntities = () => {
     getAllEntities();
@@ -88,7 +96,7 @@ export const Enfermedad = () => {
       return order === ASC ? faSortUp : faSortDown;
     }
   };
-
+  console.log();
   return (
     <div>
       <h2 id="enfermedad-heading" data-cy="EnfermedadHeading">

@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAccount } from "app/shared/reducers/authentication";
 import { getEntities as getUsuarios, getEntity} from 'app/entities/usuario/usuario.reducer';
 import { getEntities as getAllCitas } from "app/entities/cita/cita.reducer";
-import { getEntities } from "app/entities/mascota/mascota.reducer";
+import { getEntities as getAllMascotas} from "app/entities/mascota/mascota.reducer";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Translate } from "react-jhipster";
 import { updateMascotasWithCitas } from "./mascotaCita.reducer";
+import AddCitaModal from "./AddCitaModal";
+
 
 
 interface Event {
@@ -26,45 +28,50 @@ const CitasCalendario = () =>{
     const dispatch = useDispatch<AppDispatch>();
     const [events, setEvents] = useState<Event[]>([]);
     const mascotasWithCitas = useAppSelector((state) => state.mascotWithCitasReducer.entities);
-
-
-    console.log(mascotasWithCitas);
+    const allUsarios = useAppSelector(state => state.usuario.entities);
+    const todasLasCitas = useAppSelector(state => state.cita.entities);
+    const todasLasMascotasYduenos = useAppSelector(state => state.mascota.entities);
+    const [modalOpen, setModalOpen] = useState(false);
     
-
     //Citas solo para usuario actual
     useEffect(() =>{
+      dispatch(getUsuarios({page:0,size:999,sort:`id,asc`}))
+      dispatch(getAllCitas({page:0,size:999,sort:`id,asc`}));
+      dispatch(getAllMascotas({page:0,size:999,sort:`id,asc`}))
+      
+    },[])
+    console.log(allUsarios);
+    console.log(todasLasCitas);
+    console.log(todasLasMascotasYduenos);
+    
+    useEffect(() =>{
       const fetchEvents = async () =>{
-        const user = await dispatch(getAccount());
-        const { id } = (user.payload as any).data;
-        const allUsarios = await dispatch(getUsuarios({}))
-        const usuarioActual = (allUsarios.payload as any).data.filter((e,i) => 
-        e.user.id==id);
-  
-        console.log(usuarioActual);
-        console.log(usuarioActual[0].dueno.id);
-        
-  
-        const todasLasCitas = await dispatch(getAllCitas({}));
-        console.log(todasLasCitas);
-  
-        const todasLasMascotasYduenos = await dispatch(getEntities({}))
-        console.log(todasLasMascotasYduenos);
 
+        if (allUsarios.length > 0 && todasLasCitas.length > 0 && todasLasMascotasYduenos.length > 0) {
+          const user = await dispatch(getAccount());
+          const { id } = (user.payload as any).data;
+          const usuarioActual = allUsarios.find((e) => e.user.id === id);
+
+        console.log(usuarioActual);
+        
         //mascotas del usuario actual
-        const mascotasDelUsuarioActual = (todasLasMascotasYduenos.payload as any).data
-        .filter((e) => e.dueno.id === usuarioActual[0].dueno.id)
+        const mascotasDelUsuarioActual = todasLasMascotasYduenos
+        .filter((e) => e.dueno.id === usuarioActual.dueno.id)
         //este necesito guardarlo en estado grobal usando redux para acceder a la misma varible y tambien poder guardarla
         dispatch(updateMascotasWithCitas(mascotasDelUsuarioActual));
+
+        console.log(mascotasDelUsuarioActual);
+        
   
-        const citasConMascota = (todasLasCitas.payload as any).data.
+        const citasConMascota = todasLasCitas.
         filter((ele) =>{
           return (ele.mascotas!=null&&ele.mascotas.length>0)
         })
   
         console.log("Citas con mascota",citasConMascota);
         
-        const mascotaConCita = (todasLasMascotasYduenos.payload as any).data.filter((ele,index) =>{
-           return (ele.citas.length>0&&ele.dueno.id===usuarioActual[0].dueno.id)
+        const mascotaConCita = todasLasMascotasYduenos.filter((ele,index) =>{
+           return (ele.citas.length>0&&ele.dueno.id===usuarioActual.dueno.id)
         });
         console.log(mascotaConCita);
 
@@ -88,11 +95,10 @@ const CitasCalendario = () =>{
         
   
         setEvents(formattedEvents)
-        
+      }
       };
-
       fetchEvents();
-    },[])
+    },[allUsarios,todasLasCitas,todasLasMascotasYduenos])
 
     //citas y que las muestre
 
@@ -121,27 +127,36 @@ const CitasCalendario = () =>{
     const onChange = newDate => {
       setDate(newDate);
       console.log(date);
-      
+      setModalOpen(!modalOpen);
+    };
+
+    const toggleModal = () => {
+      setModalOpen(!modalOpen);
     };
   
     return (
       <div>
-        <div style={{display:'flex',flexDirection:'row'}}>
-          <h1>Calendario</h1>
-          <Link to="/citasCalendario/newCita" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="veterinarySystemApp.cita.home.createLabel">Create new Cita</Translate>
-          </Link>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+          <div>
+            <h1>Calendario</h1>
+            <h3>Selecciona el dia que quieras una cita</h3>
+          </div>
+          
         </div>
+
+        <div>
         <Calendar
           onChange={onChange}
           value={date}
           tileContent={tileContent} 
 
-      
-        />
         
+        />
+      
+      <AddCitaModal isOpen={modalOpen} toggle={toggleModal} selectedDate={date} />
+
+
+        </div>
       </div>
     );
   };

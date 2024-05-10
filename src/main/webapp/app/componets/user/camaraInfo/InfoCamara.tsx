@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa el componente Link de react-router-dom
 import "./infoCamara.css";
-import { fetchDiseases } from "app/shared/util/usePredictions";
+
 
 const InfoCamara = () => {
   const [showModal, setShowModal] = useState(false);
-
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
-  fetchDiseases()
 
   return (
     <div className="container-info-cam">

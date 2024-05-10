@@ -1,11 +1,11 @@
-id;n_identificacion_carnet;foto;fecha_nacimiento;dueno_id
-1;20704;whether provided;2024-04-17;1
-2;12686;gosh;2024-04-18;1
-3;28773;hmph nor octagon;2024-04-18;1
-4;2533;up;2024-04-18;1
-5;24150;focus;2024-04-18;1
-6;16927;dry;2024-04-18;2
-7;23213;following geez;2024-04-18;3
-8;25368;vital shoehorn;2024-04-18;4
-9;13323;angrily glorious;2024-04-18;5
-10;1817;compliment;2024-04-18;1
+id;n_identificacion_carnet;foto;fecha_nacimiento;dueno_id;raza_id;especie_id
+1;20704;whether provided;2024-04-17;1;1;1
+2;12686;gosh;2024-04-18;1;2;1
+3;28773;hmph nor octagon;2024-04-18;1;3;1
+4;2533;up;2024-04-18;1;4;2
+5;24150;focus;2024-04-18;1;5;2
+6;16927;dry;2024-04-18;2;6;2
+7;23213;following geez;2024-04-18;3;7;3
+8;25368;vital shoehorn;2024-04-18;4;8;3
+9;13323;angrily glorious;2024-04-18;5;9;3
+10;1817;compliment;2024-04-18;1;10;2

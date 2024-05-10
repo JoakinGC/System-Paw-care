@@ -33,27 +33,34 @@ interface PropsCardMascota {
 const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
     const dispatch = useDispatch()
     const [duenoMascota,setDuenoMascota] = useState<IDueno>({nombre:""});
-    const [especieMacota,setEspecieMacota] = useState<IEspecie>();
+    const [especieMacota,setEspecieMacota] = useState<IEspecie|null>(null);
     const [razaMascota,setRazaMascota] = useState<IRaza>();
     const [citasMascota,setCitasMascotas] = useState<ICita[]>(); 
     const [medicamentoMascotas,setMedicamentosMascotas] = useState<IMedicamento[]>(); 
     const [tratamientosMascotas,setTratamientosMascotas] = useState<ITratamiento[]>(); 
 
+    console.log(dueno.id);
+    console.log(especie.id);
+    console.log(raza.id);
+    
     useEffect(() => {
         const fetchDetailsMascota = async () => {
+          console.log(citas);
+          
             try {
                 const idDue: string = dueno.id;
-                const idEspe: string = especie.id;
+                const idEspe: string|null = especie.id;
                 const idRaza: string = raza.id;
                 const jefe = await (dispatch as AppDispatch)(getDueno(idDue)); 
                 const razaM = await (dispatch as AppDispatch)(getRaza(idRaza));
-                const especieM = await (dispatch as AppDispatch)(getEspecie(idEspe));
+                let especieM=null
+                if(idEspe) especieM = await (dispatch as AppDispatch)(getEspecie(idEspe));
                 setDuenoMascota((jefe.payload as any).data)
                 setRazaMascota((razaM.payload as any).data)
-                setEspecieMacota((especieM.payload as any).data)
+                if(especieM)setEspecieMacota((especieM.payload as any).data)
     
                 // Citas
-                const citasPromises = citas.map(c => (dispatch as AppDispatch)(getCita(c.id)));
+                const citasPromises = citas.map(async c => await(dispatch as AppDispatch)(getCita(c.id)));
                 const citasResults = await Promise.all(citasPromises);
                 const citasData = citasResults.map(result => (result.payload as any).data);
                 console.log(citasData);

@@ -103,6 +103,7 @@ export const Raza = () => {
             &nbsp;
             <Translate contentKey="veterinarySystemApp.raza.home.createLabel">Create new Raza</Translate>
           </Link>
+    
         </div>
       </h2>
       <div className="table-responsive">

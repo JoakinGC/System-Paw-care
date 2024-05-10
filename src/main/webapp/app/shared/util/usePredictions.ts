@@ -132,20 +132,67 @@ export async function usePredictionsAnimal(image:any) :Promise<string | null>{
     }
   }
 
-  export async function fetchDiseases(){
-    const headers = new Headers({
-      "Content-Type": "application/json",
-      "x-api-key": "live_2CmCYbBbHxoKPFHN2tN89sxh5btpZOXtqE8jV68gNiAvG1nSp8TLIparkF2gypTx"
-    });
-    
-    var requestOptions = {
-      method: 'GET',
-      headers: headers,
-      redirect: 'follow'
+
+ 
+
+
+export async function TranslateString(mensaje: string): Promise<string | null> {
+    const url = 'https://deep-translate1.p.rapidapi.com/language/translate/v2';
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': 'a5ddfbd33fmshd814e3004466489p199862jsn86413ef59e8d',
+        'X-RapidAPI-Host': 'deep-translate1.p.rapidapi.com'
+      },
+      body: JSON.stringify({
+        q: mensaje,
+        source: 'en',
+        target: 'es'
+      })
     };
     
-    fetch("https://api.thedogapi.com/v1/images/search?size=med&mime_types=jpg&format=json&has_breeds=true&order=RANDOM&page=0&limit=1", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));        
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
+
+export async function getDogBreedInfo(breedName) : Promise<any | null>{
+  const url = `https://api.thedogapi.com/v1/breeds/search?q=${breedName}`;
+  
+  try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      // Aquí puedes procesar los datos obtenidos, como imprimirlos en la consola
+      console.log(data);
+      return data[0]
+  } catch (error) {
+      console.error('Error al obtener información de la raza de perro:', error);
+      return null;
+  }
+}
+
+
+export async function getCatBreedInfo(breedName: string): Promise<any | null> {
+  const url = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`;
+
+  try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Aquí puedes procesar los datos obtenidos, como imprimirlos en la consola
+      console.log(data);
+      return data[0];
+  } catch (error) {
+      console.error('Error al obtener información de la raza de gato:', error);
+      return null;
+  }
+}
+

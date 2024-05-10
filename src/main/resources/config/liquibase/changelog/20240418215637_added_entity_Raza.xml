@@ -14,7 +14,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="nombre" type="varchar(20)">
+            <column name="nombre" type="varchar(50)">
                 <constraints nullable="true" />
             </column>
             <column name="nombre_cientifico" type="varchar(50)">

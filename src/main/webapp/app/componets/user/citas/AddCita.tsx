@@ -10,12 +10,13 @@ import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterin
 import {  getEntities as getMascotas, updateEntity as updateMascota } from 'app/entities/mascota/mascota.reducer';
 import { getEntity,  reset, createEntity as createCita, updateEntity as updateCita  } from '../../../entities/cita/cita.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
+import dayjs from 'dayjs';
 
 interface PropsAddCita{
     animales:any[];
 }
 
-export const AddCita = () => {
+const AddCita = ({toggleModal,selectedDate}) => {
   
   const dispatch = useAppDispatch();
 
@@ -34,12 +35,12 @@ export const AddCita = () => {
   const updateSuccess = useAppSelector(state => state.cita.updateSuccess);
   const mascotasWithCitas = useAppSelector((state) => state.mascotWithCitasReducer.entities);
   const [mascotasSeleccionadas,setMascotasSeleccionadas] = useState<any[]>([]);
-
+  const [isOpen, setIsOpen] = useState(true);
 
   console.log(mascotasWithCitas);
 
   const handleClose = () => {
-    navigate('/cita' + location.search);
+    toggleModal();
   };
 
   console.log(veterinarios);
@@ -75,10 +76,11 @@ export const AddCita = () => {
     const mascotas =(allMascotas.payload as any).data.filter(mascota => values.mascotas.includes(mascota.id.toString())) ;
     console.log("values" , values);
     
-
+    const fecha = dayjs(selectedDate);
     const entity = {
       ...citaEntity,
       ...values,
+      fecha,
       estetica: esteticas.find(it => it.id.toString() === values.estetica?.toString()),
       cuidadoraHotel: cuidadoraHotels.find(it => it.id.toString() === values.cuidadoraHotel?.toString()),
       veterinario: veterinarios.find(it => it.id.toString() === values.veterinario?.toString()),
@@ -186,13 +188,6 @@ export const AddCita = () => {
               ) : null}
               <ValidatedField label={translate('veterinarySystemApp.cita.hora')} id="cita-hora" name="hora" data-cy="hora" type="time" />
               <ValidatedField
-                label={translate('veterinarySystemApp.cita.fecha')}
-                id="cita-fecha"
-                name="fecha"
-                data-cy="fecha"
-                type="date"
-              />
-              <ValidatedField
                 label={translate('veterinarySystemApp.cita.motivo')}
                 id="cita-motivo"
                 name="motivo"
@@ -269,13 +264,6 @@ export const AddCita = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/cita" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.back">Back</Translate>
-                </span>
-              </Button>
               &nbsp;
               <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
