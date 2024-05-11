@@ -9,7 +9,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { AppDispatch, useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUsuarios, getEntity as getUsuario} from 'app/entities/usuario/usuario.reducer';
-import { getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
+import { createEntity, getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
 import CardMascota from './CardMascota';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
@@ -17,6 +17,7 @@ import { IMascota } from 'app/shared/model/mascota.model';
 import axios from 'axios';
 import ImageUploadForm from 'app/entities/image/ImageUploadForm';
 import AddMascotaModal from './AddMascotaModal';
+import { IDueno } from 'app/shared/model/dueno.model';
 
 
 const MascotaList = () =>{
@@ -34,6 +35,7 @@ const MascotaList = () =>{
     const totalItems = useAppSelector(state => state.mascota.totalItems);
     const [mascotasUser,setMascotasUser] = useState<IMascota[]>();
     const [modalOpen, setModalOpen] = useState(false);
+    const [duenoActual,setDuenoActual] =  useState<IDueno>({})
 
     const toggleModal = () => setModalOpen(!modalOpen);
   
@@ -43,33 +45,9 @@ const MascotaList = () =>{
       );
     };
   
-    const sortEntities = () => {
-      getAllEntities();
-      const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-      if (pageLocation.search !== endURL) {
-        navigate(`${pageLocation.pathname}${endURL}`);
-      }
-    };
-  
-    useEffect(() => {
-      sortEntities();
-    }, [paginationState.activePage, paginationState.order, paginationState.sort]);
-  
-    useEffect(() => {
-      const params = new URLSearchParams(pageLocation.search);
-      const page = params.get('page');
-      const sort = params.get(SORT);
-      if (page && sort) {
-        const sortSplit = sort.split(',');
-        setPaginationState({
-          ...paginationState,
-          activePage: +page,
-          sort: sortSplit[0],
-          order: sortSplit[1],
-        });
-      }
-
-    }, [pageLocation.search]);
+    useEffect(() =>{
+      getAllEntities()
+    },[])
   
    
   useEffect(() =>{
@@ -82,9 +60,11 @@ const MascotaList = () =>{
   
         console.log(usuarioActual);
         console.log(usuarioActual[0].dueno.id);
+        
 
         const duenoMn = ((await (dispatch as AppDispatch)(getDueno(usuarioActual[0].dueno.id))).payload as any).data;
         console.log("dueno" , duenoMn);
+        setDuenoActual(duenoMn)
         
         if(mascotaList&&mascotaList.length>0){
             const mascotaUserActual = mascotaList.filter((e) =>{
@@ -128,9 +108,7 @@ const MascotaList = () =>{
         ) : null}
 
 
-          <AddMascotaModal isOpen={modalOpen} toggle={toggleModal} onSave={(mascotaData) => {
-          console.log('Nueva mascota:', mascotaData);
-        }} />
+          <AddMascotaModal dueno={duenoActual} isOpen={modalOpen} toggle={toggleModal} />
         <ImageUploadForm/>
       </div>
       
