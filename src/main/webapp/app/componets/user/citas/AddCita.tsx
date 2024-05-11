@@ -85,8 +85,6 @@ const AddCita = ({toggleModal,selectedDate}) => {
     
     let hora = values.hora;
     const fecha = dayjs(selectedDate).format('YYYY-MM-DD');;
-    console.log(fecha);
-    console.log(hora);
 
     const horaSplit = hora.split(':');
     if (horaSplit.length === 2) {
@@ -97,8 +95,6 @@ const AddCita = ({toggleModal,selectedDate}) => {
 
     
     const citaExistente = citaList.find(cita => {
-      console.log("fecha de cita ",cita.fecha);
-      console.log("Hora de cita ",cita.hora);
       return cita.fecha == fecha && cita.hora == hora;
     });
 
@@ -194,111 +190,112 @@ const AddCita = ({toggleModal,selectedDate}) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="veterinarySystemApp.cita.home.createOrEditLabel" data-cy="CitaCreateUpdateHeading">
-            <Translate contentKey="veterinarySystemApp.cita.home.createOrEditLabel">Create or edit a Cita</Translate>
-          </h2>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md="8">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField
-                  name="id"
-                  required
-                  readOnly
-                  id="cita-id"
-                  label={translate('global.field.id')}
-                  validate={{ required: true }}
-                />
-              ) : null}
-              <ValidatedField
-                label={translate('veterinarySystemApp.cita.hora')}
-                id="cita-hora"
-                name="hora"
-                data-cy="hora"
-                type="time"
-                step="3600" // Define el incremento en segundos (3600 segundos = 1 hora)
-                min="09:00" // Define la hora mínima permitida
-                 max="17:00" // Define la hora máxima permitida
-              />
-              <ValidatedField
-                label={translate('veterinarySystemApp.cita.motivo')}
-                id="cita-motivo"
-                name="motivo"
-                data-cy="motivo"
-                type="text"
-                validate={{
-                  maxLength: { value: 100, message: translate('entity.validation.maxlength', { max: 100 }) },
-                }}
-              />
-              <ValidatedField
-                id="cita-estetica"
-                name="estetica"
-                data-cy="estetica"
-                label={"Elige estilista que tengas preferencia"}
-                type="select"
-              >
-                <option value="" key="0" />
-                {esteticas
-                  ? esteticas.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.nombre}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                id="cita-veterinario"
-                name="veterinario"
-                data-cy="veterinario"
-                label={"Elige al veterinario que tengas preferencia"}
-                type="select"
-              >
-                <option value="" key="0" />
-                {veterinarios
-                  ? veterinarios.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.nombre}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                label={'¿Cúal de tus mascotas quiere ser atendida?'}
-                id="cita-mascota"
-                data-cy="mascota"
-                type="select"
-                multiple
-                name="mascotas"
-              >
-                <option value="" key="0" />
-                {mascotasWithCitas
-                  ? mascotasWithCitas.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}
-                      onClick={() => hadleMascotaSeleccionadas(otherEntity)}
-                      >
-                        {otherEntity.nIdentificacionCarnet}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp;
-                <Translate contentKey="entity.action.save">Save</Translate>
-              </Button>
-            </ValidatedForm>
-          )}
-        </Col>
-      </Row>
-    </div>);
+  <Row className="justify-content-center">
+    <Col md="8">
+      <h2 id="veterinarySystemApp.cita.home.createOrEditLabel" data-cy="CitaCreateUpdateHeading">
+        Pedir una cita
+      </h2>
+    </Col>
+  </Row>
+  <Row className="justify-content-center">
+    <Col md="8">
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+          {!isNew ? (
+            <ValidatedField
+              name="id"
+              required
+              readOnly
+              id="cita-id"
+              label={translate('global.field.id')}
+              validate={{ required: true }}
+            />
+          ) : null}
+          <ValidatedField
+            label={translate('veterinarySystemApp.cita.hora')}
+            id="cita-hora"
+            name="hora"
+            data-cy="hora"
+            type="time"
+            step="3600" // Define el incremento en segundos (3600 segundos = 1 hora)
+            min="09:00" // Define la hora mínima permitida
+            max="17:00" // Define la hora máxima permitida
+          />
+          <ValidatedField
+            label={translate('veterinarySystemApp.cita.motivo')}
+            id="cita-motivo"
+            name="motivo"
+            data-cy="motivo"
+            type="text"
+            validate={{
+              maxLength: { value: 100, message: translate('entity.validation.maxlength', { max: 100 }) },
+            }}
+          />
+          <ValidatedField
+            id="cita-estetica"
+            name="estetica"
+            data-cy="estetica"
+            label={"Elige estilista que tengas preferencia"}
+            type="select"
+          >
+            <option value="" key="0" />
+            {esteticas
+              ? esteticas.map(otherEntity => (
+                  <option value={otherEntity.id} key={otherEntity.id}>
+                    {otherEntity.nombre}
+                  </option>
+                ))
+              : null}
+          </ValidatedField>
+          <ValidatedField
+            id="cita-veterinario"
+            name="veterinario"
+            data-cy="veterinario"
+            label={"Elige al veterinario que tengas preferencia"}
+            type="select"
+          >
+            <option value="" key="0" />
+            {veterinarios
+              ? veterinarios.map(otherEntity => (
+                  <option value={otherEntity.id} key={otherEntity.id}>
+                    {otherEntity.nombre}
+                  </option>
+                ))
+              : null}
+          </ValidatedField>
+          <ValidatedField
+            label={'¿Cuál de tus mascotas quieres que sea atendida?'}
+            id="cita-mascota"
+            data-cy="mascota"
+            type="select"
+            multiple
+            name="mascotas"
+          >
+            <option value="" key="0" />
+            {mascotasWithCitas
+              ? mascotasWithCitas.map(otherEntity => (
+                  <option value={otherEntity.id} key={otherEntity.id}
+                  onClick={() => hadleMascotaSeleccionadas(otherEntity)}
+                  >
+                    {otherEntity.nIdentificacionCarnet}
+                  </option>
+                ))
+              : null}
+          </ValidatedField>
+          &nbsp;
+          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+            <FontAwesomeIcon icon="save" />
+            &nbsp;
+            <Translate contentKey="entity.action.save">Guardar</Translate>
+          </Button>
+        </ValidatedForm>
+      )}
+    </Col>
+  </Row>
+</div>);
+
 };
 
 export default AddCita;

@@ -44,34 +44,40 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
     console.log(raza.id);
     
     useEffect(() => {
-        const fetchDetailsMascota = async () => {
-          console.log(citas);
-          
-            try {
-                const idDue: string = dueno.id;
-                const idEspe: string|null = especie.id;
-                const idRaza: string = raza.id;
-                const jefe = await (dispatch as AppDispatch)(getDueno(idDue)); 
-                const razaM = await (dispatch as AppDispatch)(getRaza(idRaza));
-                let especieM=null
-                if(idEspe) especieM = await (dispatch as AppDispatch)(getEspecie(idEspe));
-                setDuenoMascota((jefe.payload as any).data)
-                setRazaMascota((razaM.payload as any).data)
-                if(especieM)setEspecieMacota((especieM.payload as any).data)
-    
-                // Citas
-                const citasPromises = citas.map(async c => await(dispatch as AppDispatch)(getCita(c.id)));
-                const citasResults = await Promise.all(citasPromises);
-                const citasData = citasResults.map(result => (result.payload as any).data);
-                console.log(citasData);
-
-                setCitasMascotas(citasData);
-            } catch (error) {
-                console.error("Error: ", error);
-            }
-        };
-        fetchDetailsMascota();
-    }, []);
+      const fetchDetailsMascota = async () => {
+          try {
+              // Obtener la fecha de hoy
+              const today = new Date();
+              const todayString = today.toISOString().split('T')[0];
+  
+              const idDue: string = dueno.id;
+              const idEspe: string|null = especie.id;
+              const idRaza: string = raza.id;
+  
+              const jefe = await (dispatch as AppDispatch)(getDueno(idDue)); 
+              const razaM = await (dispatch as AppDispatch)(getRaza(idRaza));
+              let especieM=null
+              if(idEspe) especieM = await (dispatch as AppDispatch)(getEspecie(idEspe));
+  
+              setDuenoMascota((jefe.payload as any).data);
+              setRazaMascota((razaM.payload as any).data);
+              if(especieM) setEspecieMacota((especieM.payload as any).data);
+  
+              // Citas
+              const citasPromises = citas.map(async c => await(dispatch as AppDispatch)(getCita(c.id)));
+              const citasResults = await Promise.all(citasPromises);
+              const citasData = citasResults.map(result => (result.payload as any).data);
+              
+              // Filtrar citas anteriores al día de hoy
+              const citasFiltradas = citasData.filter(cita => cita.fecha && cita.fecha >= todayString);
+              setCitasMascotas(citasFiltradas);
+          } catch (error) {
+              console.error("Error: ", error);
+          }
+      };
+      fetchDetailsMascota();
+  }, []);
+  
     
     console.log();
     

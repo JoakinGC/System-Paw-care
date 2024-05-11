@@ -16,6 +16,7 @@ import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
 import axios from 'axios';
 import ImageUploadForm from 'app/entities/image/ImageUploadForm';
+import AddMascotaModal from './AddMascotaModal';
 
 
 const MascotaList = () =>{
@@ -32,14 +33,13 @@ const MascotaList = () =>{
     const loading = useAppSelector(state => state.mascota.loading);
     const totalItems = useAppSelector(state => state.mascota.totalItems);
     const [mascotasUser,setMascotasUser] = useState<IMascota[]>();
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const toggleModal = () => setModalOpen(!modalOpen);
   
     const getAllEntities = () => {
       dispatch(
-        getMascotas({
-          page: paginationState.activePage - 1,
-          size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`,
-        }),
+        getMascotas({page:0,size:999,sort:`id,asc`}),
       );
     };
   
@@ -103,6 +103,10 @@ const MascotaList = () =>{
     
     return (
         <div>
+          <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
+            <h1>Tús Mascotas</h1>
+          <Button style={{marginLeft:'3vw'}} color="primary" onClick={toggleModal}>Agregar Mascota</Button>
+          </div>          
         {mascotasUser && mascotasUser.length > 0 ? (
           mascotasUser.map((mascota,index) => (
             <CardMascota
@@ -124,7 +128,9 @@ const MascotaList = () =>{
         ) : null}
 
 
-
+          <AddMascotaModal isOpen={modalOpen} toggle={toggleModal} onSave={(mascotaData) => {
+          console.log('Nueva mascota:', mascotaData);
+        }} />
         <ImageUploadForm/>
       </div>
       
