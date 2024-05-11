@@ -11,6 +11,7 @@ import {  getEntities as getMascotas, updateEntity as updateMascota } from 'app/
 import { getEntity,  reset, createEntity as createCita, updateEntity as updateCita  } from '../../../entities/cita/cita.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
 import dayjs from 'dayjs';
+import { getEntities as getAllCitas } from "app/entities/cita/cita.reducer";
 
 interface PropsAddCita{
     animales:any[];
@@ -25,6 +26,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const citaList = useAppSelector(state => state.cita.entities);
   const esteticas = useAppSelector(state => state.estetica.entities);
   const cuidadoraHotels = useAppSelector(state => state.cuidadoraHotel.entities);
   const veterinarios = useAppSelector(state => state.veterinario.entities);
@@ -53,7 +55,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
     } else {
       dispatch(getEntity(id));
     }
-
+    dispatch(getAllCitas({page:0,size:999,sort:`id,asc`}))
     dispatch(getEsteticas({}));
     dispatch(getCuidadoraHotels({}));
     dispatch(getVeterinarios({}));
@@ -72,13 +74,39 @@ const AddCita = ({toggleModal,selectedDate}) => {
       values.id = Number(values.id);
     }
 
+   
+    console.log("citas ",citaList);
+    
+
     const allMascotas = await dispatch(getMascotas({}));
     const mascotas =(allMascotas.payload as any).data.filter(mascota => values.mascotas.includes(mascota.id.toString())) ;
     console.log("values" , values);
     console.log(selectedDate);
     
+    let hora = values.hora;
     const fecha = dayjs(selectedDate).format('YYYY-MM-DD');;
     console.log(fecha);
+    console.log(hora);
+
+    const horaSplit = hora.split(':');
+    if (horaSplit.length === 2) {
+      hora = `${horaSplit[0]}:${horaSplit[1].padStart(2, '0')}:00`;
+    } else if (horaSplit.length === 3) {
+      hora = `${horaSplit[0]}:${horaSplit[1].padStart(2, '0')}:${horaSplit[2].padStart(2, '0')}`;
+    }
+
+    
+    const citaExistente = citaList.find(cita => {
+      console.log("fecha de cita ",cita.fecha);
+      console.log("Hora de cita ",cita.hora);
+      return cita.fecha == fecha && cita.hora == hora;
+    });
+
+    if (citaExistente) {
+      console.log("Ya existe una cita en la misma fecha y hora.");
+      alert("Ya existe esta cita")
+      return;
+    }
     
     const entity = {
       ...citaEntity,
@@ -189,7 +217,16 @@ const AddCita = ({toggleModal,selectedDate}) => {
                   validate={{ required: true }}
                 />
               ) : null}
-              <ValidatedField label={translate('veterinarySystemApp.cita.hora')} id="cita-hora" name="hora" data-cy="hora" type="time" />
+              <ValidatedField
+                label={translate('veterinarySystemApp.cita.hora')}
+                id="cita-hora"
+                name="hora"
+                data-cy="hora"
+                type="time"
+                step="3600" // Define el incremento en segundos (3600 segundos = 1 hora)
+                min="09:00" // Define la hora mínima permitida
+                 max="17:00" // Define la hora máxima permitida
+              />
               <ValidatedField
                 label={translate('veterinarySystemApp.cita.motivo')}
                 id="cita-motivo"
@@ -204,7 +241,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
                 id="cita-estetica"
                 name="estetica"
                 data-cy="estetica"
-                label={translate('veterinarySystemApp.cita.estetica')}
+                label={"Elige estilista que tengas preferencia"}
                 type="select"
               >
                 <option value="" key="0" />
@@ -217,26 +254,10 @@ const AddCita = ({toggleModal,selectedDate}) => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                id="cita-cuidadoraHotel"
-                name="cuidadoraHotel"
-                data-cy="cuidadoraHotel"
-                label={translate('veterinarySystemApp.cita.cuidadoraHotel')}
-                type="select"
-              >
-                <option value="" key="0" />
-                {cuidadoraHotels
-                  ? cuidadoraHotels.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.nombre}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
                 id="cita-veterinario"
                 name="veterinario"
                 data-cy="veterinario"
-                label={translate('veterinarySystemApp.cita.veterinario')}
+                label={"Elige al veterinario que tengas preferencia"}
                 type="select"
               >
                 <option value="" key="0" />
@@ -249,7 +270,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
                   : null}
               </ValidatedField>
               <ValidatedField
-                label={translate('veterinarySystemApp.cita.mascota')}
+                label={'¿Cúal de tus mascotas quiere ser atendida?'}
                 id="cita-mascota"
                 data-cy="mascota"
                 type="select"
