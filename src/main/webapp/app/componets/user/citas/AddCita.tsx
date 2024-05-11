@@ -75,8 +75,11 @@ const AddCita = ({toggleModal,selectedDate}) => {
     const allMascotas = await dispatch(getMascotas({}));
     const mascotas =(allMascotas.payload as any).data.filter(mascota => values.mascotas.includes(mascota.id.toString())) ;
     console.log("values" , values);
+    console.log(selectedDate);
     
-    const fecha = dayjs(selectedDate);
+    const fecha = dayjs(selectedDate).format('YYYY-MM-DD');;
+    console.log(fecha);
+    
     const entity = {
       ...citaEntity,
       ...values,

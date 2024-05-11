@@ -73,6 +73,7 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
         fetchDetailsMascota();
     }, []);
     
+    console.log();
     
 
     return (
@@ -118,9 +119,9 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
             <h2>Citas</h2>
             {(citasMascota && citasMascota.length>0)?citasMascota.map((e) =>{
                 return(<div className="body-cita">
-                    <span><strong>Hora: </strong>{e.hora.toString()}</span>
-                    <span><strong>fecha: </strong>{e.fecha.toString()}</span>
-                    <span><strong>motivo: </strong>{e.motivo}</span>
+                    <span><strong>Hora: </strong>{e.hora&&e.hora.toString()}</span>
+                    <span><strong>fecha: </strong>{e.fecha&&e.fecha.toString()}</span>
+                    <span><strong>motivo: </strong>{e.motivo&&e.motivo}</span>
                 </div>)
             })
             :

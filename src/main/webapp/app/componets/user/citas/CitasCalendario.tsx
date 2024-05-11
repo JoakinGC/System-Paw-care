@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Translate } from "react-jhipster";
 import { updateMascotasWithCitas } from "./mascotaCita.reducer";
 import AddCitaModal from "./AddCitaModal";
+import { Button } from "reactstrap";
 
 
 
@@ -32,6 +33,7 @@ const CitasCalendario = () =>{
     const todasLasCitas = useAppSelector(state => state.cita.entities);
     const todasLasMascotasYduenos = useAppSelector(state => state.mascota.entities);
     const [modalOpen, setModalOpen] = useState(false);
+    const loading = useAppSelector(state => state.cita.loading);
     
     //Citas solo para usuario actual
     useEffect(() =>{
@@ -62,33 +64,23 @@ const CitasCalendario = () =>{
 
         console.log(mascotasDelUsuarioActual);
         
-  
-        const citasConMascota = todasLasCitas.
-        filter((ele) =>{
-          return (ele.mascotas!=null&&ele.mascotas.length>0)
-        })
-  
-        console.log("Citas con mascota",citasConMascota);
         
         const mascotaConCita = todasLasMascotasYduenos.filter((ele,index) =>{
-           return (ele.citas.length>0&&ele.dueno.id===usuarioActual.dueno.id)
+          return (ele.citas.length>0&&ele.dueno.id===usuarioActual.dueno.id)
         });
-        console.log(mascotaConCita);
-
-        const mascotaUsuarioActualCitas = citasConMascota.filter((e,i) =>{
-          const mascotasCitaIds = e.mascotas.map(mascota => mascota.id);
-          const mascotasConCitaIds = mascotaConCita.map(mascota => mascota.id);
-
-          return mascotasCitaIds.some(id => mascotasConCitaIds.includes(id));
-        })
-
-        console.log(mascotaUsuarioActualCitas);
+        const citasConMascotaUsuarioActual = todasLasCitas.filter((cita) =>
+          mascotaConCita.some((mascota) =>
+              mascota.citas.map((mc) => mc.id).includes(cita.id)
+          )
+        );
+      
+        console.log("Citas con mascota",citasConMascotaUsuarioActual);
         
-        mascotaUsuarioActualCitas.map((e) => console.log(e))
-        const formattedEvents = mascotaUsuarioActualCitas.map((cita: any) => ({
+        
+        const formattedEvents = citasConMascotaUsuarioActual.map((cita: any) => ({
           title: 'Cita',
-          date: new Date(cita.fecha), // Ajusta cómo obtienes la fecha de la cita
-          description: cita.motivo // O cualquier otra información relevante que quieras mostrar
+          date: new Date(cita.fecha), 
+          description: cita.motivo 
         }));
 
         console.log(formattedEvents);
@@ -98,7 +90,7 @@ const CitasCalendario = () =>{
       }
       };
       fetchEvents();
-    },[allUsarios,todasLasCitas,todasLasMascotasYduenos])
+    },[allUsarios,todasLasCitas,todasLasMascotasYduenos,modalOpen])
 
     //citas y que las muestre
 
@@ -124,16 +116,25 @@ const CitasCalendario = () =>{
       }
     };
   
-    const onChange = newDate => {
-      setDate(newDate);
-      console.log(date);
+    const onChange = async newDate => {
+      await setDate(newDate);
+      console.log(newDate);
       setModalOpen(!modalOpen);
     };
 
     const toggleModal = () => {
       setModalOpen(!modalOpen);
     };
-  
+    
+    const handleSyncList = () => {
+      getAllEntities();
+    };
+
+    const getAllEntities = () => {
+      dispatch(getUsuarios({page:0,size:999,sort:`id,asc`}))
+      dispatch(getAllCitas({page:0,size:999,sort:`id,asc`}));
+      dispatch(getAllMascotas({page:0,size:999,sort:`id,asc`}))
+    };
     return (
       <div>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
@@ -141,7 +142,10 @@ const CitasCalendario = () =>{
             <h1>Calendario</h1>
             <h3>Selecciona el dia que quieras una cita</h3>
           </div>
-          
+          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} />{' '}
+            Refrescar Calendario
+          </Button>
         </div>
 
         <div>
