@@ -25,6 +25,16 @@ public class CitaDTO implements Serializable {
 
     private EsteticaDTO estetica;
 
+    private boolean atendido;
+
+    public boolean getAtendido() {
+        return atendido;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
+    }
+
     private CuidadoraHotelDTO cuidadoraHotel;
 
     private VeterinarioDTO veterinario;

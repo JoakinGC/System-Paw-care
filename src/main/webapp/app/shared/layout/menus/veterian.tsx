@@ -49,7 +49,7 @@ const VeterianMenu = () =>{
     </NavItem>
     <NavItem>
 
-      <NavLink tag={Link} to="/mascota" className="d-flex align-items-center">
+      <NavLink tag={Link} to="/mascotasVeterian" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faPaw}  />
       <span>
         <Translate contentKey="global.menu.entities.mascota" ></Translate>

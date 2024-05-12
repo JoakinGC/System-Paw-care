@@ -20,7 +20,7 @@ import FichaMascota from './FichaMascota';
 import AddMascotaModal from './AddMascotaModal';
 
 
-const MascotaList = () =>{
+const MascotaListVeterinario = () =>{
     const dispatch = useAppDispatch();
 
     const pageLocation = useLocation();
@@ -118,7 +118,7 @@ const MascotaList = () =>{
 }
 
 
-export default MascotaList;
+export default MascotaListVeterinario;
 
 
 

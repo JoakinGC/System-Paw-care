@@ -20,6 +20,15 @@ public class CompraDTO implements Serializable {
     private Float total;
 
     private UsuarioDTO usuario;
+    private boolean entregado;
+
+    public boolean getEntregado() {
+        return entregado;
+    }
+
+    public void setEntregado(boolean entregado) {
+        this.entregado = entregado;
+    }
 
     public Long getId() {
         return id;

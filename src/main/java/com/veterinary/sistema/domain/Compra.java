@@ -34,6 +34,18 @@ public class Compra implements Serializable {
     @Column(name = "total", nullable = false)
     private Float total;
 
+    @NotNull
+    @Column(name = "entregado", nullable = false)
+    private boolean entregado;
+
+    public boolean getEntregado() {
+        return entregado;
+    }
+
+    public void setEntregado(boolean entregado) {
+        this.entregado = entregado;
+    }
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "compra")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "compra", "producto" }, allowSetters = true)

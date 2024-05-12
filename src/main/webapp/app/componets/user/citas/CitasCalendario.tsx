@@ -34,6 +34,7 @@ const CitasCalendario = () =>{
     const todasLasMascotasYduenos = useAppSelector(state => state.mascota.entities);
     const [modalOpen, setModalOpen] = useState(false);
     const loading = useAppSelector(state => state.cita.loading);
+    const [citaFechaPosterior, setCitasFechaPosterior] = useState<any>();
     
     //Citas solo para usuario actual
     useEffect(() =>{
@@ -75,9 +76,19 @@ const CitasCalendario = () =>{
         );
       
         console.log("Citas con mascota",citasConMascotaUsuarioActual);
+
+
+        const currentDateNow = new Date()
+        const citasFechaPosterior = citasConMascotaUsuarioActual.filter((e) =>{
+          const citaDate = new Date(e.fecha);
+          return citaDate >= currentDateNow;
+        });
+
+        console.log(citasFechaPosterior);
         
         
-        const formattedEvents = citasConMascotaUsuarioActual.map((cita: any) => ({
+        setCitasFechaPosterior(citasFechaPosterior);
+        const formattedEvents = citasFechaPosterior.map((cita: any) => ({
           title: 'Cita',
           date: new Date(cita.fecha), 
           description: cita.motivo 
@@ -119,6 +130,15 @@ const CitasCalendario = () =>{
     const onChange = async newDate => {
       await setDate(newDate);
       console.log(newDate);
+    
+      const selectedDateString = newDate.toISOString().split('T')[0]; // Obtener la fecha seleccionada en formato de cadena YYYY-MM-DD
+      const citaExistente = citaFechaPosterior.find(cita => cita.fecha === selectedDateString);
+  
+      if (!citaExistente) {
+        console.log('Ya existe una cita para este día.');
+        return;
+      }
+    
       setModalOpen(!modalOpen);
     };
 

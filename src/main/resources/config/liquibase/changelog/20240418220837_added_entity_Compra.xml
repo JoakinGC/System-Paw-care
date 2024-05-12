@@ -20,6 +20,9 @@
             <column name="total" type="${floatType}">
                 <constraints nullable="false" />
             </column>
+            <column name="entregado" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="usuario_id" type="bigint">
                 <constraints nullable="true" />
             </column>

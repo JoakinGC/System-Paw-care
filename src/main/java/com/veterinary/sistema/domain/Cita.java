@@ -33,6 +33,17 @@ public class Cita implements Serializable {
     @Column(name = "fecha")
     private LocalDate fecha;
 
+    @Column(name = "atendido")
+    private boolean atendido;
+
+    public boolean getAtendido() {
+        return atendido;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
+    }
+
     @Size(max = 100)
     @Column(name = "motivo", length = 100)
     private String motivo;

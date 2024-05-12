@@ -41,9 +41,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
 
   console.log(mascotasWithCitas);
 
-  const handleClose = () => {
-    toggleModal();
-  };
+ 
 
   console.log(veterinarios);
   console.log(esteticas);
@@ -60,21 +58,35 @@ const AddCita = ({toggleModal,selectedDate}) => {
     dispatch(getCuidadoraHotels({}));
     dispatch(getVeterinarios({}));
     dispatch(getMascotas({}));
+
+    
+    
   }, []);
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      toggleModal();
     }
   }, [updateSuccess]);
 
   // eslint-disable-next-line complexity
   const saveEntity = async values => {
+
+    
+    const currentDate = new Date();
+    if (selectedDate <= currentDate) return
+    if(values.hora.length===0) return
+    if(values.motivo.length===0) return
+    if(values.mascotas.length===0) return
+    if(values.estetica.length !=0&&values.veterinario.length!=0) return
+    
+
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
 
-   
+    
+   if(values.mascotas.length  >= 3) return
     console.log("citas ",citaList);
     
 
@@ -122,9 +134,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
       console.log(newEn);
       if (newEn.payload) {
       const nuevasMascotas = mascotas.map(mascota => {
-        // Clonar la mascota para evitar mutaciones inesperadas
         const nuevaMascota = { ...mascota };
-        // Agregar la nueva cita a la lista de citas de la mascota
         nuevaMascota.citas = [...nuevaMascota.citas, (newEn.payload as any).data];
         return nuevaMascota;
       });
@@ -142,9 +152,7 @@ const AddCita = ({toggleModal,selectedDate}) => {
 
       if (newEn.payload) {
       const nuevasMascotas = mascotas.map(mascota => {
-        // Clonar la mascota para evitar mutaciones inesperadas
         const nuevaMascota = { ...mascota };
-        // Agregar la nueva cita a la lista de citas de la mascota
         nuevaMascota.citas = [...nuevaMascota.citas, (newEn.payload as any).data];
         return nuevaMascota;
       });

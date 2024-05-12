@@ -23,6 +23,9 @@
             <column name="motivo" type="varchar(100)">
                 <constraints nullable="true" />
             </column>
+            <column name="atendido" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="estetica_id" type="bigint">
                 <constraints nullable="true" />
             </column>
