@@ -80,6 +80,7 @@ const FormCompra = ({productos,isForm}:PropsProduco) => {
     } catch (error) {
       console.error('Error al crear la compra:', error);
     }
+    isForm(false);
   };
   
 

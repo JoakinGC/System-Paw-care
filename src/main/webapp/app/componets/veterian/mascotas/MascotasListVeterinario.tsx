@@ -49,36 +49,7 @@ const MascotaListVeterinario = () =>{
       getAllEntities()
     },[])
   
-   
-  useEffect(() =>{
-    const geMascotasUserActual = async() =>{
-        const user = await dispatch(getAccount());
-        const { id } = (user.payload as any).data;
-        const allUsarios = await dispatch(getUsuarios({}))
-        const usuarioActual = (allUsarios.payload as any).data.filter((e,i) => 
-        e.user.id==id);
-        console.log("user " , user);
-        
-  
-        console.log(usuarioActual);
-        console.log(usuarioActual[0].dueno.id);
-        
-
-        const duenoMn = ((await (dispatch as AppDispatch)(getDueno(usuarioActual[0].dueno.id))).payload as any).data;
-        console.log("dueno" , duenoMn);
-        setDuenoActual(duenoMn)
-        
-        if(mascotaList&&mascotaList.length>0){
-            const mascotaUserActual = mascotaList.filter((e) =>{
-                return (e.dueno.id===usuarioActual[0].dueno.id)
-            })
-            console.log(mascotaUserActual);
-            setMascotasUser(mascotaUserActual)
-        }
-      }
-
-      geMascotasUserActual()
-  },[mascotaList])
+ 
     
   
     console.log(mascotaList);
@@ -86,11 +57,11 @@ const MascotaListVeterinario = () =>{
     return (
         <div>
           <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
-            <h1>Tús Mascotas</h1>
+            <h1>Todas las mascotas y sus citas</h1>
           <Button style={{marginLeft:'3vw'}} color="primary" onClick={toggleModal}>Agregar Mascota</Button>
           </div>          
-        {mascotasUser && mascotasUser.length > 0 ? (
-          mascotasUser.map((mascota,index) => (
+        {mascotaList && mascotaList.length > 0 ? (
+          mascotaList.map((mascota,index) => (
             <FichaMascota
               key={index} 
               id={mascota.id}
@@ -111,7 +82,6 @@ const MascotaListVeterinario = () =>{
 
 
           <AddMascotaModal dueno={duenoActual} isOpen={modalOpen} toggle={toggleModal} />
-        <ImageUploadForm/>
       </div>
       
     );
