@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Translate } from "react-jhipster";
 import { ITratamiento } from "app/shared/model/tratamiento.model";
 import { IMedicamento } from "app/shared/model/medicamento.model";
+import axios from "axios";
 
 interface PropsCardMascota {
     id:number;
@@ -38,10 +39,43 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
     const [citasMascota,setCitasMascotas] = useState<ICita[]>(); 
     const [medicamentoMascotas,setMedicamentosMascotas] = useState<IMedicamento[]>(); 
     const [tratamientosMascotas,setTratamientosMascotas] = useState<ITratamiento[]>(); 
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     console.log(dueno.id);
     console.log(especie.id);
     console.log(raza.id);
+
+    useEffect(() => {
+      const fetchImage = async () => {
+        try {
+          const imageUrl = await obtenerImagen("1509captured_image.png");
+          setImageUrl(imageUrl);
+        } catch (error) {
+          console.error('Error al obtener la imagen:', error);
+        }
+      };
+      fetchImage();
+    }, []);
+
+    const obtenerImagen = async (fileName) => {
+      try {
+        const response = await axios.get(`http://localhost:9000/api/images/${fileName}`, {
+          responseType: 'arraybuffer'
+        });
+
+        if (response.status !== 200) {
+          throw new Error('Error al obtener la imagen');
+        }
+
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const imageUrl = URL.createObjectURL(blob);
+
+        return imageUrl;
+      } catch (error) {
+        console.error('Error:', error);
+        return null;
+      }
+    };
     
     useEffect(() => {
       const fetchDetailsMascota = async () => {
@@ -86,7 +120,7 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
         <div>
         <div className="container-card">
             <div className="card-image-mascota-container">
-                <img src={urlImg} alt="Imagen de la mascota"/>
+              {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
             </div>
             <div className="card-details">
                 <span><strong>Número de Carnet: </strong> {nCarnet}</span>
@@ -134,7 +168,7 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    
         }
         </div>
-
+        
         </div>
     )
 }

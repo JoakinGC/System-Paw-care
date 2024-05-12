@@ -52,6 +52,7 @@ public class ImageController {
             byte[] imageBytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
             return ResponseEntity.ok().body(imageBytes);
         } catch (IOException e) {
+            System.out.println("Error image: " +e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

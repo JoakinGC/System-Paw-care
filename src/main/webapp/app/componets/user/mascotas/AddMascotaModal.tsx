@@ -28,7 +28,40 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
     const loading = useAppSelector(state => state.mascota.loading);
     const updating = useAppSelector(state => state.mascota.updating);
     const updateSuccess = useAppSelector(state => state.mascota.updateSuccess);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [capturedImage, setCapturedImage] = useState(null);
     
+
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+      };
+    
+    const displayCapturedImage = (blob) => {
+        setCapturedImage(URL.createObjectURL(blob));
+    };
+
+    const handleCameraCapture = async () => {
+        try {
+          const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          console.log(mediaStream);
+          
+          const mediaStreamTrack = mediaStream.getVideoTracks()[0];
+          console.log(mediaStreamTrack);
+          const imageCapture = new window.ImageCapture(mediaStreamTrack); 
+          console.log(imageCapture);
+          
+    
+          const blob = await imageCapture.takePhoto();
+          console.log(blob);
+          
+          setSelectedFile(blob);
+          displayCapturedImage(blob);
+        } catch (error) {
+          console.error('Error al capturar la imagen:', error);
+        }
+      };
 
     useEffect(() => {
         if (isNew) {
@@ -48,20 +81,24 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
 
       useEffect(() => {
         if (updateSuccess) {
+            
           toggle();
         }
       }, [updateSuccess]);
 
-      const saveEntity = values => {
-        if (values.id !== undefined && typeof values.id !== 'number') {
-          values.id = Number(values.id);
-        }
-        if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number') {
+      const saveEntity = async values => {
+        
+        if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number' &&values.nIdentificacionCarnet) {
           values.nIdentificacionCarnet = Number(values.nIdentificacionCarnet);
         }
-    
-    
-    
+        
+
+        if (!selectedFile) {
+            alert('Por favor selecciona un archivo.');
+            return;
+        }
+        
+        
     
         const entity = {
           ...mascotaEntity,
@@ -70,12 +107,28 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
           especie: especies.find(it => it.id.toString() === values.especie?.toString()),
           raza: razas.find(it => it.id.toString() === values.raza?.toString()),
         };
-    
-        if (isNew) {
-          dispatch(createEntity(entity));
-        } else {
-          dispatch(updateEntity(entity));
+        
+        
+        const id = await  dispatch(createEntity(entity));
+        
+        const formData = new FormData();
+        formData.append('file', selectedFile, `${(id.payload as any).data.id}captured_image.png`);
+
+        try {
+          const response = await axios.post('http://localhost:9000/api/images/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          const imageUrl = response.data.url;
+          console.log('URL de la imagen:', imageUrl);
+          console.log('Respuesta del servidor:', response.data);
+          alert('Imagen subida con éxito.');
+        } catch (error) {
+          console.error('Error al subir la imagen:', error);
+          alert('Error al subir la imagen. Por favor intenta de nuevo.');
         }
+        window.location.reload()
       };
 
   const defaultValues = () =>
@@ -97,16 +150,6 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField
-                  name="id"
-                  required
-                  readOnly
-                  id="mascota-id"
-                  label={translate('global.field.id')}
-                  validate={{ required: true }}
-                />
-              ) : null}
               <ValidatedField
                 label={translate('veterinarySystemApp.mascota.nIdentificacionCarnet')}
                 id="mascota-nIdentificacionCarnet"
@@ -118,6 +161,7 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
+              <button type="button" onClick={handleCameraCapture}>Tomar Foto</button>
               <ValidatedField
                 label={translate('veterinarySystemApp.mascota.foto')}
                 id="mascota-foto"

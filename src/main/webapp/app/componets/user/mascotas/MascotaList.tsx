@@ -57,6 +57,8 @@ const MascotaList = () =>{
         const allUsarios = await dispatch(getUsuarios({}))
         const usuarioActual = (allUsarios.payload as any).data.filter((e,i) => 
         e.user.id==id);
+        console.log("user " , user);
+        
   
         console.log(usuarioActual);
         console.log(usuarioActual[0].dueno.id);
