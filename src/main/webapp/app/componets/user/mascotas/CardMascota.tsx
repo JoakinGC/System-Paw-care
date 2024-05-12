@@ -20,6 +20,7 @@ import { ITratamiento } from "app/shared/model/tratamiento.model";
 import { IMedicamento } from "app/shared/model/medicamento.model";
 import axios from "axios";
 import EditImageMascota from "./EditImageMascota";
+import { faCamera, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface PropsCardMascota {
     id:number;
@@ -132,20 +133,21 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
                 <span><strong>Especie: </strong>{especieMacota&&especieMacota.nombre} </span>
                 <span><strong>Raza: </strong>{razaMascota&&razaMascota.nombre} </span>
             </div>
-            <Button color="primary" onClick={() => setModalOpen(true)}>Cambiar foto</Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/mascota/${id}/delete`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+            <div className="card-icons-options">
+            <Button color="primary" onClick={() => setModalOpen(true)} 
+            style={{ borderRadius: '20px', marginBottom:10, height:40,marginRight: 40}}>
+                <FontAwesomeIcon icon={faCamera}/> 
+            </Button>
+            <Button
+               onClick={() => (window.location.href = `/mascota/${id}/delete`)}
+                color="danger"
+                 size="sm"
+                data-cy="entityDeleteButton"
+                style={{ borderRadius: '20px' ,marginRight: 40,height:40}}
+              >
+                <FontAwesomeIcon icon={faTrash}  />
+              </Button>
+            </div>
         </div>
         <div className="container-card-citas">
             <h2>Citas</h2>

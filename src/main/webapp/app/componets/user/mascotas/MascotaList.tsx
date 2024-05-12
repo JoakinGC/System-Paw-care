@@ -106,7 +106,6 @@ const MascotaList = () =>{
           </div>
         ) : null}
 
-        <ImageUploadForm/>
       </div>
       
     );

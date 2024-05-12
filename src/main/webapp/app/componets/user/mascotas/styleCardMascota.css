@@ -1,5 +1,4 @@
 .container-card {
-    background-color: red;
     width: 100%;
     height: 20vh;
     display: flex;
@@ -24,6 +23,14 @@
     width: 100%;
     display: flex;
     flex-direction: column; /* Cambiado a column */
+}
+
+.card-icons-options{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: azure;
 }
 
 .card-details img{
