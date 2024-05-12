@@ -98,11 +98,15 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
             return;
         }
         
-        
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString().split('/').join('-'); // Formato: MM-DD-YYYY
+        const foto = `${formattedDate}_captured_image.png`;
+
     
         const entity = {
           ...mascotaEntity,
           ...values,
+          foto,
           dueno,
           especie: especies.find(it => it.id.toString() === values.especie?.toString()),
           raza: razas.find(it => it.id.toString() === values.raza?.toString()),
@@ -112,7 +116,7 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
         const id = await  dispatch(createEntity(entity));
         
         const formData = new FormData();
-        formData.append('file', selectedFile, `${(id.payload as any).data.id}captured_image.png`);
+        formData.append('file', selectedFile, foto);
 
         try {
           const response = await axios.post('http://localhost:9000/api/images/upload', formData, {
@@ -162,16 +166,6 @@ const AddMascotaModal = ({ isOpen, toggle, dueno }: { isOpen: any; toggle: any; 
                 }}
               />
               <button type="button" onClick={handleCameraCapture}>Tomar Foto</button>
-              <ValidatedField
-                label={translate('veterinarySystemApp.mascota.foto')}
-                id="mascota-foto"
-                name="foto"
-                data-cy="foto"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
 
               <ValidatedField
                 label={translate('veterinarySystemApp.mascota.fechaNacimiento')}

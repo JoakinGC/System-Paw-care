@@ -10,14 +10,14 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { AppDispatch, useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUsuarios, getEntity as getUsuario} from 'app/entities/usuario/usuario.reducer';
 import { createEntity, getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
-import CardMascota from './CardMascota';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
 import axios from 'axios';
 import ImageUploadForm from 'app/entities/image/ImageUploadForm';
-import AddMascotaModal from '../../veterian/mascotas/AddMascotaModal';
 import { IDueno } from 'app/shared/model/dueno.model';
+import FichaMascota from './FichaMascota';
+import AddMascotaModal from './AddMascotaModal';
 
 
 const MascotaList = () =>{
@@ -34,7 +34,10 @@ const MascotaList = () =>{
     const loading = useAppSelector(state => state.mascota.loading);
     const totalItems = useAppSelector(state => state.mascota.totalItems);
     const [mascotasUser,setMascotasUser] = useState<IMascota[]>();
+    const [modalOpen, setModalOpen] = useState(false);
     const [duenoActual,setDuenoActual] =  useState<IDueno>({})
+
+    const toggleModal = () => setModalOpen(!modalOpen);
   
     const getAllEntities = () => {
       dispatch(
@@ -84,11 +87,11 @@ const MascotaList = () =>{
         <div>
           <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
             <h1>Tús Mascotas</h1>
-          
+          <Button style={{marginLeft:'3vw'}} color="primary" onClick={toggleModal}>Agregar Mascota</Button>
           </div>          
         {mascotasUser && mascotasUser.length > 0 ? (
           mascotasUser.map((mascota,index) => (
-            <CardMascota
+            <FichaMascota
               key={index} 
               id={mascota.id}
               dueno={mascota.dueno}
@@ -106,6 +109,8 @@ const MascotaList = () =>{
           </div>
         ) : null}
 
+
+          <AddMascotaModal dueno={duenoActual} isOpen={modalOpen} toggle={toggleModal} />
         <ImageUploadForm/>
       </div>
       

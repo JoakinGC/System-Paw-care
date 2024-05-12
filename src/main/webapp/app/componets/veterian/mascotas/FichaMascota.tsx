@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import './styleCardMascota.css';
 import { useDispatch } from "react-redux";
@@ -19,7 +21,7 @@ import { Translate } from "react-jhipster";
 import { ITratamiento } from "app/shared/model/tratamiento.model";
 import { IMedicamento } from "app/shared/model/medicamento.model";
 import axios from "axios";
-import EditImageMascota from "./EditImageMascota";
+
 
 interface PropsCardMascota {
     id:number;
@@ -32,7 +34,7 @@ interface PropsCardMascota {
     citas: any[]
 }
 
-const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
+const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
     const dispatch = useDispatch()
     const [duenoMascota,setDuenoMascota] = useState<IDueno>({nombre:""});
     const [especieMacota,setEspecieMacota] = useState<IEspecie|null>(null);
@@ -160,9 +162,9 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    
         }
         </div>
-        <EditImageMascota isOpen={modalOpen} toggle={() => setModalOpen(!modalOpen)} imageUrl={urlImg}/>
+        
         </div>
     )
 }
 
-export default CardMascota;
+export default FichaMascota;

@@ -33,6 +33,14 @@ public class ImageController {
             String fileName = file.getOriginalFilename();
             String filePath = UPLOAD_DIR + File.separator + fileName; // Utiliza File.separator para la compatibilidad multiplataforma
             File dest = new File(filePath);
+
+            // Verificar si el archivo ya existe
+            if (dest.exists()) {
+                // Eliminar el archivo existente
+                dest.delete();
+            }
+
+            // Transferir el nuevo archivo
             file.transferTo(dest);
 
             // Devolver la URL del archivo guardado
