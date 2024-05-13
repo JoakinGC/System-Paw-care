@@ -136,9 +136,9 @@ const VeterianMain = () =>{
             </h1>
         </div>
         <div>
-        <SliderCita array={citasDiaDehoy} title={'Citas de esta hoy'}/>
-        <SliderCita array={citasDiaDeEstaSemana} title={'Citas de esta semana'}/>
-        <SliderCita array={citasDiaDeMes} title={'Citas de este mes'}/>
+        <SliderCita array={citasDiaDehoy} classname={'cita-hoy'} title={'Citas de esta hoy'}/>
+        <SliderCita array={citasDiaDeEstaSemana} classname={'cita-semana'} title={'Citas de esta semana'}/>
+        <SliderCita array={citasDiaDeMes} classname={'cita-mes'} title={'Citas de este mes'}/>
       </div>
     </>
     );

@@ -9,7 +9,7 @@ import axios from "axios";
 import { getEntity } from "app/entities/dueno/dueno.reducer";
 import { IDueno } from "app/shared/model/dueno.model";
 
-const CardCita = ({ fecha, hora, mascotas, motivo }) => {
+const CardCita = ({ fecha, hora, mascotas, motivo,classname }) => {
     const dispatch = useAppDispatch();
     const mascotaList = useAppSelector(state => state.mascota.entities);
     const [mascotasDeLaCita, setMascotasDeLaCita] = useState<IMascota[]>([]);
@@ -63,7 +63,7 @@ const CardCita = ({ fecha, hora, mascotas, motivo }) => {
     }, [mascotasDeLaCita]);
 
     return (
-        <div className="cita-card-container">
+        <div className={`cita-card-container ${classname}`}>
             <div className="cita-head">
                 <span className="cita-date">
                     <div className="cita-time">

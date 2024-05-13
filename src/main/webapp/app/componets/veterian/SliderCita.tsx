@@ -11,11 +11,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
-const SliderCita = ({array,title}) =>{
+const SliderCita = ({array,title,classname}) =>{
 
     return(
         <div className="container">
             <h1 className="heading">{title}</h1>
+
+            {(array.length===0)?(<CardCita
+                            classname={classname}
+                            fecha={"##/##/####"}
+                            hora={"##:##"}
+                            mascotas={[]}
+                            motivo={"No hay citas"}
+                        />):
             <Swiper
                 effect="coverflow"
                 grabCursor={true}
@@ -41,6 +49,7 @@ const SliderCita = ({array,title}) =>{
                     return(
                         <SwiperSlide key={index}>
                             <CardCita 
+                                classname={classname}
                                 fecha={cita.fecha}
                                 hora={cita.hora}
                                 mascotas={cita.mascotas}
@@ -51,22 +60,7 @@ const SliderCita = ({array,title}) =>{
                 }):(<>
                     <SwiperSlide>
                         <CardCita
-                            fecha={"##/##/####"}
-                            hora={"##:##"}
-                            mascotas={"No hay citas"}
-                            motivo={"No hay citas"}
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <CardCita
-                            fecha={"##/##/####"}
-                            hora={"##:##"}
-                            mascotas={"No hay citas"}
-                            motivo={"No hay citas"}
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <CardCita
+                            classname={classname}
                             fecha={"##/##/####"}
                             hora={"##:##"}
                             mascotas={"No hay citas"}
@@ -86,6 +80,8 @@ const SliderCita = ({array,title}) =>{
                     <div className="swiper-pagination"></div>
                 </div>
             </Swiper>
+
+            }
         </div>
     )
 }
