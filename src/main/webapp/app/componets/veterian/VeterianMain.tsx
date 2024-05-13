@@ -17,6 +17,7 @@ import { getEntities } from 'app/entities/cita/cita.reducer';
 import { Link } from 'react-router-dom';
 import { ICita } from 'app/shared/model/cita.model';
 import CardCita from './CardCita';
+import SliderCita from './SliderCita';
 
 const VeterianMain = () =>{
     const [userActual, setUserActual] = useState<IUser|undefined>();
@@ -135,7 +136,9 @@ const VeterianMain = () =>{
             </h1>
         </div>
         <div>
-          <CardCita/>
+        <SliderCita array={citasDiaDehoy} title={'Citas de esta hoy'}/>
+        <SliderCita array={citasDiaDeEstaSemana} title={'Citas de esta semana'}/>
+        <SliderCita array={citasDiaDeMes} title={'Citas de este mes'}/>
       </div>
     </>
     );
