@@ -28,7 +28,7 @@ import CorouselRouter from 'app/componets/user/compra/index';
 import RoutesCalendarCita from 'app/componets/user/citas';
 import HistorialRoutes from './historial';
 import HistoryUserRouter from 'app/componets/user/history';
-import VeterianRoutes from 'app/componets/veterian';
+import VeterianRoutes from 'app/componets/veterian/citas';
 import MascotaUserRouter from 'app/componets/user/mascotas';
 import InfoCamRoutes from 'app/componets/user/camaraInfo';
 import MascotaVeterianRouter from 'app/componets/veterian/mascotas';

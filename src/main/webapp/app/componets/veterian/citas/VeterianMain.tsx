@@ -18,12 +18,17 @@ import { Link } from 'react-router-dom';
 import { ICita } from 'app/shared/model/cita.model';
 import CardCita from './CardCita';
 import SliderCita from './SliderCita';
+import ModalAddCita from './ModalAddCita';
 
 const VeterianMain = () =>{
     const [userActual, setUserActual] = useState<IUser|undefined>();
     const dispatch = useDispatch<AppDispatch>();
     const pageLocation = useLocation();
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
+
+    const handleOpenModal = () => setShowModal(true); // Función para abrir el modal
+    const handleCloseModal = () => setShowModal(false);// Función para abrir el modal
 
     const [citasDiaDehoy,setCitasDiaDeHoy] = useState<ICita[]>([]);
     const [citasDiaDeMes,setCitasDiaDeMes] = useState<ICita[]>([]);
@@ -134,12 +139,16 @@ const VeterianMain = () =>{
                     <></>
                 )}
             </h1>
+            <Button variant="primary" onClick={handleOpenModal}>
+              Agregar Cita
+            </Button>
         </div>
         <div>
-        <SliderCita array={citasDiaDehoy} classname={'cita-hoy'} title={'Citas de esta hoy'}/>
+        <SliderCita array={citasDiaDehoy} classname={'cita-hoy'} title={'Citas de hoy'}/>
         <SliderCita array={citasDiaDeEstaSemana} classname={'cita-semana'} title={'Citas de esta semana'}/>
         <SliderCita array={citasDiaDeMes} classname={'cita-mes'} title={'Citas de este mes'}/>
       </div>
+      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} />
     </>
     );
 }

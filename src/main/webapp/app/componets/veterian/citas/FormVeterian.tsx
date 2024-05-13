@@ -17,8 +17,8 @@ import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterin
 import { IMascota } from 'app/shared/model/mascota.model';
 import { getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
 import { IHistorial } from 'app/shared/model/historial.model';
-import { getEntity as getHistorial, updateEntity as updateHistorial, createEntity as createHistorial, reset  as resetHistorial} from '../../entities/historial/historial.reducer';
-import { getEntity as getTratamiento, updateEntity as updateTratamiento, createEntity as createTratamiento, reset as resetTratamientos } from '../../entities/tratamiento/tratamiento.reducer';
+import { getEntity as getHistorial, updateEntity as updateHistorial, createEntity as createHistorial, reset  as resetHistorial} from '../../../entities/historial/historial.reducer';
+import { getEntity as getTratamiento, updateEntity as updateTratamiento, createEntity as createTratamiento, reset as resetTratamientos } from '../../../entities/tratamiento/tratamiento.reducer';
 import { getEntities as getHistorials } from 'app/entities/historial/historial.reducer';
 
 const FormVeterian = () =>{
