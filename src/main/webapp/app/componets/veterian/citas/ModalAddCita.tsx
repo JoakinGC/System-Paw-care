@@ -11,6 +11,7 @@ import { ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipst
 import AddMascotaForm from './AddMascotaForm';
 import axios from 'axios';
 import { IMascota } from 'app/shared/model/mascota.model';
+import './sliderCita.css';
 
 
 const ModalAddCita = ({ isOpen, toggle, veterinario }
@@ -28,23 +29,12 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
     const loading = useAppSelector(state => state.mascota.loading);
     const duenoList = useAppSelector(state => state.dueno.entities);
     const loadingDueno = useAppSelector(state => state.dueno.loading);
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     useEffect(()=>{
         dispatch(getMascotas({page:0,size:999,sort:`id,asc`}));
         dispatch(getDuenos({page:0,size:999,sort:`id,asc`}));
     },[])
-        const fetchImage = async (urlImg) => {
-          try {
-            const imageUrl = await obtenerImagen(urlImg);
-            setImageUrl(imageUrl);
-          } catch (error) {
-            console.error('Error al obtener la imagen:', error);
-          }
-        };
-        
-      
-
+    
     const goToFormDueno = () => setParteFormulario(4);
     const goToFormMascota = () => {
         setParteFormulario(5)
@@ -57,19 +47,15 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
     
         // Dividir la hora proporcionada en partes (horas y minutos)
         const [horas, minutos] = hora.split(':');
-        
+    
         // Convertir horas y minutos a números enteros
         const horaProporcionada = parseInt(horas, 10);
         const minutosProporcionados = parseInt(minutos, 10);
     
-        // Verificar si la hora proporcionada es posterior a la hora actual
-        if (horaProporcionada < horaActual || (horaProporcionada === horaActual && minutosProporcionados <= minutosActuales)) {
-            return false;
-        }
-        
         // Verificar si los minutos son cero (00)
         return minutosProporcionados === 0;
     };
+    
 
     const handleNext = (values) => {
 
@@ -99,6 +85,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
     const handleNext2of3 = (values) => {
 
 
+
         if(!values.nombreDeDueno) return 
         if(values.nombreDeDueno===0)return
        
@@ -109,7 +96,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
 
         if (dueñoEncontrado) {
             setSeletedDueno(dueñoEncontrado);
-            setParteFormulario(3);  
+            setParteFormulario(3); 
         } else {
             alert("Ese dueño NO existe")
         }
@@ -145,7 +132,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
             return nuevaMascota;
         });
         
-        nuevasMascotas.map(async m => {
+        await nuevasMascotas.map(async m => {
             const ac = await dispatch(updateEntity(m));
             console.log("Mascota actulziada:" ,ac);
             
@@ -179,25 +166,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
     console.log(duenoList);
     console.log(cita);
 
-    const obtenerImagen = async (fileName) => {
-        try {
-          const response = await axios.get(`http://localhost:9000/api/images/${fileName}`, {
-            responseType: 'arraybuffer'
-          });
-  
-          if (response.status !== 200) {
-            throw new Error('Error al obtener la imagen');
-          }
-  
-          const blob = new Blob([response.data], { type: response.headers['content-type'] });
-          const imageUrl = URL.createObjectURL(blob);
-  
-          return imageUrl;
-        } catch (error) {
-          console.error('Error:', error);
-          return null;
-        }
-      };
+    
     return (
         <>
             <Modal show={isOpen} onHide={handleClose}>
@@ -282,13 +251,15 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
                             >
                             <option value="" key="0" />    
                             {selectedDueno ? (
-                                mascotaList.map((m) => {
+                                mascotaList.map((m,i) => {
                                     if (m.dueno.id === selectedDueno.id) {
                                         return (
+                                            <>
+                
                                             <option value={m.id} key={m.id} >
-                                                {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
-                                                {m.nIdentificacionCarnet}
+                                                Nº de carnet:{m.nIdentificacionCarnet}
                                             </option>
+                                            </>
                                         );
                                     }
                                 })
