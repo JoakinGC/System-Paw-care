@@ -61,25 +61,7 @@ const MascotaListVeterinario = () =>{
             <h1>Todas las mascotas y sus citas</h1>
           <Button style={{marginLeft:'3vw'}} color="primary" onClick={toggleModal}>Agregar Mascota</Button>
           </div>          
-        {mascotaList && mascotaList.length > 0 ? (
-          mascotaList.map((mascota,index) => (
-            <FichaMascota
-              key={index} 
-              id={mascota.id}
-              dueno={mascota.dueno}
-              especie={mascota.especie}
-              fechaNacimiento={mascota.fechaNacimiento}
-              nCarnet={mascota.nIdentificacionCarnet}
-              raza={mascota.raza}
-              urlImg={mascota.foto}
-              citas={mascota.citas}
-            />
-          ))
-        ) : !loading ? (
-          <div className="alert alert-warning">
-            <Translate contentKey="veterinarySystemApp.mascota.home.notFound">No Mascotas found</Translate>
-          </div>
-        ) : null}
+       
 
         <SliderMascota array={mascotaList}classname={'background1'}title={"Todas las mascotas"} key={0}/>
 
