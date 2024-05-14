@@ -4,16 +4,26 @@
 * Created with https://www.css-gradient.com
 * Gradient link: https://www.css-gradient.com/?c1=dcc272&c2=dd53c5&gt=l&gd=dcr
 */
+height: 100%;
+width: 100%;
+border-radius: 20px;
 background: #DCC272;
 background: linear-gradient(270deg, #DCC272, #DD53C5);
 }
+.container-card-head{
+    margin-top: 2vh;
+}
 
 .card-body-datails{
+        margin-top: 2;
         width: 100%;
         display: flex;
         flex-direction: column; 
 }
-
+.container-card-citas{
+    height: 40vh;
+    margin-top: 10vh;
+}
 .end-card-cita{
     border-bottom: 2px solid black;
 }

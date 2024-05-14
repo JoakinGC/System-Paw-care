@@ -35,7 +35,7 @@ interface PropsCardMascota {
     classname?:string;
 }
 
-const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
+const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas,classname}: PropsCardMascota) => {
     const dispatch = useDispatch()
     const [duenoMascota,setDuenoMascota] = useState<IDueno>({nombre:""});
     const [especieMacota,setEspecieMacota] = useState<IEspecie|null>(null);
@@ -120,7 +120,7 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
     
 
     return (
-        <div className="container-card">
+        <div className={`container-card ${classname}`} >
         <div className="container-card-head">
             <div className="body-card-cita">
               {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
@@ -135,7 +135,9 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
             
         </div>
         <div>
-        <Button color="primary" onClick={() => setModalOpen(true)}>Cambiar foto</Button>
+        <Button color="primary"
+          style={{marginTop:10}}
+        onClick={() => setModalOpen(true)}>Cambiar foto</Button>
                       <Button
                         onClick={() =>
                           (window.location.href = `/mascota/${id}/delete`)
@@ -150,8 +152,8 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
                         </span>
                       </Button>
         </div>
-        <div className="container-card-citas">
-            <h2>Citas</h2>
+        <div className="container-card-citas" style={{ overflowY: 'auto',width:'100%',height:'100%', maxHeight:80}}>
+      {(citasMascota&&citasMascota.length>0)&&(<h2>Citas</h2>)}        
             {(citasMascota && citasMascota.length>0)?citasMascota.map((e,i) =>{
 
               if(i>=20)return
@@ -165,6 +167,7 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    
         }
         </div>
+
         
         </div>
     )
