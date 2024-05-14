@@ -64,6 +64,8 @@ const VeterianMain = () =>{
         if(userActual&&citaList.length>0){
 
           const citaFiltradas = citaList.filter((cita) =>{
+            console.log(cita);
+            
             return  !cita.atendido&&cita.estetica===null&&cita.veterinario&&cita.veterinario.id==userActual[0].id
           })
           setCitasVeterinario(citaFiltradas)
@@ -74,7 +76,17 @@ const VeterianMain = () =>{
 
       useEffect(() =>{
         if(userActual&&citaList.length>0&&citaList.length >0){
-        const citasHoy = todasLasCitasDelVeterinario.filter((cita: any) => {
+
+          const citasOrdenadas = [...todasLasCitasDelVeterinario];
+
+          // Ordenar la lista de citas por fecha
+          citasOrdenadas.sort((a, b) => {
+              const dateA:Date = new Date(a.fecha.toString());
+              const dateB:Date = new Date(b.fecha.toString());
+              return dateA.getTime() - dateB.getTime();
+          });
+
+        const citasHoy = citasOrdenadas.filter((cita: any) => {
           const fechaCita = new Date(cita.fecha);
           const hoy = new Date();
           return fechaCita.toDateString() === hoy.toDateString();
@@ -82,7 +94,7 @@ const VeterianMain = () =>{
         setCitasDiaDeHoy(citasHoy);
     
 
-        const citasMesActual = todasLasCitasDelVeterinario.filter((cita: any) => {
+        const citasMesActual = citasOrdenadas.filter((cita: any) => {
           const fechaCita = new Date(cita.fecha);
           const mesActual = new Date().getMonth();
           return fechaCita.getMonth() === mesActual;
@@ -90,7 +102,7 @@ const VeterianMain = () =>{
         setCitasDiaDeMes(citasMesActual);
     
 
-        const citasSemanaActual = todasLasCitasDelVeterinario.filter((cita: any) => {
+        const citasSemanaActual = citasOrdenadas.filter((cita: any) => {
           const fechaCita = new Date(cita.fecha);
           const hoy = new Date();
           const primerDiaSemana = new Date(hoy.setDate(hoy.getDate() - hoy.getDay()));
@@ -126,6 +138,7 @@ const VeterianMain = () =>{
       
 
     console.log(userActual);
+    console.log(citaList);
 
     return (
         <>
@@ -149,7 +162,7 @@ const VeterianMain = () =>{
         <SliderCita array={citasDiaDeEstaSemana} classname={'cita-semana'} title={'Citas de esta semana'}/>
         <SliderCita array={citasDiaDeMes} classname={'cita-mes'} title={'Citas de este mes'}/>
       </div>
-      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} veterianrio={userActual&&userActual[0]}/>
+      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} veterinario={userActual&&userActual[0]}/>
     </>
     );
 }

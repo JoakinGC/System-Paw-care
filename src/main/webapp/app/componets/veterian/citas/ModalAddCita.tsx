@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { createEntity as createNewCita} from 'app/entities/cita/cita.reducer';
 import { createEntity, getEntities as getDuenos} from 'app/entities/dueno/dueno.reducer';
-import { getEntities as getMascotas} from 'app/entities/mascota/mascota.reducer';
+import { getEntities as getMascotas, updateEntity} from 'app/entities/mascota/mascota.reducer';
 import { ICita } from 'app/shared/model/cita.model';
 import { IDueno } from 'app/shared/model/dueno.model';
 import { IVeterinario } from 'app/shared/model/veterinario.model';
@@ -9,13 +9,15 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap'; 
 import { ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
 import AddMascotaForm from './AddMascotaForm';
+import axios from 'axios';
+import { IMascota } from 'app/shared/model/mascota.model';
 
 
-const ModalAddCita = ({ isOpen, toggle, veterianrio }
+const ModalAddCita = ({ isOpen, toggle, veterinario }
     :{
         isOpen:boolean;
         toggle:()=>void;
-        veterianrio:IVeterinario;
+        veterinario:IVeterinario;
     }) => {
     const [parteFormulario, setParteFormulario] = useState(1);
     const [cita,setCita] = useState<ICita>({});
@@ -26,14 +28,22 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
     const loading = useAppSelector(state => state.mascota.loading);
     const duenoList = useAppSelector(state => state.dueno.entities);
     const loadingDueno = useAppSelector(state => state.dueno.loading);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     useEffect(()=>{
         dispatch(getMascotas({page:0,size:999,sort:`id,asc`}));
         dispatch(getDuenos({page:0,size:999,sort:`id,asc`}));
     },[])
-    useEffect(()=>{
-        dispatch(getMascotas({page:0,size:999,sort:`id,asc`}));
-    },[])
+        const fetchImage = async (urlImg) => {
+          try {
+            const imageUrl = await obtenerImagen(urlImg);
+            setImageUrl(imageUrl);
+          } catch (error) {
+            console.error('Error al obtener la imagen:', error);
+          }
+        };
+        
+      
 
     const goToFormDueno = () => setParteFormulario(4);
     const goToFormMascota = () => {
@@ -79,7 +89,7 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
             'hora':values.hora,
             'fecha':values.fecha,
             'motivo':values.motivo,
-            veterianrio
+            veterinario
         }
 
         setCita(current)
@@ -113,16 +123,34 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
     const saveEntity = async (values) => {
         
         
-        const mascotasSeleccionadas = mascotaList.filter(mascota => values.mascotas.includes(mascota.id.toString()));
+        const mascotasSeleccionadas:IMascota[] = await mascotaList.filter(mascota => values.mascotas.includes(mascota.id.toString()));
         
-        console.log(mascotasSeleccionadas);
+        console.log("Mascotas sleccioada",mascotasSeleccionadas);
+
+        if(mascotasSeleccionadas.length>2) return
         
         const entity = {
             ...cita,
             'mascotas':mascotasSeleccionadas
         }
+        console.log("nueva",entity);
+        const nueva:ICita = await((await dispatch(createNewCita(entity))).payload as any).data;
+
+
+        const nuevasMascotas = await mascotasSeleccionadas.map(m => {
+            const nuevaMascota = { ...m };
+            nuevaMascota.citas = [...nuevaMascota.citas, nueva];
+            console.log("nueva mascota",nuevaMascota);
+            
+            return nuevaMascota;
+        });
         
-        dispatch(createNewCita(entity))
+        nuevasMascotas.map(async m => {
+            const ac = await dispatch(updateEntity(m));
+            console.log("Mascota actulziada:" ,ac);
+            
+        });
+        console.log("nueva",nueva);
         handleClose();
     }
 
@@ -150,6 +178,26 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
     console.log(mascotaList);
     console.log(duenoList);
     console.log(cita);
+
+    const obtenerImagen = async (fileName) => {
+        try {
+          const response = await axios.get(`http://localhost:9000/api/images/${fileName}`, {
+            responseType: 'arraybuffer'
+          });
+  
+          if (response.status !== 200) {
+            throw new Error('Error al obtener la imagen');
+          }
+  
+          const blob = new Blob([response.data], { type: response.headers['content-type'] });
+          const imageUrl = URL.createObjectURL(blob);
+  
+          return imageUrl;
+        } catch (error) {
+          console.error('Error:', error);
+          return null;
+        }
+      };
     return (
         <>
             <Modal show={isOpen} onHide={handleClose}>
@@ -222,7 +270,7 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
                     )}
                      {parteFormulario === 3 && (
                         <ValidatedForm onSubmit={saveEntity}>
-                            <p>Selecciona unas de tus mascotas:</p>
+                            <p>Selecciona unas de tus mascotas {selectedDueno&&`${selectedDueno.nombre} ${selectedDueno.apellido}`}:</p>
                             <ValidatedField
                                 label={translate('veterinarySystemApp.cita.mascota')}
                                 id="cita-mascota"
@@ -238,6 +286,7 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
                                     if (m.dueno.id === selectedDueno.id) {
                                         return (
                                             <option value={m.id} key={m.id} >
+                                                {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
                                                 {m.nIdentificacionCarnet}
                                             </option>
                                         );
@@ -250,7 +299,7 @@ const ModalAddCita = ({ isOpen, toggle, veterianrio }
                             <Button type="submit" variant="primary">
                                 Guardar Cita
                             </Button>
-                            <Button onClick={goToFormMascota} variant="primary">
+                            <Button onClick={goToFormMascota} style={{marginLeft:3}} variant="primary">
                                 Agregar mascota
                             </Button>
                         </ValidatedForm>

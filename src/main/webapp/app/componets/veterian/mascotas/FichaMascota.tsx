@@ -39,11 +39,8 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
     const [duenoMascota,setDuenoMascota] = useState<IDueno>({nombre:""});
     const [especieMacota,setEspecieMacota] = useState<IEspecie|null>(null);
     const [razaMascota,setRazaMascota] = useState<IRaza>();
-    const [citasMascota,setCitasMascotas] = useState<ICita[]>(); 
-    const [medicamentoMascotas,setMedicamentosMascotas] = useState<IMedicamento[]>(); 
-    const [tratamientosMascotas,setTratamientosMascotas] = useState<ITratamiento[]>(); 
+    const [citasMascota,setCitasMascotas] = useState<ICita[]>();  
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [nameImage, setNameImage] = useState<string | null>(null);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     console.log(dueno.id);
