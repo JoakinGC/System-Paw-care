@@ -1,7 +1,6 @@
 
 
 import React, { useEffect, useState } from "react";
-import './styleCardMascota.css';
 import { useDispatch } from "react-redux";
 import { getEntity as getDueno} from "app/entities/dueno/dueno.reducer";
 import { AppDispatch } from "app/config/store";
@@ -21,6 +20,7 @@ import { Translate } from "react-jhipster";
 import { ITratamiento } from "app/shared/model/tratamiento.model";
 import { IMedicamento } from "app/shared/model/medicamento.model";
 import axios from "axios";
+import './styleCardMascota.css';
 
 
 interface PropsCardMascota {
@@ -31,7 +31,8 @@ interface PropsCardMascota {
     dueno: any;
     especie: any;
     raza: any;
-    citas: any[]
+    citas: any[],
+    classname?:string;
 }
 
 const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza,citas}: PropsCardMascota) => {
@@ -119,19 +120,22 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
     
 
     return (
-        <div>
         <div className="container-card">
-            <div className="card-image-mascota-container">
+        <div className="container-card-head">
+            <div className="body-card-cita">
               {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
             </div>
-            <div className="card-details">
+            <div className="card-body-datails">
                 <span><strong>Número de Carnet: </strong> {nCarnet}</span>
                 <span><strong>Fecha de Nacimiento :</strong> {fechaNacimiento.toString()}</span>
                 <span><strong>Dueño: </strong>{duenoMascota&&duenoMascota.nombre}</span>
                 <span><strong>Especie: </strong>{especieMacota&&especieMacota.nombre} </span>
                 <span><strong>Raza: </strong>{razaMascota&&razaMascota.nombre} </span>
             </div>
-            <Button color="primary" onClick={() => setModalOpen(true)}>Cambiar foto</Button>
+            
+        </div>
+        <div>
+        <Button color="primary" onClick={() => setModalOpen(true)}>Cambiar foto</Button>
                       <Button
                         onClick={() =>
                           (window.location.href = `/mascota/${id}/delete`)
@@ -148,12 +152,14 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
         </div>
         <div className="container-card-citas">
             <h2>Citas</h2>
-            {(citasMascota && citasMascota.length>0)?citasMascota.map((e) =>{
-                return(<div className="body-cita">
+            {(citasMascota && citasMascota.length>0)?citasMascota.map((e,i) =>{
+
+              if(i>=20)return
+                return(<>
                     <span><strong>Hora: </strong>{e.hora&&e.hora.toString()}</span>
                     <span><strong>fecha: </strong>{e.fecha&&e.fecha.toString()}</span>
-                    <span><strong>motivo: </strong>{e.motivo&&e.motivo}</span>
-                </div>)
+                    <span className="end-card-cita"><strong>motivo: </strong>{e.motivo&&e.motivo}</span>
+                </>)
             })
             :
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    

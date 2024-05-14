@@ -39,7 +39,6 @@
 }
 
 .container-card-citas{
-    margin-left: 5vw;
     display: flex;
     flex-direction: column;
 }

@@ -18,6 +18,7 @@ import ImageUploadForm from 'app/entities/image/ImageUploadForm';
 import { IDueno } from 'app/shared/model/dueno.model';
 import FichaMascota from './FichaMascota';
 import AddMascotaModal from './AddMascotaModal';
+import SliderMascota from './SliderMascota';
 
 
 const MascotaListVeterinario = () =>{
@@ -79,6 +80,8 @@ const MascotaListVeterinario = () =>{
             <Translate contentKey="veterinarySystemApp.mascota.home.notFound">No Mascotas found</Translate>
           </div>
         ) : null}
+
+        <SliderMascota array={mascotaList}classname={'background1'}title={"Todas las mascotas"} key={0}/>
 
 
           <AddMascotaModal dueno={duenoActual} isOpen={modalOpen} toggle={toggleModal} />
