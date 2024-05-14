@@ -228,8 +228,8 @@ const AddCita = ({toggleModal,selectedDate}) => {
             data-cy="hora"
             type="time"
             step="3600" // Define el incremento en segundos (3600 segundos = 1 hora)
-            min="09:00" // Define la hora mínima permitida
-            max="17:00" // Define la hora máxima permitida
+            min="08:00" 
+            max="17:00"
           />
           <ValidatedField
             label={translate('veterinarySystemApp.cita.motivo')}

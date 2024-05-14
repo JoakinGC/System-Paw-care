@@ -139,16 +139,17 @@ const VeterianMain = () =>{
                     <></>
                 )}
             </h1>
-            <Button variant="primary" onClick={handleOpenModal}>
+            <Button variant="primary" onClick={handleOpenModal} disabled={!userActual}>
               Agregar Cita
             </Button>
+
         </div>
         <div>
         <SliderCita array={citasDiaDehoy} classname={'cita-hoy'} title={'Citas de hoy'}/>
         <SliderCita array={citasDiaDeEstaSemana} classname={'cita-semana'} title={'Citas de esta semana'}/>
         <SliderCita array={citasDiaDeMes} classname={'cita-mes'} title={'Citas de este mes'}/>
       </div>
-      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} />
+      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} veterianrio={userActual&&userActual[0]}/>
     </>
     );
 }
