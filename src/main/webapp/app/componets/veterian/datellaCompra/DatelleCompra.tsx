@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import CardCompra from "./CardCompra";
-import CardDetalleCompra from "./CardDetalleCompra";
+import ModalCardDetils from "./ModalCardDatils";
 import dayjs from "dayjs";
 import { IUsuario } from "app/shared/model/usuario.model";
 import { useAppDispatch, useAppSelector } from "app/config/store";
@@ -14,11 +14,16 @@ import { getEntity } from "app/entities/dueno/dueno.reducer";
 
 const DetalleCompraVeterianAndEstilis = () =>{
     const dispatch = useAppDispatch();
-    const datelleCompraList = useAppSelector(state => state.datelleCompra.entities);
-    const loading = useAppSelector(state => state.datelleCompra.loading);
     const compraList = useAppSelector(state => state.compra.entities);
+    const datelleCompraList = useAppSelector(state => state.datelleCompra.entities);
     const [compraListDatilsUser, setCompraListDatilsUser] = useState<ICompra[]|null>(null);
     const [modalOpen , closeModal] = useState<boolean>();
+    const [idDatelleCompra,setIdDetalleCompra] = useState<number|undefined>();
+
+    const toggleModalDatils = (id:number) =>{
+        setIdDetalleCompra(id)
+        closeModal(!modalOpen)
+    }
 
     const toggleModal = () =>{
         closeModal(!modalOpen)
@@ -61,17 +66,23 @@ const DetalleCompraVeterianAndEstilis = () =>{
         }
     }, [compraList]);
     
+    const updateCompra = () =>{
+
+    }
    
     console.log(compraList);
     
     return (
         <>
-            <h1>Pepe</h1>
+        <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
+            <h1>Entregas</h1>
+        </div>
+            <h2>No entregados</h2>
             <div className="container-cards">
-
                 {(compraListDatilsUser&&compraListDatilsUser.length>0)?(
 
-                compraListDatilsUser.map((c:ICompra) =>{
+                compraListDatilsUser.map((c:any) =>{
+                    if(!c.entregado){
                         return(
                             <CardCompra
                             id={c.id}
@@ -79,9 +90,34 @@ const DetalleCompraVeterianAndEstilis = () =>{
                             total={c.total}
                             key={c.id}
                             usuario={c.usuario}
-                            toggleModal={toggleModal}
+                            entregado={false}
+                            toggleModal={toggleModalDatils}
                         /> 
                         )
+                        }
+                    })
+                ):<></>}
+            
+            </div>
+            <h2>Entregados</h2>
+            <div className="container-cards">
+                
+                {(compraListDatilsUser&&compraListDatilsUser.length>0)?(
+
+                compraListDatilsUser.map((c:any) =>{
+                    if(c.entregado){
+                        return(
+                            <CardCompra
+                            id={c.id}
+                            fecha={c.fechaCompra}
+                            total={c.total}
+                            key={c.id}
+                            usuario={c.usuario}
+                            entregado={true}
+                            toggleModal={toggleModalDatils}
+                        /> 
+                        )
+                        }
                     })
                 ):<></>}
             
@@ -90,7 +126,7 @@ const DetalleCompraVeterianAndEstilis = () =>{
             <Modal isOpen={modalOpen} toggle={toggleModal}>
                 <ModalHeader toggle={toggleModal}>Detalle de compra</ModalHeader>
                 <ModalBody>
-                    <CardDetalleCompra  />
+                    <ModalCardDetils datalleCompraList={datelleCompraList} idCompra={idDatelleCompra} />
                 </ModalBody>
                 <ModalFooter>
                     <Button color="secondary" onClick={toggleModal}>Cerrar</Button>
