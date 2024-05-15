@@ -3,17 +3,18 @@ import './cardCompra.css';
 import { Button,Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { IUsuario } from "app/shared/model/usuario.model";
 import dayjs from "dayjs";
+import { ICompra } from "app/shared/model/compra.model";
 
 const CardCompra = (
     {fecha,total,usuario,toggleModal}:
     {
+        id:number,
         fecha:dayjs.Dayjs,
         total:number,
         usuario?: IUsuario | null,
         toggleModal:() => void,
     }
 ) =>{
-   
     //fecha la compra 
     //total de la compra, y el usuario
     return(<div className="card-compra">
@@ -31,19 +32,19 @@ const CardCompra = (
         </div>
         <div className="card-compra-body">
             <div>
-            <span>Nombre: {usuario&&usuario.dueno.nombre}</span>
+                <span>Nombre: {usuario && usuario.dueno && usuario.dueno.nombre ? usuario.dueno.nombre : null}</span>
             </div>
             <div>
-            <span>Apellido: {usuario&&usuario.dueno.apellido}</span>
-
+                <span>Apellido: {usuario && usuario.dueno && usuario.dueno.apellido ? usuario.dueno.apellido : null}</span>
             </div>
             <div>
-            <span>Direccion: {usuario&&usuario.dueno.direccion}</span>
+                <span>Direccion: {usuario && usuario.dueno && usuario.dueno.direccion ? usuario.dueno.direccion : null}</span>
             </div>
             <div>
-                <span>Direccion: {usuario&&usuario.dueno.telefono}</span>
+                <span>Telefono: {usuario && usuario.dueno && usuario.dueno.telefono ? usuario.dueno.telefono : null}</span>
             </div>
         </div>
+
         <div className="card-compra-footer">
             <Button>Confirmar entrega de producto</Button>
             <Button onClick={toggleModal}>Detalle de compra</Button>
