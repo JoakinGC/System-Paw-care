@@ -31,7 +31,7 @@ const VeterianMenu = () =>{
       </NavItem>
       <NavItem>
 
-      <NavLink tag={Link} to="/datelle-compra" className="d-flex align-items-center">
+      <NavLink tag={Link} to="/datelleCompraVeteAndStil" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faShoppingCart}  />
       <span>
         <Translate contentKey="global.menu.entities.datelleCompra">History</Translate>
@@ -56,9 +56,6 @@ const VeterianMenu = () =>{
         </span>
         </NavLink>
     </NavItem>
-
-    
-
   </>
     );
 };

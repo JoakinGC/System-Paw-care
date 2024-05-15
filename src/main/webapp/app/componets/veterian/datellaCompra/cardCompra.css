@@ -1,0 +1,43 @@
+.container-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta automáticamente el número de columnas */
+    gap: 2vw; /* Espacio entre las tarjetas */
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    padding: 20px; /* Espaciado interno */
+    box-sizing: border-box; /* Incluye el padding en el tamaño total */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+}
+
+.container-cards:only-child .card-compra {
+    margin: 0; /* Elimina el margen izquierdo y derecho */
+}
+
+.card-compra {
+    background: #0F0F11;
+    background: linear-gradient(180deg, #0F0F11, #203E12);
+    width: 80vw;
+    max-width: 200px;
+    height: auto; /* Altura automática para ajustarse al contenido */
+    max-height: none; /* Elimina la altura máxima para permitir que la tarjeta crezca según el contenido */
+    margin-left: auto;
+    margin: 0 auto;
+    margin-right: auto;
+    color: white;
+    overflow: hidden; /* Oculta el desbordamiento del contenido */
+}
+
+.card-compra-body {
+    padding: 10px; /* Añade un poco de espacio entre el borde y el contenido */
+}
+
+.card-compra-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribuye los botones a los lados de la tarjeta */
+    padding: 10px; /* Añade un poco de espacio entre el borde y los botones */
+}
+
+.card-compra-footer button {
+    margin-left: 1vw; /* Elimina el margen de los botones */
+}

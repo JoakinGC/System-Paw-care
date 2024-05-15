@@ -32,6 +32,7 @@ import VeterianRoutes from 'app/componets/veterian/citas';
 import MascotaUserRouter from 'app/componets/user/mascotas';
 import InfoCamRoutes from 'app/componets/user/camaraInfo';
 import MascotaVeterianRouter from 'app/componets/veterian/mascotas';
+import RouterDatelleCompraVeterian from 'app/componets/veterian/datellaCompra';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 
@@ -43,6 +44,7 @@ export default () => {
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
         <Route path='camaraInfo/*' element={<InfoCamRoutes/>}/>
+        <Route path='datelleCompraVeteAndStil/*' element={<RouterDatelleCompraVeterian/>}/>
         <Route path='mascotasVeterian/*' element={<MascotaVeterianRouter/>}/>
         <Route path='mascotasUser/*' element={<MascotaUserRouter/>}/>
         <Route path='vetirinarioMenu/*' element={<VeterianRoutes/>}/>
