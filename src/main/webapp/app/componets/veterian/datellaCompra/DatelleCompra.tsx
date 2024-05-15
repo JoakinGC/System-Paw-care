@@ -5,7 +5,7 @@ import ModalCardDetils from "./ModalCardDatils";
 import dayjs from "dayjs";
 import { IUsuario } from "app/shared/model/usuario.model";
 import { useAppDispatch, useAppSelector } from "app/config/store";
-import { getEntities as getAllCompras} from "app/entities/compra/compra.reducer";
+import { getEntities as getAllCompras, updateEntity} from "app/entities/compra/compra.reducer";
 import { getEntities as getAllDetalleCompra} from "app/entities/datelle-compra/datelle-compra.reducer";
 import { ICompra } from "app/shared/model/compra.model";
 import { getEntity as getUsuario} from "app/entities/usuario/usuario.reducer";
@@ -66,8 +66,8 @@ const DetalleCompraVeterianAndEstilis = () =>{
         }
     }, [compraList]);
     
-    const updateCompra = () =>{
-
+    const updateCompra = async(compra:any) =>{
+        await dispatch(updateEntity(compra))
     }
    
     console.log(compraList);
@@ -92,6 +92,7 @@ const DetalleCompraVeterianAndEstilis = () =>{
                             usuario={c.usuario}
                             entregado={false}
                             toggleModal={toggleModalDatils}
+                            updateCompra={updateCompra}
                         /> 
                         )
                         }

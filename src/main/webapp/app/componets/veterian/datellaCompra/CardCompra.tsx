@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 
 const CardCompra = (
-    {id,fecha,total,usuario,toggleModal,entregado}:
+    {id,fecha,total,usuario,toggleModal,entregado,updateCompra}:
     {
         id:number,
         fecha:dayjs.Dayjs,
@@ -14,12 +14,25 @@ const CardCompra = (
         usuario?: IUsuario | null,
         entregado:boolean,
         toggleModal:(idCompra:number|string) => void,
+        updateCompra?:(compra:any) => void
     }
 ) =>{
     //fecha la compra 
     //total de la compra, y el usuario
     const openDatilsCompra = () =>{
         toggleModal(id);
+    }
+
+    const updateEntrega = async() =>{
+        const n = {
+            id,
+           'fechaCompra':fecha,
+            total,
+            usuario,
+            'entregado':true,
+        }
+        await updateCompra(n)
+
     }
     return(<div className="card-compra">
         <div className="card-compra-head">
@@ -50,7 +63,7 @@ const CardCompra = (
         </div>
 
         <div className="card-compra-footer">
-            <Button disabled={entregado}>Confirmar entrega de producto</Button>
+            <Button disabled={entregado} onClick={updateEntrega}>Confirmar entrega de producto</Button>
             <Button  onClick={openDatilsCompra}>Detalle de compra</Button>
         </div>
     </div>)
