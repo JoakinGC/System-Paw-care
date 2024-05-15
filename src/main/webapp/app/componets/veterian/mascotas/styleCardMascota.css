@@ -1,14 +1,13 @@
 
 .background1{
-    /*
-* Created with https://www.css-gradient.com
-* Gradient link: https://www.css-gradient.com/?c1=dcc272&c2=dd53c5&gt=l&gd=dcr
-*/
+
 height: 100%;
 width: 100%;
 border-radius: 20px;
-background: #DCC272;
-background: linear-gradient(270deg, #DCC272, #DD53C5);
+
+
+background: #161616;
+background: linear-gradient(225deg, #161616, #6A6970);
 }
 .container-card-head{
     margin-top: 2vh;

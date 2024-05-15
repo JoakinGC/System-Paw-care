@@ -13,7 +13,7 @@ import { useNavigate, useParams } from 'react-router';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { IMascota } from 'app/shared/model/mascota.model';
 
-const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any; dueno: IDueno }) => {
+const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
     const dispatch = useAppDispatch();
 
     const navigate = useNavigate();

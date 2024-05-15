@@ -120,7 +120,7 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
     
 
     return (
-        <div className={`container-card ${classname}`} >
+        <div className={`container-card ${classname}`} style={{color:'#faf4f0'}} >
         <div className="container-card-head">
             <div className="body-card-cita">
               {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
