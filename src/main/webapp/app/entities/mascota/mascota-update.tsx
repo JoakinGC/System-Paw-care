@@ -36,13 +36,12 @@ export const MascotaUpdate = () => {
   const loading = useAppSelector(state => state.mascota.loading);
   const updating = useAppSelector(state => state.mascota.updating);
   const updateSuccess = useAppSelector(state => state.mascota.updateSuccess);
-  const [razasList,setListRaza] = useState<IRaza[]>()
-  const [especiesList,setListEspecies] = useState<IEspecie[]>()
-  const [citasList,setListCitas] = useState<ICita[]>()
+  const [selectedFile, setSelectedFile] = useState(null);
+
   
 
   const handleClose = () => {
-    navigate('/mascotasUser' + location.search);
+   // navigate('/' + location.search);
   };
 
   useEffect(() => {
@@ -55,7 +54,7 @@ export const MascotaUpdate = () => {
     dispatch(getCitas({}));
     dispatch(getDuenos({}));
     dispatch(getEspecies({}));
-    dispatch(getRazas({}));
+    dispatch(getRazas({page:0,size:999,sort:`id,asc`}));
 
     
 
@@ -68,16 +67,19 @@ export const MascotaUpdate = () => {
   }, [updateSuccess]);
 
   // eslint-disable-next-line complexity
-  const saveEntity = values => {
-    if (values.id !== undefined && typeof values.id !== 'number') {
-      values.id = Number(values.id);
-    }
-    if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number') {
+  const saveEntity = async values => {
+        
+    if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number' &&values.nIdentificacionCarnet) {
       values.nIdentificacionCarnet = Number(values.nIdentificacionCarnet);
     }
+    
 
-
-
+    
+    
+    
+    const foto = mascotaEntity.foto;
+    console.log(mascotaEntity.foto);
+    
 
     const entity = {
       ...mascotaEntity,
@@ -87,14 +89,36 @@ export const MascotaUpdate = () => {
       especie: especies.find(it => it.id.toString() === values.especie?.toString()),
       raza: razas.find(it => it.id.toString() === values.raza?.toString()),
     };
-
-    if (isNew) {
-      dispatch(createEntity(entity));
-    } else {
-      dispatch(updateEntity(entity));
+    if (!selectedFile) {
+      alert('Por favor selecciona un archivo.');
+      return;
     }
+    
+    const id = await  dispatch(updateEntity(entity));
+    const fotoBlob = new Blob([values.foto], { type: values.foto.type });
+    const formData = new FormData();
+    formData.append('file', selectedFile, foto);
+
+    try {
+      const response = await axios.post('http://localhost:9000/api/images/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      const imageUrl = response.data;
+      console.log('URL de la imagen:', imageUrl);
+      console.log('Respuesta del servidor:', response.data);
+      alert('Imagen subida con éxito.');
+    } catch (error) {
+      console.error('Error al subir la imagen:', error);
+      alert('Error al subir la imagen. Por favor intenta de nuevo.');
+    }
+    window.location.reload()
   };
 
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
   const defaultValues = () =>
     isNew
       ? {}
@@ -137,21 +161,13 @@ export const MascotaUpdate = () => {
                 name="nIdentificacionCarnet"
                 data-cy="nIdentificacionCarnet"
                 type="text"
+                required={true}
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              <ValidatedField
-                label={translate('veterinarySystemApp.mascota.foto')}
-                id="mascota-foto"
-                name="foto"
-                data-cy="foto"
-                type="file"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
+              <input type="file" accept="image/*" onChange={handleFileChange} />
 
               <ValidatedField
                 label={translate('veterinarySystemApp.mascota.fechaNacimiento')}
@@ -159,31 +175,17 @@ export const MascotaUpdate = () => {
                 name="fechaNacimiento"
                 data-cy="fechaNacimiento"
                 type="date"
+                required={true}
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
-              <ValidatedField
-                label={translate('veterinarySystemApp.mascota.cita')}
-                id="mascota-cita"
-                data-cy="cita"
-                type="select"
-                multiple
-                name="citas"
-              >
-                <option value="" key="0" />
-                {citas
-                  ? citas.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
+              
               <ValidatedField
                 id="mascota-dueno"
                 name="dueno"
                 data-cy="dueno"
+                required={true}
                 label={translate('veterinarySystemApp.mascota.dueno')}
                 type="select"
               >
@@ -200,6 +202,7 @@ export const MascotaUpdate = () => {
                 id="mascota-especie"
                 name="especie"
                 data-cy="especie"
+                required={true}
                 label={translate('veterinarySystemApp.mascota.especie')}
                 type="select"
               >
@@ -218,6 +221,7 @@ export const MascotaUpdate = () => {
                 data-cy="raza"
                 label={translate('veterinarySystemApp.mascota.raza')}
                 type="select"
+                required={true}
               >
                 <option value="" key="0" />
                 {razas

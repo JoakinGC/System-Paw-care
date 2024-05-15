@@ -134,10 +134,19 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
             </div>
             
         </div>
-        <div>
-        <Button color="primary"
-          style={{marginTop:10}}
-        onClick={() => setModalOpen(true)}>Cambiar foto</Button>
+            <div>
+                <Button
+                        tag={Link}
+                        to={`/mascota/${id}/edit`}
+                        color="primary"
+                        size="sm"
+                        data-cy="entityEditButton"
+                      >
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
+                      </Button>
                       <Button
                         onClick={() =>
                           (window.location.href = `/mascota/${id}/delete`)
