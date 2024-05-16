@@ -1,30 +1,57 @@
 import React from "react";
 import './cardDiagnots.css';
+import dayjs from "dayjs";
+import { IMascota } from "app/shared/model/mascota.model";
+import { IMedicamento } from "app/shared/model/medicamento.model";
+import { IEnfermedad } from "app/shared/model/enfermedad.model";
+import { IVeterinario } from "app/shared/model/veterinario.model";
+import { Button } from "reactstrap";
 
-const CardDiagnots = () =>{
+const CardDiagnots = ({
+    fechaConsulta,
+    diagnostico,
+    mascota,
+    toggleModal
+}:{
+    fechaConsulta:dayjs.Dayjs,
+    diagnostico:string
+    mascota?: IMascota | null,
+    toggleModal:() =>void,
+}) =>{
 
 
     return(
         <div className="container-card-diagnot">
             <div>
-            <h3>Diagnostico</h3>
-            <span>Fecha de consulta</span>    
+                <h3>Diagnostico</h3>
+                <span><strong>Fecha de consulta:</strong>{fechaConsulta&&fechaConsulta.toString()}</span>    
             </div>
-            
             <div className="card-body-diagnot">
-            Diagnostico
+                {diagnostico&&diagnostico}
             </div>
             <div className="card-mascota-diagnot">
                 <span>
-                    n de carnet
+                    n de carnet: 
                 </span>
                 <span>
-                    raza                    
+                    Raza:                
                 </span>
                 <span>
-                    especie
+                    Especie:
                 </span>
             </div>
+            <div className="card-mascota-diagnot">
+                <span>
+                {(mascota&&mascota.nIdentificacionCarnet)?mascota.nIdentificacionCarnet:null }
+                </span>
+                <span>
+                {(mascota&&mascota.raza.nombre)?mascota.raza.nombre:null }
+                </span>
+                <span>
+                {(mascota&&mascota.especie.nombre)?mascota.especie.nombre:null }
+                </span>
+            </div>
+            <Button onClick={toggleModal}>Ver detalles</Button>
         </div>
     )
 }

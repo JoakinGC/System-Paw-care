@@ -10,6 +10,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-bottom: 20px;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    margin-top: 2vw;
 }
 
 .container-card-diagnot > div {
