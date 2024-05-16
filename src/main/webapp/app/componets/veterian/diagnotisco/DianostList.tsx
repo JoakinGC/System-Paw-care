@@ -20,6 +20,7 @@ import { IMedicamento } from "app/shared/model/medicamento.model";
 import { IEnfermedad } from "app/shared/model/enfermedad.model";
 import CardEnfermedadVeterian from "./CardEnfermedadVeterian";
 import CardMedicamentoVeterian from "./CardMedicamentoVeterian";
+import AddDiagnotsModal from "./AddDiagnotsModal";
 
 
 const DiagnostList = () => {
@@ -166,6 +167,7 @@ const DiagnostList = () => {
         <div>
             <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <h1>Todos los diagnósticos</h1>
+                <Button onClick={toggleModalAdd}>Diagnostico</Button>
             </div>
             <div className="cards-container">
                 {(historialFiltrado&&historialFiltrado.length>0)?(
@@ -219,9 +221,11 @@ const DiagnostList = () => {
                 </ModalFooter>
             </Modal>
             <Modal isOpen={modalOpenAdd} toggle={toggleModalAdd}>
-                <ModalHeader toggle={toggleModal}>Diagnosticar Mascota</ModalHeader>
+                <ModalHeader toggle={toggleModalAdd}>Diagnosticar Mascota</ModalHeader>
                 <ModalBody>
-                        
+                        <AddDiagnotsModal 
+                            veterinario={userActual&&userActual}
+                        />
                 </ModalBody>       
             </Modal>
         </div>

@@ -13,12 +13,12 @@ const VeterianMenu = () =>{
       <>
       <NavItem>
 
-        <NavLink tag={Link} to="/historial" className="d-flex align-items-center">
-          <FontAwesomeIcon icon={faArchive}  />
-          <span>
-            <Translate contentKey="global.menu.entities.historial">History</Translate>
-          </span>
-          </NavLink>
+        <NavLink tag={Link} to="/diagnostVeterian" className="d-flex align-items-center">
+        <FontAwesomeIcon icon={faUserCheck}  />
+        <span>
+          Diagnostico
+        </span>
+      </NavLink>
       </NavItem>
       <NavItem>
 
@@ -39,15 +39,6 @@ const VeterianMenu = () =>{
         </NavLink>
     </NavItem>
     <NavItem>
-
-      <NavLink tag={Link} to="/vetirinarioMenu/new" className="d-flex align-items-center">
-      <FontAwesomeIcon icon={faUserCheck}  />
-      <span>
-        Diagnostico
-        </span>
-        </NavLink>
-    </NavItem>
-    <NavItem>
     
       <NavLink tag={Link} to="/mascotasVeterian" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faPaw}  />
@@ -56,16 +47,7 @@ const VeterianMenu = () =>{
         </span>
         </NavLink>
     </NavItem>
-    <NavItem>
-
-      <NavLink tag={Link} to="/diagnostVeterian" className="d-flex align-items-center">
-      <FontAwesomeIcon icon={faCalendarAlt}  />
-      <span>
-        Diagnostico
-        </span>
-        </NavLink>
-    </NavItem>
-    <NavItem></NavItem>
+    
   </>
     );
 };
