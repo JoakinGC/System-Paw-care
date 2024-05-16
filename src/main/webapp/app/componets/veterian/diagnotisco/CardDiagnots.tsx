@@ -8,16 +8,23 @@ import { IVeterinario } from "app/shared/model/veterinario.model";
 import { Button } from "reactstrap";
 
 const CardDiagnots = ({
+    id,
     fechaConsulta,
     diagnostico,
     mascota,
     toggleModal
-}:{
+}:{ 
+    id:number,
     fechaConsulta:dayjs.Dayjs,
     diagnostico:string
     mascota?: IMascota | null,
-    toggleModal:() =>void,
+    toggleModal:(id:number) =>void,
 }) =>{
+
+    const openModal = () =>{
+
+        toggleModal(id)
+    }
 
 
     return(
@@ -51,7 +58,7 @@ const CardDiagnots = ({
                 {(mascota&&mascota.especie&&mascota.especie.nombre)?mascota.especie.nombre:null }
                 </span>
             </div>
-            <Button onClick={toggleModal}>Ver detalles</Button>
+            <Button onClick={openModal}>Ver detalles</Button>
         </div>
     )
 }

@@ -14,13 +14,24 @@ import { IUsuario } from "app/shared/model/usuario.model";
 import {getMascota} from "app/entities/mascota/mascota.reducer";
 import { getEntity as getRaza} from "app/entities/raza/raza.reducer";
 import { getEntity as getEspecie} from "app/entities/especie/especie.reducer";
+import { getEntities as getAllMedicamnetos} from "app/entities/medicamento/medicamento.reducer";
+import { getEntities as getAllEnfermedades} from "app/entities/enfermedad/enfermedad.reducer";
+import { IMedicamento } from "app/shared/model/medicamento.model";
+import { IEnfermedad } from "app/shared/model/enfermedad.model";
+
 
 const DiagnostList = () => {
     const [modalOpen, setModalOpen] = useState(false); 
     const dispatch = useAppDispatch();
     const historialList = useAppSelector(state => state.historial.entities);
+    const medicamentoList = useAppSelector(state => state.medicamento.entities);
+    const enfermedadList = useAppSelector(state => state.enfermedad.entities);
+
+
     const [historialFiltrado,setHistorialFiltrados] = useState<IHistorial[]|null>(null);
     const [userActual, setUserActual] = useState<IUsuario|undefined>();
+    const [medicamentosFiltrados,setMedicamentosFiltrados] = useState<IMedicamento[]|null>(null)
+    const [enfermedadesFiltradas,setEnfermedadesFiltradas] = useState<IEnfermedad[]|null>(null)
 
     const getAllEntities = () => {
         dispatch(
@@ -28,6 +39,10 @@ const DiagnostList = () => {
             page:0,size:999,sort:`id,asc`
           }),
         );
+
+        dispatch(getAllMedicamnetos({page:0,size:999,sort:`id,asc`}))
+        dispatch(getAllEnfermedades({page:0,size:999,sort:`id,asc`}))
+        
       };
 
     useEffect(() =>{
@@ -92,6 +107,36 @@ const DiagnostList = () => {
             
         }
     },[historialList,userActual])
+    const openModalDatils = (id: number) => {
+        if (medicamentoList && medicamentoList.length > 0) {
+            const filteredMedicamentos = medicamentoList.filter((m: IMedicamento) => {
+                if (m.historials) {
+                    return m.historials.some((h: IHistorial) => h.id === id);
+                }
+                return false;
+            });
+    
+            // Hacer algo con filteredMedicamentos, por ejemplo, abrir el modal con los medicamentos filtrados
+            console.log("filtro de medicamneots",filteredMedicamentos);
+            setMedicamentosFiltrados(filteredMedicamentos)
+        }
+
+        if (enfermedadList && enfermedadList.length > 0) {
+            const filteredMedicamentos = enfermedadList.filter((e: IEnfermedad) => {
+                if (e.historials) {
+                    return e.historials.some((h: IHistorial) => h.id === id);
+                }
+                return false;
+            });
+    
+            // Hacer algo con filteredMedicamentos, por ejemplo, abrir el modal con los medicamentos filtrados
+            console.log("filtro de enfermedades",filteredMedicamentos);
+            setEnfermedadesFiltradas(filteredMedicamentos)
+        }
+    
+        setModalOpen(!modalOpen);
+    };
+    
 
     const toggleModal = () => {
         setModalOpen(!modalOpen);
@@ -118,9 +163,10 @@ const DiagnostList = () => {
                     historialFiltrado.map((d:IHistorial) =>{
                         return(
                             <CardDiagnots
+                            id={d.id}
                             fechaConsulta={d.fechaConsulta}
                             diagnostico={d.diagnostico}
-                            toggleModal={toggleModal}
+                            toggleModal={openModalDatils}
                             key={d.id}
                             mascota={d.mascota}/>
                         )
