@@ -223,15 +223,6 @@ const AddDiagnotsModal = ({veterinario}:
                   maxLength: { value: 200, message: translate('entity.validation.maxlength', { max: 200 }) },
                 }}
               />
-
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/historial" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.back">Back</Translate>
-                </span>
-              </Button>
-              &nbsp;
               <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updatingHistorial}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
