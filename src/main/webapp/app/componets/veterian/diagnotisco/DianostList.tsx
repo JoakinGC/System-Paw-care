@@ -11,6 +11,9 @@ import { getAccount } from "app/shared/reducers/authentication";
 import { getEntities as getAllUsuarios} from "app/entities/usuario/usuario.reducer";
 import { IUser } from "app/shared/model/user.model";
 import { IUsuario } from "app/shared/model/usuario.model";
+import {getMascota} from "app/entities/mascota/mascota.reducer";
+import { getEntity as getRaza} from "app/entities/raza/raza.reducer";
+import { getEntity as getEspecie} from "app/entities/especie/especie.reducer";
 
 const DiagnostList = () => {
     const [modalOpen, setModalOpen] = useState(false); 
@@ -47,16 +50,45 @@ const DiagnostList = () => {
         if(historialList&&historialList.length>0&&userActual){
             
 
-            const historialVeterinarios = historialList.filter((e:IHistorial) =>{
+            let historialVeterinarios = historialList.filter((e:IHistorial) =>{
                 console.log(e);
-                
                 if(e.veterinario&&userActual.veterinario){
                     return e.veterinario.id == userActual.veterinario.id
                 }
             })
+            const fetch = async () =>{
+                historialVeterinarios = await Promise.all(historialVeterinarios.map(async (e: IHistorial) => {
+                    let nMas:IMascota = null;
+                    console.log(e.mascota);
+                    console.log(e.mascota.id&&e.mascota.id);
+                    
+                    if (e.mascota && e.mascota.id) {
+                        const mascotaData = await dispatch(getMascota(e.mascota.id));
+                        nMas = await (mascotaData.payload as any).data as IMascota;
 
-            console.log(historialVeterinarios);
-            setHistorialFiltrados(historialVeterinarios)
+                        if(nMas&&nMas.raza){
+                            const razaFilt = await  ((await dispatch(getRaza(nMas.raza.id))).payload as any).data;
+                            nMas = {...nMas, 'raza':razaFilt};
+                        }
+
+                        if(nMas&&nMas.especie){
+                            const espeFilt = await  ((await dispatch(getEspecie(nMas.especie.id))).payload as any).data;
+                            nMas = {...nMas, 'especie':espeFilt};
+                        }
+
+                        console.log(nMas);  
+                    }
+                    console.log(nMas);
+                    const newHisto = { ...e, 'mascota': nMas};
+                    console.log(newHisto);
+                    
+                    return newHisto;
+                }));
+                console.log(historialVeterinarios);
+                setHistorialFiltrados(historialVeterinarios)
+            }
+
+            fetch();
             
         }
     },[historialList,userActual])
@@ -65,7 +97,8 @@ const DiagnostList = () => {
         setModalOpen(!modalOpen);
     };
 
-
+    console.log(historialFiltrado);
+    
     const d = dayjs();  
     const m:IMascota = {
         id:1,
