@@ -48,7 +48,7 @@ const VeterianMenu = () =>{
         </NavLink>
     </NavItem>
     <NavItem>
-
+    
       <NavLink tag={Link} to="/mascotasVeterian" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faPaw}  />
       <span>
@@ -56,6 +56,16 @@ const VeterianMenu = () =>{
         </span>
         </NavLink>
     </NavItem>
+    <NavItem>
+
+      <NavLink tag={Link} to="/diagnostVeterian" className="d-flex align-items-center">
+      <FontAwesomeIcon icon={faCalendarAlt}  />
+      <span>
+        Diagnostico
+        </span>
+        </NavLink>
+    </NavItem>
+    <NavItem></NavItem>
   </>
     );
 };

@@ -29,15 +29,13 @@ const MenuStilist = () =>{
         </NavItem>
         <NavItem>
 
-          <NavLink tag={Link} to="/datelle-compra" className="d-flex align-items-center">
-          <FontAwesomeIcon icon={faShoppingCart}  />
-            <span>
-              <Translate contentKey="global.menu.entities.datelleCompra">History</Translate>
-              </span>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-        </NavItem>
+      <NavLink tag={Link} to="/datelleCompraVeteAndStil" className="d-flex align-items-center">
+        <FontAwesomeIcon icon={faShoppingCart}  />
+        <span>
+          <Translate contentKey="global.menu.entities.datelleCompra">History</Translate>
+        </span>
+        </NavLink>
+      </NavItem>
 
         <NavItem>
 
@@ -48,6 +46,8 @@ const MenuStilist = () =>{
         </span>
         </NavLink>
     </NavItem>
+
+
         </>
     );
 }

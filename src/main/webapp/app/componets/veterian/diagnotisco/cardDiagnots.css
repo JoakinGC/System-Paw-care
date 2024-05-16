@@ -1,0 +1,41 @@
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Distribuye automáticamente las tarjetas en columnas */
+    grid-gap: 20px; /* Espacio entre las tarjetas */
+}
+
+.container-card-diagnot {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.container-card-diagnot > div {
+    margin-bottom: 10px;
+}
+
+.card-body-diagnot {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.card-mascota-diagnot {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-mascota-diagnot span {
+    font-size: 14px;
+    color: #555555;
+}
+
+h3 {
+    margin: 0;
+    color: #333333;
+    font-size: 18px;
+}
+
