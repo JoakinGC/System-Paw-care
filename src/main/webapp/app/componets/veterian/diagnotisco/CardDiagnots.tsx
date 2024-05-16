@@ -45,10 +45,10 @@ const CardDiagnots = ({
                 {(mascota&&mascota.nIdentificacionCarnet)?mascota.nIdentificacionCarnet:null }
                 </span>
                 <span>
-                {(mascota&&mascota.raza.nombre)?mascota.raza.nombre:null }
+                {(mascota&&mascota.raza&&mascota.raza.nombre)?mascota.raza.nombre:null }
                 </span>
                 <span>
-                {(mascota&&mascota.especie.nombre)?mascota.especie.nombre:null }
+                {(mascota&&mascota.especie&&mascota.especie.nombre)?mascota.especie.nombre:null }
                 </span>
             </div>
             <Button onClick={toggleModal}>Ver detalles</Button>

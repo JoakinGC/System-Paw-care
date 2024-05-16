@@ -24,7 +24,6 @@ const VeterianMain = () =>{
     const [userActual, setUserActual] = useState<IUser|undefined>();
     const dispatch = useDispatch<AppDispatch>();
     const pageLocation = useLocation();
-    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
 
     const handleOpenModal = () => setShowModal(true); // Función para abrir el modal
@@ -41,8 +40,6 @@ const VeterianMain = () =>{
       );
     
       const citaList = useAppSelector(state => state.cita.entities);
-      const loading = useAppSelector(state => state.cita.loading);
-      const totalItems = useAppSelector(state => state.cita.totalItems);
       
     
       const searchCita = () =>{
