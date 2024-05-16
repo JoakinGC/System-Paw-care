@@ -18,10 +18,13 @@ import { getEntities as getAllMedicamnetos} from "app/entities/medicamento/medic
 import { getEntities as getAllEnfermedades} from "app/entities/enfermedad/enfermedad.reducer";
 import { IMedicamento } from "app/shared/model/medicamento.model";
 import { IEnfermedad } from "app/shared/model/enfermedad.model";
+import CardEnfermedadVeterian from "./CardEnfermedadVeterian";
+import CardMedicamentoVeterian from "./CardMedicamentoVeterian";
 
 
 const DiagnostList = () => {
     const [modalOpen, setModalOpen] = useState(false); 
+    const [modalOpenAdd, setModalOpenAdd] = useState(false); 
     const dispatch = useAppDispatch();
     const historialList = useAppSelector(state => state.historial.entities);
     const medicamentoList = useAppSelector(state => state.medicamento.entities);
@@ -142,6 +145,10 @@ const DiagnostList = () => {
         setModalOpen(!modalOpen);
     };
 
+    const toggleModalAdd = () =>{
+        setModalOpenAdd(!modalOpenAdd);
+    }
+
     console.log(historialFiltrado);
     
     const d = dayjs();  
@@ -157,7 +164,9 @@ const DiagnostList = () => {
 
     return (
         <div>
-            <h1>Todos los diagnósticos</h1>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <h1>Todos los diagnósticos</h1>
+            </div>
             <div className="cards-container">
                 {(historialFiltrado&&historialFiltrado.length>0)?(
                     historialFiltrado.map((d:IHistorial) =>{
@@ -176,11 +185,44 @@ const DiagnostList = () => {
             <Modal isOpen={modalOpen} toggle={toggleModal}>
                 <ModalHeader toggle={toggleModal}>Detalles del diagnóstico</ModalHeader>
                 <ModalBody>
-                    <p>Detalles del diagnóstico aquí...</p>
+                    <h2>Enfermedades.</h2>
+                <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
+                    
+
+                    {(enfermedadesFiltradas&&enfermedadesFiltradas.length>0)?
+                        enfermedadesFiltradas.map((e:IEnfermedad) =>{
+                            return<CardEnfermedadVeterian
+                                nombre={e.nombre}
+                                descripcion={e.descripcion}
+                            />
+                        })
+                    :<>No cuenta con enfermedades</>}
+    
+                </div>
+                <h2>Medicamentos.</h2>
+                <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
+                    
+                    {(medicamentosFiltrados&&medicamentosFiltrados.length>0)?
+                        medicamentosFiltrados.map((e:IMedicamento) =>{
+                           return <CardMedicamentoVeterian
+                            nombre={e.nombre}
+                            descripcion={e.descripcion}
+                            />
+                        })
+                    :<>No debes tomar ningun medicamento</>}
+    
+                </div>
+
                 </ModalBody>
                 <ModalFooter>
                     <Button color="secondary" onClick={toggleModal}>Cerrar</Button>
                 </ModalFooter>
+            </Modal>
+            <Modal isOpen={modalOpenAdd} toggle={toggleModalAdd}>
+                <ModalHeader toggle={toggleModal}>Diagnosticar Mascota</ModalHeader>
+                <ModalBody>
+                        
+                </ModalBody>       
             </Modal>
         </div>
     );
