@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { createEntity as createNewCita} from 'app/entities/cita/cita.reducer';
-import { createEntity as createNewDueno, getEntities as getDuenos, getEntity, updateEntity} from 'app/entities/dueno/dueno.reducer';
-import { getEntities as getMascotas, updateEntity as updateMascota} from 'app/entities/mascota/mascota.reducer';
+import { createEntity as createNewDueno, getEntities as getDuenos, getEntity as getDueno, updateEntity} from 'app/entities/dueno/dueno.reducer';
+import { createEntity, getEntities as getMascotas, updateEntity as updateMascota} from 'app/entities/mascota/mascota.reducer';
 import { ICita } from 'app/shared/model/cita.model';
 import { IDueno } from 'app/shared/model/dueno.model';
 import { IVeterinario } from 'app/shared/model/veterinario.model';
@@ -167,41 +167,50 @@ const handleNext = (values) => {
     }
 
     const saveEntity = async (values) => {
+        let mascotasSeleccionadas = await mascotaList.filter(mascota => values.mascotas.includes(mascota?.id?.toString()));
         
-        
-        const mascotasSeleccionadas:IMascota[] = await mascotaList.filter(mascota => values.mascotas.includes(mascota.id.toString()));
-        
-        console.log("Mascotas sleccioada",mascotasSeleccionadas);
-
-        if(mascotasSeleccionadas.length>2){
-            toast.error("NO se puede elegir más de dods animales por cita");
-            return
+        console.log("Mascotas seleccionadas", mascotasSeleccionadas);
+        let newMascota = null;
+        if (mascotasSeleccionadas.length === 0) {
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString().split('/').join('-'); // Formato: MM-DD-YYYY
+            newMascota = await ((await dispatch(createEntity({
+                "nIdentificacionCarnet": -1,
+                "foto": `${formattedDate}_captured_image.png`,
+                "fechaNacimiento": dayjs(),
+                'dueno': selectedDueno,
+                'especie':{id:4},
+                'raza':{id:62}
+            }))).payload as any).data;
+        }
+    
+        if (newMascota) mascotasSeleccionadas.push(newMascota);
+    
+        if (mascotasSeleccionadas.length > 2) {
+            toast.error("NO se puede elegir más de dos animales por cita");
+            return;
         }
         
         const entity = {
             ...cita,
-            'mascotas':mascotasSeleccionadas
+            'mascotas': mascotasSeleccionadas
         }
-        console.log("nueva",entity);
-        const nueva:ICita = await((await dispatch(createNewCita(entity))).payload as any).data;
-
-
-        const nuevasMascotas = await mascotasSeleccionadas.map(m => {
-            const nuevaMascota = { ...m };
-            nuevaMascota.citas = [...nuevaMascota.citas, nueva];
-            console.log("nueva mascota",nuevaMascota);
-            
+        console.log("nueva", entity);
+        const nueva = await ((await dispatch(createNewCita(entity))).payload as any).data;
+    
+        const nuevasMascotas = await Promise.all(mascotasSeleccionadas.map(async m => {
+            if (!m) return null;
+            const nuevaMascota = { ...m, citas: [...m.citas, nueva] };
+            console.log("nueva mascota", nuevaMascota);
+            const updatedMascota = await dispatch(updateMascota(nuevaMascota));
+            console.log("Mascota actualizada:", updatedMascota);
             return nuevaMascota;
-        });
-        
-        await nuevasMascotas.map(async m => {
-            const ac = await dispatch(updateMascota(m));
-            console.log("Mascota actulziada:" ,ac);
-            
-        });
-        console.log("nueva",nueva);
+        }));
+    
+        console.log("nueva", nueva);
         handleClose();
     }
+    
 
     const formAddNewDueno = async(values) =>{
         if(!values.apellido) return 
@@ -227,7 +236,7 @@ const handleNext = (values) => {
       
           const promises = allusuarios.map(async (u: IUsuario) => {
               if (u.dueno && u.dueno.id) {
-                  const response = await dispatch(getEntity(u.dueno.id));
+                  const response = await dispatch(getDueno(u.dueno.id));
                   return (response.payload as any).data;
               }
               return null;
@@ -348,8 +357,10 @@ const handleNext = (values) => {
                                 required={true}
                             >
                             <option value="" key="0" />    
-                            {selectedDueno ? (
+                            {(selectedDueno&&mascotaList)? (
                                 mascotaList.map((m,i) => {
+                                    console.log(m.dueno.id);
+                                    
                                     if (m.dueno.id === selectedDueno.id) {
                                         return (
                                             <>
