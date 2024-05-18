@@ -13,6 +13,7 @@ import { Translate } from "react-jhipster";
 import { updateMascotasWithCitas } from "./mascotaCita.reducer";
 import AddCitaModal from "./AddCitaModal";
 import { Button } from "reactstrap";
+import { toast } from "react-toastify";
 
 
 
@@ -130,17 +131,37 @@ const CitasCalendario = () =>{
     const onChange = async newDate => {
       await setDate(newDate);
       console.log(newDate);
+      const currentDate = new Date();
     
-      const selectedDateString = newDate.toISOString().split('T')[0]; // Obtener la fecha seleccionada en formato de cadena YYYY-MM-DD
-      const citaExistente = citaFechaPosterior.find(cita => cita.fecha === selectedDateString);
-  
-      if (!citaExistente) {
-        console.log('Ya existe una cita para este día.');
+      // Ajustar la extracción de la fecha seleccionada sin problemas de zona horaria
+      const selectedDateString = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}`;
+      console.log('Tipo de selectedDateString:', typeof selectedDateString);
+      console.log('selectedDateString:', selectedDateString);
+
+      if (newDate < currentDate) {
+        toast.error('La fecha seleccionada es anterior a la fecha actual.');
         return;
       }
     
-      setModalOpen(!modalOpen);
+      // Asegurarse de que las fechas en citaFechaPosterior están en el mismo formato
+      const citaExistente = citaFechaPosterior.find(cita => {
+        const citaDateString = new Date(cita.fecha).toISOString().split('T')[0];
+        console.log('Comparando:', selectedDateString, 'con', citaDateString);
+        return citaDateString === selectedDateString;
+      });
+    
+      console.log('Cita existente:', citaExistente);
+    
+      if (citaExistente) {
+        toast.error('Ya existe una cita para este día.');
+        return;
+      }
+    
+      setModalOpen(true); // Abrir el modal solo si no hay citas en la fecha seleccionada
     };
+    
+    
+    
 
     const toggleModal = () => {
       setModalOpen(!modalOpen);

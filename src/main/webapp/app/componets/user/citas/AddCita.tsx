@@ -21,7 +21,6 @@ const AddCita = ({toggleModal,selectedDate}) => {
   
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
