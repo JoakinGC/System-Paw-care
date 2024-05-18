@@ -1,18 +1,24 @@
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { createEntity as createNewCita} from 'app/entities/cita/cita.reducer';
-import { createEntity, getEntities as getDuenos} from 'app/entities/dueno/dueno.reducer';
-import { getEntities as getMascotas, updateEntity} from 'app/entities/mascota/mascota.reducer';
+import { createEntity as createNewDueno, getEntities as getDuenos, getEntity, updateEntity} from 'app/entities/dueno/dueno.reducer';
+import { getEntities as getMascotas, updateEntity as updateMascota} from 'app/entities/mascota/mascota.reducer';
 import { ICita } from 'app/shared/model/cita.model';
 import { IDueno } from 'app/shared/model/dueno.model';
 import { IVeterinario } from 'app/shared/model/veterinario.model';
 import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap'; 
-import { ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
+import { ValidatedField, ValidatedForm, isEmail, isNumber, translate } from 'react-jhipster';
 import AddMascotaForm from './AddMascotaForm';
 import axios from 'axios';
 import { IMascota } from 'app/shared/model/mascota.model';
 import './sliderCita.css';
 import dayjs from 'dayjs';
+import { createEntity as createNewUsuario, getEntities} from 'app/entities/usuario/usuario.reducer';
+import { IUsuario } from 'app/shared/model/usuario.model';
+import { IUser } from 'app/shared/model/user.model';
+import { handleRegister, reset } from 'app/modules/account/register/register.reducer';
+import { toast } from 'react-toastify';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 
 
 const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
@@ -30,6 +36,8 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
     const mascotaList = useAppSelector(state => state.mascota.entities);
     const duenoList = useAppSelector(state => state.dueno.entities);
     const [timeValue, setTimeValue] = useState('08:00');
+    const currentLocale = useAppSelector(state => state.locale.currentLocale);
+    const successMessage = useAppSelector(state => state.register.successMessage);
 
     //control de hora:
     const handleTimeChange = (event) => {
@@ -44,55 +52,67 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
     useEffect(()=>{
         dispatch(getMascotas({page:0,size:999,sort:`id,asc`}));
         dispatch(getDuenos({page:0,size:999,sort:`id,asc`}));
+        dispatch(reset());
     },[])
+    useEffect(() => {
+        if (successMessage) {
+          toast.success(translate(successMessage));
+        }
+      }, [successMessage]);
     
     const goToFormDueno = () => setParteFormulario(4);
     const goToFormMascota = () => {
         setParteFormulario(5)
     };
     const goToEndForm = ()=> setParteFormulario(3)
-    const validateHora = (hora) => {
-        // Obtener la hora actual usando Day.js
-        const horaActual = dayjs().hour();
-        const minutosActuales = dayjs().minute();
-    
-        // Dividir la hora proporcionada en partes (horas y minutos)
-        const [horas, minutos] = hora.split(':');
-    
-        // Convertir horas y minutos a números enteros
-        const horaProporcionada = parseInt(horas, 10);
-        const minutosProporcionados = parseInt(minutos, 10);
-    
-        // Verificar si las horas son mayores a la hora actual
-        if (horaProporcionada > horaActual) {
-            // Verificar si los minutos son cero (00)
-            return minutosProporcionados === 0;
-        } else if (horaProporcionada === horaActual) {
-            // Si la hora es igual a la hora actual, también verificamos los minutos
-            return minutosProporcionados === 0 && minutosActuales === 0;
-        } else {
-            // Si la hora es menor a la hora actual, la hora no es válida
-            return false;
-        }
-    };
-    
 
-    const handleNext = (values) => {
-        //validaciones
+
+const validateHora = (hora) => {
+    // Obtener la hora actual usando Day.js
+    const horaActual = dayjs().hour();
+    const minutosActuales = dayjs().minute();
+
+    // Dividir la hora proporcionada en partes (horas y minutos)
+    const [horas, minutos] = hora.split(':');
+
+    // Convertir horas y minutos a números enteros
+    const horaProporcionada = parseInt(horas, 10);
+    const minutosProporcionados = parseInt(minutos, 10);
+
+    // Verificar si las horas son mayores a la hora actual
+    if (horaProporcionada > horaActual) {
+        return true;
+    } else if (horaProporcionada === horaActual) {
+        // Si la hora es igual a la hora actual, también verificamos los minutos
+        return minutosProporcionados > minutosActuales;
+    } else {
+        // Si la hora es menor a la hora actual, la hora no es válida
+        return false;
+    }
+};
+
+const handleNext = (values) => {
+    // Validaciones
+    if (!values.hora || !values.motivo || !values.fecha) {
+        toast.error("Todos los campos son obligatorios.");
+        return;
+    }
+
+    // Validar si la fecha es hoy
+    const isToday = dayjs(values.fecha).isSame(dayjs(), 'day');
+
+    if (isToday && !validateHora(values.hora)) {
+        toast.error("La hora debe ser posterior a la hora actual.");
+        return;
+    }
+
+    if (citas) {
+        const isSameDate = citas.some(cita => dayjs(cita.fecha).isSame(values.fecha, 'day'));
     
-        if (values.hora.length === 0) return;
-        if (values.motivo.length === 0) return;
-        if (values.fecha.length === 0) return;
-    
-        if (!validateHora(values.hora)) {
-            alert("La hora debe ser posterior a la hora actual y los minutos deben ser 00");
-            return;
-        }
-    
-        if (citas) {
+        if (isSameDate) {
             let citaMismaHoraYfecha = false;
     
-            citas.forEach((cita: ICita) => {
+            citas.forEach(cita => {
                 const horaCita = cita.hora ? dayjs(cita.hora, 'HH:mm') : null;
                 const isHoraValida = horaCita && horaCita.isValid();
                 const isSameTime = isHoraValida && horaCita.format('HH:mm') === values.hora;
@@ -102,33 +122,24 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
             });
     
             if (citaMismaHoraYfecha) {
-                alert('Hay una cita con la misma fecha y hora.');
+                toast.error('Hay una cita con la misma fecha y hora.');
                 return;
             }
         }
+    }
     
-        const now = dayjs();
-        const currentHour = now.hour();
-        const currentMinute = now.minute();
-    
-        const isToday = values.fecha && dayjs(values.fecha).isSame(dayjs(), 'day');
-        const isFutureHour = values.hora && parseInt(values.hora.split(':')[0]) > currentHour;
-    
-        if (isToday && isFutureHour) {
-            alert('No puedes seleccionar una hora posterior a la hora actual para el día de hoy.');
-            return;
-        }
-    
-        const current = {
-            'hora': values.hora,
-            'fecha': values.fecha,
-            'motivo': values.motivo,
-            'veterinario': veterinario
-        };
-    
-        setCita(current);
-        setParteFormulario(2);
+
+    const current = {
+        'hora': values.hora,
+        'fecha': values.fecha,
+        'motivo': values.motivo,
+        'veterinario': veterinario
     };
+
+    setCita(current);
+    setParteFormulario(2);
+};
+
 
     const handleNext2of3 = (values) => {
 
@@ -146,7 +157,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
             setSeletedDueno(dueñoEncontrado);
             setParteFormulario(3); 
         } else {
-            alert("Ese dueño NO existe")
+            toast.error("Ese dueño NO existe")
         }
     }
 
@@ -163,7 +174,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
         console.log("Mascotas sleccioada",mascotasSeleccionadas);
 
         if(mascotasSeleccionadas.length>2){
-            alert("NO se puede elegir más de dods animales por cita");
+            toast.error("NO se puede elegir más de dods animales por cita");
             return
         }
         
@@ -184,7 +195,7 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
         });
         
         await nuevasMascotas.map(async m => {
-            const ac = await dispatch(updateEntity(m));
+            const ac = await dispatch(updateMascota(m));
             console.log("Mascota actulziada:" ,ac);
             
         });
@@ -201,22 +212,55 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
         if(values.nombre.length===0)return
         if(!values.telefono) return 
         if(values.telefono.length===0)return
+        if(!values.email) return 
+        if(values.email.length===0)return
 
-        const newDueno = {
+
+        const newUser = await (await dispatch(handleRegister({
+            login: values.nombre,
+            email: values.email,
+            password: '1234',
+            langKey: currentLocale,
+          })));
+        
+          const allusuarios = ((await dispatch(getEntities({ page: 0, size: 999, sort: 'id,asc' }))).payload as any).data;
+      
+          const promises = allusuarios.map(async (u: IUsuario) => {
+              if (u.dueno && u.dueno.id) {
+                  const response = await dispatch(getEntity(u.dueno.id));
+                  return (response.payload as any).data;
+              }
+              return null;
+          });
+      
+          const duenoActual = await Promise.all(promises);
+          console.log(duenoActual);
+          
+          let duenoFiltrado = duenoActual.filter((dueno:IDueno) => {
+                  return(dueno !== null &&dueno.nombre=== values.nombre);
+              });
+      
+          console.log(duenoFiltrado);
+         
+          const newduenoFiltrado:IDueno = {
+            'id':duenoFiltrado[0].id,
+            'nombre':duenoFiltrado[0].nombre,
+            'telefono':values.telefono,
             'apellido':values.apellido,
             'direccion':values.direccion,
-            'nombre':values.nombre,
-            'telefono':values.telefono,
-        }
+          }
 
-        const duenoEntity = ((await dispatch(createEntity(newDueno))).payload as any).data;
-        setSeletedDueno(duenoEntity);
+          dispatch(updateEntity(newduenoFiltrado));
+          
+        
+        setSeletedDueno(newduenoFiltrado);
         setParteFormulario(3);
     }
     console.log(mascotaList);
     console.log(duenoList);
     console.log(cita);
 
+    
     
     return (
         <>
@@ -355,6 +399,19 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
                                 maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
                             }}
                         />
+                        <ValidatedField
+                         name="email"
+                        label={translate('global.form.email.label')}
+                        placeholder={translate('global.form.email.placeholder')}
+                         type="email"
+                        validate={{
+                            required: { value: true, message: translate('global.messages.validate.email.required') },
+                            minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
+                            maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
+                            validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
+                        }}
+                    data-cy="email"
+                    />
                         <ValidatedField
                             label={translate('veterinarySystemApp.dueno.direccion')}
                             id="dueno-direccion"
