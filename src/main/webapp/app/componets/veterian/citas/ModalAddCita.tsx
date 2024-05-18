@@ -12,13 +12,15 @@ import AddMascotaForm from './AddMascotaForm';
 import axios from 'axios';
 import { IMascota } from 'app/shared/model/mascota.model';
 import './sliderCita.css';
+import dayjs from 'dayjs';
 
 
-const ModalAddCita = ({ isOpen, toggle, veterinario }
+const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
     :{
         isOpen:boolean;
         toggle:()=>void;
         veterinario:IVeterinario;
+        citas:ICita[]|null
     }) => {
     const [parteFormulario, setParteFormulario] = useState(1);
     const [cita,setCita] = useState<ICita>({});
@@ -26,9 +28,18 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
 
     const dispatch = useAppDispatch()
     const mascotaList = useAppSelector(state => state.mascota.entities);
-    const loading = useAppSelector(state => state.mascota.loading);
     const duenoList = useAppSelector(state => state.dueno.entities);
-    const loadingDueno = useAppSelector(state => state.dueno.loading);
+    const [timeValue, setTimeValue] = useState('08:00');
+
+    //control de hora:
+    const handleTimeChange = (event) => {
+        // Extraer la hora seleccionada del evento
+        const newTime = event.target.value;
+        // Actualizar solo las horas y mantener los minutos como están
+        const updatedTime = newTime.slice(0, 3) + timeValue.slice(3);
+        // Actualizar el estado con el nuevo valor de tiempo
+        setTimeValue(updatedTime);
+    };
 
     useEffect(()=>{
         dispatch(getMascotas({page:0,size:999,sort:`id,asc`}));
@@ -41,9 +52,9 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
     };
     const goToEndForm = ()=> setParteFormulario(3)
     const validateHora = (hora) => {
-        // Obtener la hora actual
-        const horaActual = new Date().getHours();
-        const minutosActuales = new Date().getMinutes();
+        // Obtener la hora actual usando Day.js
+        const horaActual = dayjs().hour();
+        const minutosActuales = dayjs().minute();
     
         // Dividir la hora proporcionada en partes (horas y minutos)
         const [horas, minutos] = hora.split(':');
@@ -52,8 +63,17 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
         const horaProporcionada = parseInt(horas, 10);
         const minutosProporcionados = parseInt(minutos, 10);
     
-        // Verificar si los minutos son cero (00)
-        return minutosProporcionados === 0;
+        // Verificar si las horas son mayores a la hora actual
+        if (horaProporcionada > horaActual) {
+            // Verificar si los minutos son cero (00)
+            return minutosProporcionados === 0;
+        } else if (horaProporcionada === horaActual) {
+            // Si la hora es igual a la hora actual, también verificamos los minutos
+            return minutosProporcionados === 0 && minutosActuales === 0;
+        } else {
+            // Si la hora es menor a la hora actual, la hora no es válida
+            return false;
+        }
     };
     
 
@@ -69,8 +89,34 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
             return;
         }
         if(values.motivo.length===0)return
+        if (citas) {
+            let citaMismaHoraYfecha = false;
+          
+            citas.map((cita: ICita) => {
+                const horaCita = cita.hora ? dayjs(cita.hora, 'HH:mm') : null;
+                const isHoraValida = horaCita && horaCita.isValid();
+                const isSameTime = isHoraValida && horaCita.format('HH:mm') === values.hora;
+                if (isSameTime) {
+                  citaMismaHoraYfecha = true;
+                }
+              });
+          
+            if (citaMismaHoraYfecha) {
+              alert('Hay una cita con la misma fecha y hora.');
+              return
+            }
+          }
+        const now = dayjs();
+        const currentHour = now.hour();
 
 
+        const isToday = values.fecha && dayjs(values.fecha).isSame(dayjs(), 'day');
+        const isFutureHour = values.hora && parseInt(values.hora.split(':')[0]) > currentHour;
+
+        if (isToday && isFutureHour) {
+            alert('No puedes seleccionar una hora posterior a la hora actual para el día de hoy.');
+            return
+        }
         const current = {
             'hora':values.hora,
             'fecha':values.fecha,
@@ -114,7 +160,10 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
         
         console.log("Mascotas sleccioada",mascotasSeleccionadas);
 
-        if(mascotasSeleccionadas.length>2) return
+        if(mascotasSeleccionadas.length>2){
+            alert("NO se puede elegir más de dods animales por cita");
+            return
+        }
         
         const entity = {
             ...cita,
@@ -185,8 +234,11 @@ const ModalAddCita = ({ isOpen, toggle, veterinario }
                                 step="3600" // Define el incremento en segundos (3600 segundos = 1 hora)
                                 min="08:00" 
                                 max="17:00"
+                                value={timeValue}
+                                onChange={handleTimeChange}
                                 required={true}
                             />
+
                             <ValidatedField
                                 label={translate('veterinarySystemApp.cita.fecha')}
                                 id="cita-fecha"

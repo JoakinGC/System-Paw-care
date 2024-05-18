@@ -13,7 +13,6 @@ import ModalAddCita from './ModalAddCita';
 const VeterianMain = () =>{
     const dispatch = useAppDispatch()
     const [userActual, setUserActual] = useState<IUser|undefined>();
-    const pageLocation = useLocation();
     const [showModal, setShowModal] = useState(false);
 
     const handleOpenModal = () => setShowModal(true); 
@@ -146,7 +145,7 @@ const VeterianMain = () =>{
         <SliderCita array={citasDiaDeEstaSemana} classname={'cita-semana'} title={'Citas de esta semana'}/>
         <SliderCita array={citasDiaDeMes} classname={'cita-mes'} title={'Citas de este mes'}/>
       </div>
-      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} veterinario={userActual&&userActual[0]}/>
+      <ModalAddCita isOpen={showModal} toggle={handleCloseModal} veterinario={userActual&&userActual[0]} citas={todasLasCitasDelVeterinario}/>
     </>
     );
 }
