@@ -78,55 +78,57 @@ const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
     
 
     const handleNext = (values) => {
-
         //validaciones
-
-        if(values.hora.length===0) return
-        if(values.motivo.length===0) return
-        if(values.fecha.length===0) return
+    
+        if (values.hora.length === 0) return;
+        if (values.motivo.length === 0) return;
+        if (values.fecha.length === 0) return;
+    
         if (!validateHora(values.hora)) {
             alert("La hora debe ser posterior a la hora actual y los minutos deben ser 00");
             return;
         }
-        if(values.motivo.length===0)return
+    
         if (citas) {
             let citaMismaHoraYfecha = false;
-          
-            citas.map((cita: ICita) => {
+    
+            citas.forEach((cita: ICita) => {
                 const horaCita = cita.hora ? dayjs(cita.hora, 'HH:mm') : null;
                 const isHoraValida = horaCita && horaCita.isValid();
                 const isSameTime = isHoraValida && horaCita.format('HH:mm') === values.hora;
                 if (isSameTime) {
-                  citaMismaHoraYfecha = true;
+                    citaMismaHoraYfecha = true;
                 }
-              });
-          
+            });
+    
             if (citaMismaHoraYfecha) {
-              alert('Hay una cita con la misma fecha y hora.');
-              return
+                alert('Hay una cita con la misma fecha y hora.');
+                return;
             }
-          }
+        }
+    
         const now = dayjs();
         const currentHour = now.hour();
-
-
+        const currentMinute = now.minute();
+    
         const isToday = values.fecha && dayjs(values.fecha).isSame(dayjs(), 'day');
         const isFutureHour = values.hora && parseInt(values.hora.split(':')[0]) > currentHour;
-
+    
         if (isToday && isFutureHour) {
             alert('No puedes seleccionar una hora posterior a la hora actual para el día de hoy.');
-            return
+            return;
         }
+    
         const current = {
-            'hora':values.hora,
-            'fecha':values.fecha,
-            'motivo':values.motivo,
-            veterinario
-        }
-
-        setCita(current)
+            'hora': values.hora,
+            'fecha': values.fecha,
+            'motivo': values.motivo,
+            'veterinario': veterinario
+        };
+    
+        setCita(current);
         setParteFormulario(2);
-    }
+    };
 
     const handleNext2of3 = (values) => {
 
