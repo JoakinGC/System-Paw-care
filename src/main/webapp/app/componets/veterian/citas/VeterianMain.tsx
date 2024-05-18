@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { AppDispatch } from 'app/config/store';
-import { useDispatch } from 'react-redux';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
 import { IUser } from 'app/shared/model/user.model';
-import { useLocation, useNavigate } from 'react-router';
-import { Button, Table } from 'reactstrap';
-import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { useLocation } from 'react-router';
+import { Button } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities } from 'app/entities/cita/cita.reducer';
-import { Link } from 'react-router-dom';
 import { ICita } from 'app/shared/model/cita.model';
-import CardCita from './CardCita';
 import SliderCita from './SliderCita';
 import ModalAddCita from './ModalAddCita';
 
 const VeterianMain = () =>{
+    const dispatch = useAppDispatch()
     const [userActual, setUserActual] = useState<IUser|undefined>();
-    const dispatch = useDispatch<AppDispatch>();
     const pageLocation = useLocation();
-    const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
+    const [showModal, setShowModal] = useState(false);
 
-    const handleOpenModal = () => setShowModal(true); // Función para abrir el modal
-    const handleCloseModal = () => setShowModal(false);// Función para abrir el modal
+    const handleOpenModal = () => setShowModal(true); 
+    const handleCloseModal = () => setShowModal(false);
 
     const [citasDiaDehoy,setCitasDiaDeHoy] = useState<ICita[]>([]);
     const [citasDiaDeMes,setCitasDiaDeMes] = useState<ICita[]>([]);
@@ -35,16 +25,13 @@ const VeterianMain = () =>{
     const [resultCitasBusqueda,setCitasBuscqueda] =  useState<ICita[]>([]);
     const [todasLasCitasDelVeterinario,setCitasVeterinario] = useState<ICita[]>([])
 
-    const [paginationState, setPaginationState] = useState(
-        overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
-      );
     
-      const citaList = useAppSelector(state => state.cita.entities);
+    const citaList = useAppSelector(state => state.cita.entities);
       
     
-      const searchCita = () =>{
-        resultCitasBusqueda
-      }
+    const searchCita = () =>{
+      resultCitasBusqueda
+    }
       
       const getAllEntities = () => {
         dispatch(

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import { getCatBreedInfo,getDogBreedInfo, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
+import { getCatBreedInfo,getDogBreedInfo, usePredictionsAnimal, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
 import { getEntities as getEnfermedads } from '../../../entities/enfermedad/enfermedad.reducer';
 import { useAppDispatch, useAppSelector } from "app/config/store";
 import { getEntities } from "app/entities/raza/raza.reducer";
@@ -17,8 +17,6 @@ const CamaraAnimal = () => {
   const [stream, setStream] = useState(null);
   const enfermedades =  useAppSelector(state => state.enfermedad.entities)
   const razas =  useAppSelector(state => state.raza.entities)
-
-  
 
   useEffect(() => {
     const cargarModeloInterno = async () => {
@@ -130,85 +128,11 @@ const CamaraAnimal = () => {
         arr = [arr];
 
         const tensor = tf.tensor4d(arr);
-        const resultado = modelo.predict(tensor).dataSync();
-        const resultBDogAndCat = await usePredictionsDogsAndCats(image);
-        console.log(resultBDogAndCat);
 
-        let respuesta:any;
-        if (resultado <= 0.5&&resultBDogAndCat&&resultBDogAndCat.includes("cat")) {
-          const breedCat = await usePredictionsBreedCat(image);
-          console.log(breedCat);
-          
+        const resultBAnimal = await usePredictionsAnimal(image);
+        console.log(resultBAnimal);
 
-          respuesta = {
-            "especie": 'Gato',
-            "raza": breedCat
-          };
-
-          let razaEncontrada=null;
-          if(breedCat){
-            const breedLowerCase = breedCat.toLowerCase().replace(/_/g, ' ');
-            razaEncontrada = enfermedadesYRazas.find(raza => raza.nombre.toLowerCase() === breedLowerCase);
-          }
-
-          if (razaEncontrada) {
-            console.log('Datos de la raza:', razaEncontrada);
-            const informacionCat = await getCatBreedInfo(breedCat);
-            console.log(informacionCat);
-            
-            respuesta = {
-              ...respuesta,
-              razaEncontrada,
-              informacionCat
-            }
-
-          } else {
-            console.log('La raza no se encontró en el array proporcionado.');
-            const informacion = await getDogBreedInfo(breedCat);
-            respuesta = {
-              ...respuesta,
-              'razaEncontrada':'Lo sentimos parece que no tenemos suficiente información para brindarte más detalles de la enfermedades posibles que puede tener esta raza',
-              informacion
-            }
-          }     
-        } else {
-          const breedDog = await usePredictionsBreedDog(image);
-          console.log(breedDog);
-          
-          respuesta = {
-            "especie": 'Perro',
-            "raza": breedDog
-          };
-          
-
-          let razaEncontrada=null;
-          if(breedDog){
-            const breedLowerCase = breedDog.toLowerCase().replace(/_/g, ' ');
-            razaEncontrada = enfermedadesYRazas.find(raza => raza.nombre.toLowerCase() === breedLowerCase);
-          }
-
-          if (razaEncontrada) {
-            console.log('Datos de la raza:', razaEncontrada);
-            const informacion = await getDogBreedInfo(breedDog);
-            console.log(informacion);
-            
-            respuesta = {
-              ...respuesta,
-              razaEncontrada,
-              informacion
-            }
-
-          } else {
-            console.log('La raza no se encontró en el array proporcionado.');
-            const informacion = await getDogBreedInfo(breedDog);
-            respuesta = {
-              ...respuesta,
-              'razaEncontrada':'Lo sentimos parece que no tenemos suficiente información para brindarte más detalles de la enfermedades posibles que puede tener esta raza',
-              informacion
-            }
-          }     
-        }
-        setResult(respuesta);
+        
       }
     };
 
