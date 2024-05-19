@@ -65,6 +65,8 @@ const DiagnostList = () => {
         fetchUser();
     },[])
 
+    
+
     useEffect(() =>{
         if(historialList&&historialList.length>0&&userActual){
             

@@ -247,11 +247,12 @@ const handleNext = (values) => {
           const duenoActual = await Promise.all(promises);
           console.log(duenoActual);
           
-          let duenoFiltrado = duenoActual.filter((dueno:IDueno) => {
-                  return(dueno !== null &&dueno.nombre=== values.nombre);
-              });
-      
-          console.log(duenoFiltrado);
+          let duenoFiltrado = duenoActual.filter((dueno: IDueno) => {
+            return dueno !== null && dueno.nombre.toLowerCase() === values.nombre.toLowerCase();
+        });
+        
+        console.log(duenoFiltrado);
+        
          
           const newduenoFiltrado:IDueno = {
             'id':duenoFiltrado[0].id,

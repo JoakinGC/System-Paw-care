@@ -51,6 +51,7 @@ const AddDiagnotsModal = ({veterinario}:
 
   const handleClose = () => {
     navigate('/diagnostVeterian' + location.search);
+    window.location.reload();
   };
 
   useEffect(() => {
