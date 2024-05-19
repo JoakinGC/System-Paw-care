@@ -150,15 +150,15 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
                 
         </div>
         <div className="container-card-citas" style={{ overflowY: 'auto',width:'100%',height:'100%', maxHeight:80}}>
-      {(citasMascota&&citasMascota.length>0)&&(<h2>Citas</h2>)}        
+      {(citasMascota&&citasMascota.length>0)&&(<h2 className="title-citas">Citas</h2>)}        
             {(citasMascota && citasMascota.length>0)?citasMascota.map((e,i) =>{
 
               if(i>=20)return
-                return(<>
-                    <span><strong>Hora: </strong>{e.hora&&e.hora.toString()}</span>
-                    <span><strong>fecha: </strong>{e.fecha&&e.fecha.toString()}</span>
-                    <span className="end-card-cita"><strong>motivo: </strong>{e.motivo&&e.motivo}</span>
-                </>)
+                return(<div className="card-citas-body">
+                    <span><strong>Hora: </strong>{e.hora&&e.hora.toString()}<br/></span>
+                    <span><strong>fecha: </strong>{e.fecha&&e.fecha.toString()}<br/></span>
+                    <span className="end-card-cita"><strong>motivo: </strong>{e.motivo&&e.motivo}<br/></span>
+                </div>)
             })
             :
             <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    

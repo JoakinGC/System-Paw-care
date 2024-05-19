@@ -12,7 +12,6 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
 const SliderCita = ({array,title,classname}) =>{
-    //pepe
     return(
         <div className="container">
             <h1 className="heading">{title}</h1>

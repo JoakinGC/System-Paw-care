@@ -11,6 +11,7 @@ background: linear-gradient(225deg, #161616, #6A6970);
 }
 .container-card-head{
     margin-top: 2vh;
+    font-size: 4vh;
 }
 
 .card-body-datails{
@@ -25,4 +26,11 @@ background: linear-gradient(225deg, #161616, #6A6970);
 }
 .end-card-cita{
     border-bottom: 2px solid black;
+}
+
+.title-citas{
+    font-size: 4vh;
+}
+.card-citas-body{
+    font-size: 4vh;
 }
