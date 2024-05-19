@@ -174,7 +174,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
           console.error('Error al subir la imagen:', error);
           alert('Error al subir la imagen. Por favor intenta de nuevo.');
         }
-        window.location.reload()
+        //window.location.reload()
       };
 
   const defaultValues = () =>
