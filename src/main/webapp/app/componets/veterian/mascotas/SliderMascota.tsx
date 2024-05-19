@@ -22,13 +22,13 @@ const SliderMascota = ({array,title,classname}) =>{
             {(array.length===0)?(<FichaMascota
                             classname={classname}
                             citas={[]}
-                            dueno={{}}
-                            especie={{}}
+                            dueno={{'id':11}}
+                            especie={{id:4}}
                             fechaNacimiento={dayjs()}
                             id={-1}
                             nCarnet={0}
-                            raza={""}
-                            urlImg=""
+                            raza={{id:62}}
+                            urlImg="not-found.jpg"
                             key={0}
                         />):
             <Swiper
@@ -71,18 +71,18 @@ const SliderMascota = ({array,title,classname}) =>{
                     )
                 }):(<>
                     <SwiperSlide>
-                    <FichaMascota 
-                                classname={classname}
-                                citas={[]}
-                                dueno={{}}
-                                especie={{}}
-                                fechaNacimiento={dayjs()}
-                                id={-1}
-                                nCarnet={0}
-                                raza={""}
-                                urlImg=""
-                                key={0}
-                            />
+                    <FichaMascota
+                            classname={classname}
+                            citas={[]}
+                            dueno={{'id':11}}
+                            especie={{id:4}}
+                            fechaNacimiento={dayjs()}
+                            id={-1}
+                            nCarnet={0}
+                            raza={{id:62}}
+                            urlImg="not-found.jpg"
+                            key={0}
+                        />
                     </SwiperSlide>
                     </>
                 )}

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getEntity as getDueno} from "app/entities/dueno/dueno.reducer";
 import { AppDispatch } from "app/config/store";
-import { IMascota } from "app/shared/model/mascota.model";
 import { IDueno } from "app/shared/model/dueno.model";
 import { IEspecie } from "app/shared/model/especie.model";
 import { IRaza } from "app/shared/model/raza.model";
@@ -14,11 +13,9 @@ import { ICita } from "app/shared/model/cita.model";
 import { getEntity as getCita} from "app/entities/cita/cita.reducer";
 import { Dayjs } from "dayjs";
 import { Button } from "reactstrap";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Translate } from "react-jhipster";
-import { ITratamiento } from "app/shared/model/tratamiento.model";
-import { IMedicamento } from "app/shared/model/medicamento.model";
 import axios from "axios";
 import './styleCardMascota.css';
 
@@ -91,13 +88,13 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
               const idEspe: string|null = especie.id;
               const idRaza: string = raza.id;
   
-              const jefe = await (dispatch as AppDispatch)(getDueno(idDue)); 
-              const razaM = await (dispatch as AppDispatch)(getRaza(idRaza));
+              const jefe = await((await (dispatch as AppDispatch)(getDueno(idDue))).payload as any).data; 
+              const razaM = await((await (dispatch as AppDispatch)(getRaza(idRaza))).payload as any).data;
               let especieM=null
               if(idEspe) especieM = await (dispatch as AppDispatch)(getEspecie(idEspe));
   
-              setDuenoMascota((jefe.payload as any).data);
-              setRazaMascota((razaM.payload as any).data);
+              setDuenoMascota(jefe);
+              setRazaMascota(razaM);
               if(especieM) setEspecieMacota((especieM.payload as any).data);
   
               // Citas

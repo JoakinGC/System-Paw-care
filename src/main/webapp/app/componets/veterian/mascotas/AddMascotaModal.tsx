@@ -12,6 +12,7 @@ import { createEntity as createMascota, getMascota, getEntities as getMascotas, 
 import { useNavigate, useParams } from 'react-router';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { IMascota } from 'app/shared/model/mascota.model';
+import { toast } from 'react-toastify';
 
 const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
     const dispatch = useAppDispatch();
@@ -90,10 +91,10 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
           dispatch(getMascota(id));
         }
     
-        dispatch(getCitas({}));
+        dispatch(getCitas({page:0,size:999,sort:`id,asc`}));
         dispatch(getDuenos({page:0,size:999,sort:`id,asc`}));
-        dispatch(getEspecies({}));
-        dispatch(getRazas({}));
+        dispatch(getEspecies({page:0,size:999,sort:`id,asc`}));
+        dispatch(getRazas({page:0,size:999,sort:`id,asc`}));
     
         
     
@@ -136,7 +137,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
         
 
         if (!selectedFile) {
-            alert('Por favor selecciona un archivo.');
+            toast.error('Por favor selecciona un archivo.');
             return;
         }
         
