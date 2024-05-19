@@ -5,7 +5,7 @@ import {  Translate, translate, ValidatedField, ValidatedForm } from 'react-jhip
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, getEntities as getMedicamentos } from 'app/entities/medicamento/medicamento.reducer';
+import { createEntity as createNewMedicamento, getEntities as getMedicamentos } from 'app/entities/medicamento/medicamento.reducer';
 import { createEntity as createNewEnfermedad, getEntities as getEnfermedads } from 'app/entities/enfermedad/enfermedad.reducer';
 import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterinario.reducer';
 import { getMascota, getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
@@ -281,6 +281,26 @@ const AddDiagnotsModal = ({veterinario}:
     setParteForm(5);
   }
 
+  const onSubmitNewMedicamento = async(values) =>{
+    if (values.id !== undefined && typeof values.id !== 'number') {
+      values.id = Number(values.id);
+    }
+
+    const entity = {
+      ...values,
+    };
+
+    const newMedi = await((await dispatch(createNewMedicamento(entity))).payload as any).data;
+
+    const nHis:IHistorial = {
+      ...newHistorials,
+      'medicamentos':[newMedi]
+    }
+
+    setNewHisotrial(nHis)
+    setParteForm(4)
+  }
+
 
   return (
     <div>
@@ -374,7 +394,7 @@ const AddDiagnotsModal = ({veterinario}:
 
             {(parteForm===4)&&(
               <ValidatedForm onSubmit={onSubmitEnfermedad}>
-                <input type='text' placeholder='coloca el nombre del medicamento aqui' 
+                <input type='text' placeholder='coloca el nombre de la enfermedad aqui' 
                   onChange={handleEnfermedadChange}
                 />
                 <ValidatedField
@@ -442,6 +462,29 @@ const AddDiagnotsModal = ({veterinario}:
                 validate={{
                   maxLength: { value: 200, message: translate('entity.validation.maxlength', { max: 200 }) },
                 }}
+              />
+              <Button type='submit' >Siguiente</Button>
+              </ValidatedForm>
+            )}
+            {(parteForm===7)&&(
+              <ValidatedForm onSubmit={onSubmitNewMedicamento}>
+                <ValidatedField
+                label={translate('veterinarySystemApp.medicamento.nombre')}
+                id="medicamento-nombre"
+                name="nombre"
+                data-cy="nombre"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
+                }}
+              />
+              <ValidatedField
+                label={translate('veterinarySystemApp.medicamento.descripcion')}
+                id="medicamento-descripcion"
+                name="descripcion"
+                data-cy="descripcion"
+                type="text"
               />
               <Button type='submit' >Siguiente</Button>
               </ValidatedForm>
