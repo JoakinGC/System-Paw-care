@@ -19,6 +19,8 @@ import { IUser } from 'app/shared/model/user.model';
 import { handleRegister, reset } from 'app/modules/account/register/register.reducer';
 import { toast } from 'react-toastify';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import CitaPDF from './PDFCita';
 
 
 const ModalAddCita = ({ isOpen, toggle, veterinario,citas}
@@ -376,6 +378,20 @@ const handleNext = (values) => {
                                 <p>Debe agregar mascotas para poder tener una cita.</p>
                             )}
                             </ValidatedField>
+                            <PDFDownloadLink
+                            document={
+                                <CitaPDF
+                                    fechaCita={cita.fecha && cita.fecha}
+                                    motivo={cita.motivo}
+                                    nombreSolicitante={selectedDueno.nombre}
+                                />
+                            }
+                            fileName="cita.pdf"
+                                >
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Generando documento...' : 'Inprimir cita'
+                                }
+                            </PDFDownloadLink>
                             <Button type="submit" variant="primary">
                                 Guardar Cita
                             </Button>
