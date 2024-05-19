@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity, getEntities as getMedicamentos } from 'app/entities/medicamento/medicamento.reducer';
-import { getEntities as getEnfermedads } from 'app/entities/enfermedad/enfermedad.reducer';
+import { createEntity as createNewEnfermedad, getEntities as getEnfermedads } from 'app/entities/enfermedad/enfermedad.reducer';
 import { getEntities as getVeterinarios } from 'app/entities/veterinario/veterinario.reducer';
 import { getMascota, getEntities as getMascotas } from 'app/entities/mascota/mascota.reducer';
 import { getEntity as getHistorial, updateEntity as updateHistorial, createEntity as createHistorial, reset  as resetHistorial} from '../../../entities/historial/historial.reducer';
@@ -19,8 +19,6 @@ import { toast } from 'react-toastify';
 import { IMedicamento } from 'app/shared/model/medicamento.model';
 import { IMascota } from 'app/shared/model/mascota.model';
 import { IEnfermedad } from 'app/shared/model/enfermedad.model';
-import AddMascotaForm from '../citas/AddMascotaForm';
-import { IDueno } from 'app/shared/model/dueno.model';
 
 const AddDiagnotsModal = ({veterinario}:
 
@@ -35,20 +33,15 @@ const AddDiagnotsModal = ({veterinario}:
 
   const [newHistorials, setNewHisotrial] = useState<IHistorial>();
   const [parteForm , setParteForm] = useState<number>(1);
-  const [newDueno,setNewDueno] = useState<IDueno>({});
   const [medicamentosFiltrados,setMedicamentosFiltrados] = useState<IMedicamento[]>([])
   const [enfermedadesFiltrados,setEnfermedadesFiltrados] = useState<IEnfermedad[]>([])
   const [mascotaFiltrados,setMascotaFiltrados] = useState<IMascota[]>([])
 
   const medicamentos = useAppSelector(state => state.medicamento.entities);
   const enfermedads = useAppSelector(state => state.enfermedad.entities);
-  const veterinarios = useAppSelector(state => state.veterinario.entities);
   const mascotas = useAppSelector(state => state.mascota.entities);
-  const historialEntity = useAppSelector(state => state.historial.entity);
   const loadingHistorial = useAppSelector(state => state.historial.loading);
-  const updatingHistorial = useAppSelector(state => state.historial.updating);
   const updateSuccessHistorial = useAppSelector(state => state.historial.updateSuccess);
-  const tratamientoEntity = useAppSelector(state => state.tratamiento.entity);
   const updateSuccessTratamiento = useAppSelector(state => state.tratamiento.updateSuccess);
 
 
@@ -121,7 +114,7 @@ const AddDiagnotsModal = ({veterinario}:
     setMedicamentosFiltrados(medicamentos)
   },[mascotas,medicamentos,enfermedads])
 
-    //1
+ 
    
     const handleSubmitDetalle = (values: any) => {
       if(values.diagnostico===null){
@@ -144,7 +137,7 @@ const AddDiagnotsModal = ({veterinario}:
     console.log(newHistorials);
  
   
-    //2
+
     const handleMedicamentoChange = (event) => {
       const searchValue = event.target.value.toLowerCase();
       const filteredMedicamentos = medicamentos.filter(medicamento =>
@@ -174,12 +167,6 @@ const AddDiagnotsModal = ({veterinario}:
       setParteForm(4)
     };
   
-  
-    //3
-   
-   
-
-    //4
     const handleMascotaChange = (event) => {
       const searchValue = event.target.value;
       const filteredMascotas = mascotas.filter(mascota => 
@@ -212,7 +199,7 @@ const AddDiagnotsModal = ({veterinario}:
     };
     
 
-    //5
+
     const handleEnfermedadChange = (event) => {
       const searchValue = event.target.value.toLowerCase();
       const filteredEnfermedades = enfermedads.filter(enfermedad =>
@@ -242,11 +229,7 @@ const AddDiagnotsModal = ({veterinario}:
       setParteForm(5)
     };
 
-    const addNewEnfermedad = () => setParteForm(7)
-    
-    const addMascotaToggle = () =>{
-
-    }
+   
   
 
     const saveTratamiento = async(values) =>{
@@ -274,19 +257,29 @@ const AddDiagnotsModal = ({veterinario}:
       handleClose();
     }
 
-  const goToAddMedicamento = () => setParteForm(9);
+  const goToAddMedicamento = () => setParteForm(7);
   const addNewTratamiento = () => setParteForm(6)
+  const addNewEnfermedad = () => setParteForm(8)
 
-  const defaultValues = () =>
-    isNew
-      ? {}
-      : {
-          ...historialEntity,
-          medicamentos: historialEntity?.medicamentos?.map(e => e.id.toString()),
-          enfermedads: historialEntity?.enfermedads?.map(e => e.id.toString()),
-          veterinario: historialEntity?.veterinario?.id,
-          mascota: historialEntity?.mascota?.id,
-        };
+  const onSubmitNewEnfermedad = async(values) =>{
+
+    if (values.id !== undefined && typeof values.id !== 'number') {
+      values.id = Number(values.id);
+    }
+
+    const entity = {
+      ...values,
+    }
+
+    const newEnfer = await ((await dispatch(createNewEnfermedad(entity))).payload as any).data;
+    const hw:IHistorial = {
+      ...newHistorials,
+      'enfermedads':[newEnfer]
+    };
+
+    setNewHisotrial(hw);
+    setParteForm(5);
+  }
 
 
   return (
@@ -329,7 +322,7 @@ const AddDiagnotsModal = ({veterinario}:
               </ValidatedField>
               <Button type='submit' >Siguiente</Button>
               <Link to={'/mascotasVeterian'}>
-                <Button onClick={addMascotaToggle}>Añadir nueva mascota</Button>
+                <Button>Añadir nueva mascota</Button>
               </Link>   
               </ValidatedForm>
             )}
@@ -454,7 +447,31 @@ const AddDiagnotsModal = ({veterinario}:
               </ValidatedForm>
             )}
 
-
+            {(parteForm===8)&&(
+              <ValidatedForm onSubmit={onSubmitNewEnfermedad}>
+                <ValidatedField
+                label={translate('veterinarySystemApp.enfermedad.nombre')}
+                id="enfermedad-nombre"
+                name="nombre"
+                data-cy="nombre"
+                type="text"
+                validate={{
+                  maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
+                }}
+              />
+              <ValidatedField
+                label={translate('veterinarySystemApp.enfermedad.descripcion')}
+                id="enfermedad-descripcion"
+                name="descripcion"
+                data-cy="descripcion"
+                type="text"
+                validate={{
+                  maxLength: { value: 200, message: translate('entity.validation.maxlength', { max: 200 }) },
+                }}
+              />
+              <Button type='submit' >Siguiente</Button>
+              </ValidatedForm>
+            )}
 
             </>
           )}
