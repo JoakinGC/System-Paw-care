@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Table } from 'reactstrap';
 import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities as getUsuarios, getEntity} from 'app/entities/usuario/usuario.reducer';
-import { getEntities } from '../../../entities/historial/historial.reducer';
+import { getEntities as getUsuarios} from 'app/entities/usuario/usuario.reducer';
+import { getEntities as getAllHistoriales} from '../../../entities/historial/historial.reducer';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntities as getAllMascotas } from "app/entities/mascota/mascota.reducer";
+import { getEntities as getAllVeterinarios, getEntity} from 'app/entities/veterinario/veterinario.reducer';
+import { IHistorial } from 'app/shared/model/historial.model';
+import { IMascota } from 'app/shared/model/mascota.model';
+import { IVeterinario } from 'app/shared/model/veterinario.model';
 
 export const HistoryContainer = () => {
   const dispatch = useAppDispatch();
@@ -26,16 +30,20 @@ export const HistoryContainer = () => {
   const historialList = useAppSelector(state => state.historial.entities);
   const loading = useAppSelector(state => state.historial.loading);
   const totalItems = useAppSelector(state => state.historial.totalItems);
+  const mascotaList = useAppSelector(state => state.mascota.entities);
+  const veterinarioList = useAppSelector(state => state.veterinario.entities);
   const [historyListUserActual,setHistoryListUserActual] = useState<any[]>([])
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getAllHistoriales({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
+
+    dispatch(getAllVeterinarios({page:0,size:999,sort:`id,asc`}))
   };
 
 
@@ -112,20 +120,40 @@ export const HistoryContainer = () => {
         console.log(idDuenoActual);
         
         // Filtrar las mascotas por el ID del dueño actual
-        const mascotasUsuarioActual = (todasLasMascotas.payload as any).data.filter(mascota => mascota.dueno?.id === idDuenoActual);
+        const mascotasUsuarioActual:IMascota[] = (todasLasMascotas.payload as any).data.filter(mascota => mascota.dueno?.id === idDuenoActual);
   
         console.log(mascotasUsuarioActual);
         console.log(historialList);
         
 
-        const historialesMascotasUsuarioActual = historialList.filter(historial => {
+        const historialesMascotasUsuarioActual1 = historialList.filter(historial => {
             return mascotasUsuarioActual.some(mascota => mascota.id === historial.mascota?.id);
         });
 
-        console.log(historialesMascotasUsuarioActual);
+        
+        const historialesMascotasUsuarioActual2 = await Promise.all(historialesMascotasUsuarioActual1.map(async (historial: IHistorial) => {
+          if (historial.mascota) {
+              const n: IHistorial = {
+                  diagnostico: historial.diagnostico,
+                  enfermedads: historial.enfermedads,
+                  fechaConsulta: historial.fechaConsulta,
+                  id: historial.id,
+                  mascota:  mascotasUsuarioActual.find((e: IMascota) => e.id === historial.mascota.id),
+                  medicamentos: historial.medicamentos,
+                  veterinario: await ((await dispatch(getEntity(historial.veterinario.id))).payload as any).data as IVeterinario
+              };
+              return n;
+          }
+          return historial;
+      }));
+      
+
+        console.log(historialesMascotasUsuarioActual1);
+        console.log(historialesMascotasUsuarioActual2);
+        
         
 
-        setHistoryListUserActual(historialesMascotasUsuarioActual)
+        setHistoryListUserActual(historialesMascotasUsuarioActual2)
     };
   
     citasFilterUserActual();
@@ -143,64 +171,30 @@ export const HistoryContainer = () => {
           </Button>
         </div>
       </h2>
-      <div className="table-responsive d-flex flex-row justify-content-center">
+      <div>
         {historialList && historialList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="veterinarySystemApp.historial.id">ID</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('fechaConsulta')}>
-                  <Translate contentKey="veterinarySystemApp.historial.fechaConsulta">Fecha Consulta</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('fechaConsulta')} />
-                </th>
-                <th className="hand" onClick={sort('diagnostico')}>
-                  <Translate contentKey="veterinarySystemApp.historial.diagnostico">Diagnostico</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('diagnostico')} />
-                </th>
-                <th>
-                  <Translate contentKey="veterinarySystemApp.historial.veterinario">Veterinario</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="veterinarySystemApp.historial.mascota">Mascota</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {historyListUserActual.map((historial, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/historial/${historial.id}`} color="link" size="sm">
-                      {historial.id}
-                    </Button>
-                  </td>
-                  <td>
-                    {historial.fechaConsulta ? (
-                      <TextFormat type="date" value={historial.fechaConsulta} format={APP_LOCAL_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>{historial.diagnostico}</td>
-                  <td>
-                    {historial.veterinario ? <Link to={`/veterinario/${historial.veterinario.id}`}>{historial.veterinario.id}</Link> : ''}
-                  </td>
-                  <td>{historial.mascota ? <Link to={`/mascota/${historial.mascota.id}`}>{historial.mascota.id}</Link> : ''}</td>
-                  <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/historial/${historial.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.view">View</Translate>
-                        </span>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <div className="d-flex flex-wrap justify-content-center">
+          {historyListUserActual.map((historial, i) => (
+            <Card key={`historial-${i}`} className="m-2" style={{ width: '18rem' }}>
+              <CardBody>
+                <CardSubtitle>
+                  Fecha Consulta: {historial.fechaConsulta ? <TextFormat type="date" value={historial.fechaConsulta} format={APP_LOCAL_DATE_FORMAT} /> : null}
+                </CardSubtitle>
+                <CardText>Diagnóstico: {historial.diagnostico}</CardText>
+                <CardText>
+                  Veterinario: {historial.veterinario&&historial.veterinario.nombre} 
+                </CardText>
+                <CardText>
+                  Mascota: {historial.mascota&&historial.mascota.nIdentificacionCarnet}
+                </CardText>
+                <Link to={`/historial/${historial.id}`} className="btn btn-info">
+                  <FontAwesomeIcon icon="eye" /> <Translate contentKey="entity.action.view">View</Translate>
+                </Link>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+        
         ) : (
           !loading && (
             <div className="alert alert-warning">
