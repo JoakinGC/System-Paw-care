@@ -9,7 +9,7 @@ import axios from "axios";
 import { getEntity } from "app/entities/dueno/dueno.reducer";
 import { IDueno } from "app/shared/model/dueno.model";
 
-const CardCita = ({ fecha, hora, mascotas, motivo,classname }) => {
+const CardCita = ({ id,fecha, hora, mascotas, motivo,classname }) => {
     const dispatch = useAppDispatch();
     const mascotaList = useAppSelector(state => state.mascota.entities);
     const [mascotasDeLaCita, setMascotasDeLaCita] = useState<IMascota[]>([]);
@@ -19,10 +19,18 @@ const CardCita = ({ fecha, hora, mascotas, motivo,classname }) => {
     useEffect(() => {
         dispatch(getEntities({ page: 0, size: 999, sort: `id,asc` }))
     }, []);
+    console.log(fecha);
+    console.log(hora);
+    
+    console.log("Mascotas actuales ",mascotas);
+    
 
     useEffect(() => {
-        if (mascotas && mascotas.length > 0 && mascotaList && mascotaList.length > 0) {
-            const currentMascotasDeLaCita = mascotaList.filter(mascota => mascotas.some(m => m.id === mascota.id));
+        if (mascotaList && mascotaList.length > 0) {
+            const currentMascotasDeLaCita = mascotaList.filter(mascota => 
+                mascota.citas && 
+                mascota.citas.some(cita => cita.id === id)
+            );
             setMascotasDeLaCita(currentMascotasDeLaCita);
         }
     }, [mascotaList, mascotas]);

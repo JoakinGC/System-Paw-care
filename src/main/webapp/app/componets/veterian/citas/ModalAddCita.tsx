@@ -210,7 +210,7 @@ const handleNext = (values) => {
         }));
     
         console.log("nueva", nueva);
-        handleClose();
+        //handleClose();
     }
     
 

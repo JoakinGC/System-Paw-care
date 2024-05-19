@@ -9,6 +9,8 @@ import { getEntities } from 'app/entities/cita/cita.reducer';
 import { ICita } from 'app/shared/model/cita.model';
 import SliderCita from './SliderCita';
 import ModalAddCita from './ModalAddCita';
+import dayjs from 'dayjs';
+
 
 const VeterianMain = () =>{
     const dispatch = useAppDispatch()
@@ -117,7 +119,7 @@ const VeterianMain = () =>{
         fetchUser();
 
         
-    }, []);
+    }, [dispatch]);
       
 
     console.log(userActual);

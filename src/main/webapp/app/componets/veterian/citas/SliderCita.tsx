@@ -17,6 +17,7 @@ const SliderCita = ({array,title,classname}) =>{
             <h1 className="heading">{title}</h1>
 
             {(array.length===0)?(<CardCita
+                            id={1}
                             classname={classname}
                             fecha={"##/##/####"}
                             hora={"##:##"}
@@ -48,6 +49,7 @@ const SliderCita = ({array,title,classname}) =>{
                     return(
                         <SwiperSlide key={index}>
                             <CardCita 
+                                id={cita.id}
                                 classname={classname}
                                 fecha={cita.fecha}
                                 hora={cita.hora}
@@ -59,6 +61,7 @@ const SliderCita = ({array,title,classname}) =>{
                 }):(<>
                     <SwiperSlide>
                         <CardCita
+                            id={1}
                             classname={classname}
                             fecha={"##/##/####"}
                             hora={"##:##"}
