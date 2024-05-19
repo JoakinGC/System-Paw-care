@@ -14,7 +14,6 @@
 }
 
 html {
-  font-size: 62.5%;
   scroll-behavior: smooth;
 }
 
@@ -55,7 +54,6 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
   background: var(--bg);
 }
 
