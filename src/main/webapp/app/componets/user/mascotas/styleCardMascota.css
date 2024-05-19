@@ -1,56 +1,45 @@
-.container-card {
-    width: 100%;
-    height: 20vh;
-    display: flex;
-    flex-direction: row;
-    margin-top: 10vh;
-    margin-bottom: 2vh;
-    padding-left: 3vw;
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden; /* Evita que las imágenes sobresalgan del contenedor */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Agrega sombra para resaltar las tarjetas */
 }
 
 .card-image-mascota-container {
-    background-color: aquamarine;
+    width: 100%; /* Ajusta el ancho de la imagen al contenedor */
+    height: 200px; /* Limita la altura de la imagen */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que exceda el contenedor */
 }
 
-
-.card-image-mascota-container img{
-    width: 10vw;
-    height: 20vh;
+.card-image img {
+    width: 100%; /* Ajusta la imagen al ancho del contenedor */
+    height: auto; /* Permite que la altura se ajuste automáticamente */
+    border-radius: 8px;
+    object-fit: cover; /* Escala la imagen para que se ajuste al contenedor sin distorsión */
 }
+
 .card-details {
-    padding-left: 3vw;
-    background-color: azure;
-    width: 100%;
+    padding: 10px;
+}
+
+.card-details span {
+    display: block; /* Muestra cada detalle de la mascota en una línea diferente */
+    margin-bottom: 8px;
+}
+
+.card-icons-options {
     display: flex;
-    flex-direction: column; /* Cambiado a column */
+    justify-content: center; /* Centra los iconos de opciones horizontalmente */
+    padding: 10px;
 }
 
-.card-icons-options{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: azure;
-}
-
-.card-details img{
-    width: 20vw;
-    height: 20vh;
-}
-
-.container-card-citas{
-    display: flex;
-    flex-direction: column;
-}
-
-.body-cita{
-    border-top:2px solid gray;
-    border-bottom:2px solid gray;
-    margin-bottom: 5px;
-
-}
-
-.body-cita span{
-    margin-left: 2vw;
-    margin-right: 2vw;
+.cita{
+    border-bottom: 2px solid black;
 }

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getMascota, deleteEntity } from './mascota.reducer';
+import { getEntity } from '../dueno/dueno.reducer';
 
 export const MascotaDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -35,8 +36,13 @@ export const MascotaDeleteDialog = () => {
     }
   }, [updateSuccess]);
 
-  const confirmDelete = () => {
+  const confirmDelete = async() => {
     dispatch(deleteEntity(mascotaEntity.id));
+
+    const getDueno = await((await dispatch(getEntity(mascotaEntity.dueno.id))).payload as any).data;
+    console.log(mascotaEntity);
+    
+    
   };
 
   return (

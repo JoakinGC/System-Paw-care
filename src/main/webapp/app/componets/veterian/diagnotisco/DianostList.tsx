@@ -9,7 +9,6 @@ import { getEntities as getAllHistoriales} from "app/entities/historial/historia
 import { IHistorial } from "app/shared/model/historial.model";
 import { getAccount } from "app/shared/reducers/authentication";
 import { getEntities as getAllUsuarios} from "app/entities/usuario/usuario.reducer";
-import { IUser } from "app/shared/model/user.model";
 import { IUsuario } from "app/shared/model/usuario.model";
 import {getMascota} from "app/entities/mascota/mascota.reducer";
 import { getEntity as getRaza} from "app/entities/raza/raza.reducer";
@@ -65,7 +64,7 @@ const DiagnostList = () => {
         fetchUser();
     },[])
 
-    
+
 
     useEffect(() =>{
         if(historialList&&historialList.length>0&&userActual){
@@ -114,31 +113,26 @@ const DiagnostList = () => {
         }
     },[historialList,userActual])
     const openModalDatils = (id: number) => {
-        if (medicamentoList && medicamentoList.length > 0) {
-            const filteredMedicamentos = medicamentoList.filter((m: IMedicamento) => {
-                if (m.historials) {
-                    return m.historials.some((h: IHistorial) => h.id === id);
-                }
-                return false;
-            });
+
+        const historialFilter = historialFiltrado.find(h => h.id === id); // Buscar el historial específico
+        console.log(historialFilter);
     
-            // Hacer algo con filteredMedicamentos, por ejemplo, abrir el modal con los medicamentos filtrados
-            console.log("filtro de medicamneots",filteredMedicamentos);
-            setMedicamentosFiltrados(filteredMedicamentos)
+        if (historialFilter) {
+            const enfermedadIds = historialFilter.enfermedads.map(enfermedad => enfermedad.id); // Obtener los IDs de las enfermedades asociadas al historial
+            const filteredEnfermedades = enfermedadList.filter((enfermedad: IEnfermedad) => enfermedadIds.includes(enfermedad.id));
+            
+            console.log("filtro de enfermedades", filteredEnfermedades);
+            setEnfermedadesFiltradas(filteredEnfermedades);
         }
 
-        if (enfermedadList && enfermedadList.length > 0) {
-            const filteredMedicamentos = enfermedadList.filter((e: IEnfermedad) => {
-                if (e.historials) {
-                    return e.historials.some((h: IHistorial) => h.id === id);
-                }
-                return false;
-            });
-    
-            // Hacer algo con filteredMedicamentos, por ejemplo, abrir el modal con los medicamentos filtrados
-            console.log("filtro de enfermedades",filteredMedicamentos);
-            setEnfermedadesFiltradas(filteredMedicamentos)
+        if (historialFilter) {
+            const medimentosIds = historialFilter.medicamentos.map(enfermedad => enfermedad.id); // Obtener los IDs de las enfermedades asociadas al historial
+            const filteredMedicamentos = medicamentoList.filter((enfermedad: IMedicamento) => medimentosIds.includes(enfermedad.id));
+            
+            console.log("filtro de enfermedades", filteredMedicamentos);
+            setMedicamentosFiltrados(filteredMedicamentos);
         }
+    
     
         setModalOpen(!modalOpen);
     };

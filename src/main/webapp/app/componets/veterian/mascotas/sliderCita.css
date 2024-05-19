@@ -14,7 +14,6 @@
 }
 
 html {
-  font-size: 62.5%;
   scroll-behavior: smooth;
 }
 
@@ -55,7 +54,6 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
   background: var(--bg);
 }
 
@@ -67,7 +65,6 @@ body {
 
 .heading {
   padding: 1rem 0;
-  font-size: 3.5rem;
   text-align: center;
 }
 
@@ -183,30 +180,7 @@ body {
   background: var(--primary);
 }
 
-/*cita card*/
 
-.cita-semana {
-    background: linear-gradient(135deg, rgba(108, 71, 220, 1.0), rgba(183, 132, 193, 1.0));
-  }
-  
-  .cita-hoy {
-/*
-* Created with https://www.css-gradient.com
-* Gradient link: https://www.css-gradient.com/?c1=abaa54&c2=d5e3f7&gt=r&gd=dcc
-*/
-background: rgba(171, 170, 84, 1.0);
-background: radial-gradient(at center, rgba(171, 170, 84, 1.0), rgba(213, 227, 247, 1.0));
-  }
-  
-  .cita-mes {
-/*
-* Created with https://www.css-gradient.com
-* Gradient link: https://www.css-gradient.com/?c1=462127&c2=dec2d3&gt=r&gd=dcc
-*/
-background: rgba(70, 33, 39, 1.0);
-background: radial-gradient(at center, rgba(70, 33, 39, 1.0), rgba(222, 194, 211, 1.0));
-  }
-  
 
 .cita-card-container{
     width: 100%;

@@ -81,47 +81,40 @@ const MascotaList = () =>{
     console.log(mascotaList);
     
     return (
-        <div>
-          <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}>
-            <h1>Tús Mascotas</h1>
-          
-          </div>          
-        {mascotasUser && mascotasUser.length > 0 ? (
-          mascotasUser.map((mascota,index) => (
-            <CardMascota
-              key={index} 
-              id={mascota.id}
-              dueno={mascota.dueno}
-              especie={mascota.especie}
-              fechaNacimiento={mascota.fechaNacimiento}
-              nCarnet={mascota.nIdentificacionCarnet}
-              raza={mascota.raza}
-              urlImg={mascota.foto}
-              citas={mascota.citas}
-            />
-          ))
-        ) : !loading ? (
-          <div className="alert alert-warning">
-            <Translate contentKey="veterinarySystemApp.mascota.home.notFound">No Mascotas found</Translate>
-          </div>
-        ) : null}
-
+      <div >
+      <div>
+          <h1>Tus Mascotas</h1>
       </div>
+      <div className="grid-container">
+
+     
+      <div className="cards-container">
+          {mascotasUser && mascotasUser.length > 0 ? (
+              mascotasUser.map((mascota,index) => (
+                  <CardMascota
+                      key={index} 
+                      id={mascota.id}
+                      dueno={mascota.dueno}
+                      especie={mascota.especie}
+                      fechaNacimiento={mascota.fechaNacimiento}
+                      nCarnet={mascota.nIdentificacionCarnet}
+                      raza={mascota.raza}
+                      urlImg={mascota.foto}
+                      citas={mascota.citas}
+                  />
+              ))
+          ) : !loading ? (
+              <div className="alert alert-warning">
+                  <Translate contentKey="veterinarySystemApp.mascota.home.notFound">No Mascotas found</Translate>
+              </div>
+          ) : null}
+      </div>
+      </div>
+  </div>
+  
       
     );
 }
 
 
 export default MascotaList;
-
-
-
-
-
-
-
-
-
-
-
-

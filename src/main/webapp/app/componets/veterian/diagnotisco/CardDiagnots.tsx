@@ -22,8 +22,9 @@ const CardDiagnots = ({
 }) =>{
 
     const openModal = () =>{
-
         toggleModal(id)
+        console.log("id modal",id);
+        
     }
 
 

@@ -147,19 +147,7 @@ const FichaMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raz
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/mascota/${id}/delete`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+                
         </div>
         <div className="container-card-citas" style={{ overflowY: 'auto',width:'100%',height:'100%', maxHeight:80}}>
       {(citasMascota&&citasMascota.length>0)&&(<h2>Citas</h2>)}        

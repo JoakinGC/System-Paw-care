@@ -3,7 +3,6 @@ import './styleCardMascota.css';
 import { useDispatch } from "react-redux";
 import { getEntity as getDueno} from "app/entities/dueno/dueno.reducer";
 import { AppDispatch } from "app/config/store";
-import { IMascota } from "app/shared/model/mascota.model";
 import { IDueno } from "app/shared/model/dueno.model";
 import { IEspecie } from "app/shared/model/especie.model";
 import { IRaza } from "app/shared/model/raza.model";
@@ -13,9 +12,7 @@ import { ICita } from "app/shared/model/cita.model";
 import { getEntity as getCita} from "app/entities/cita/cita.reducer";
 import { Dayjs } from "dayjs";
 import { Button } from "reactstrap";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Translate } from "react-jhipster";
 import { ITratamiento } from "app/shared/model/tratamiento.model";
 import { IMedicamento } from "app/shared/model/medicamento.model";
 import axios from "axios";
@@ -121,49 +118,37 @@ const CardMascota = ({ id,urlImg, nCarnet, fechaNacimiento, dueno, especie, raza
     
 
     return (
-        <div>
-        <div className="container-card">
-            <div className="card-image-mascota-container">
-              {imageUrl && <img src={imageUrl} alt="Imagen de la mascota"/>}
-            </div>
-            <div className="card-details">
-                <span><strong>Número de Carnet: </strong> {nCarnet}</span>
-                <span><strong>Fecha de Nacimiento :</strong> {fechaNacimiento.toString()}</span>
-                <span><strong>Dueño: </strong>{duenoMascota&&duenoMascota.nombre}</span>
-                <span><strong>Especie: </strong>{especieMacota&&especieMacota.nombre} </span>
-                <span><strong>Raza: </strong>{razaMascota&&razaMascota.nombre} </span>
-            </div>
-            <div className="card-icons-options">
-            <Button color="primary" onClick={() => setModalOpen(true)} 
-            style={{ borderRadius: '20px', marginBottom:10, height:40,marginRight: 40}}>
-                <FontAwesomeIcon icon={faCamera}/> 
-            </Button>
-            <Button
-               onClick={() => (window.location.href = `/mascota/${id}/delete`)}
-                color="danger"
-                 size="sm"
-                data-cy="entityDeleteButton"
-                style={{ borderRadius: '20px' ,marginRight: 40,height:40}}
-              >
-                <FontAwesomeIcon icon={faTrash}  />
+      <div className="card-container">
+      <div className="card">
+          <div className="card-image">
+              {imageUrl && <img src={imageUrl} alt="Imagen de la mascota" />}
+          </div>
+          <div className="card-details">
+              <span><strong>Número de Carnet: </strong>{nCarnet}</span>
+              <span><strong>Fecha de Nacimiento: </strong>{fechaNacimiento.toString()}</span>
+              <span><strong>Dueño: </strong>{duenoMascota && duenoMascota.nombre}</span>
+              <span><strong>Especie: </strong>{especieMacota && especieMacota.nombre}</span>
+              <span><strong>Raza: </strong>{razaMascota && razaMascota.nombre}</span>
+          </div>
+          <div className="card-actions">
+              <Button color="primary" onClick={() => setModalOpen(true)}>
+                  <FontAwesomeIcon icon={faCamera} /> Editar Imagen
               </Button>
-            </div>
-        </div>
-        <div className="container-card-citas">
-            <h2>Citas</h2>
-            {(citasMascota && citasMascota.length>0)?citasMascota.map((e) =>{
-                return(<div className="body-cita">
-                    <span><strong>Hora: </strong>{e.hora&&e.hora.toString()}</span>
-                    <span><strong>fecha: </strong>{e.fecha&&e.fecha.toString()}</span>
-                    <span><strong>motivo: </strong>{e.motivo&&e.motivo}</span>
-                </div>)
-            })
-            :
-            <h2 style={{color:'red'}}><strong>NO</strong> tiene citas proximas</h2>    
-        }
-        </div>
-        <EditImageMascota isOpen={modalOpen} toggle={() => setModalOpen(!modalOpen)} imageUrl={urlImg}/>
-        </div>
+          </div>
+      </div>
+      <div className="card-citas">
+          <h2>Citas</h2>
+          {(citasMascota && citasMascota.length > 0) ? citasMascota.map((cita, index) => (
+              <div className="cita" key={index}>
+                  <span><strong>Hora: </strong>{cita.hora && cita.hora.toString()}<br/></span>
+                  <span><strong>Fecha: </strong>{cita.fecha && cita.fecha.toString()}<br/></span>
+                  <span><strong>Motivo: </strong>{cita.motivo && cita.motivo}<br/></span>
+              </div>
+          )) : <h2 style={{ color: 'red' }}>NO tiene citas próximas</h2>}
+      </div>
+      <EditImageMascota isOpen={modalOpen} toggle={() => setModalOpen(!modalOpen)} imageUrl={urlImg} />
+  </div>
+  
     )
 }
 

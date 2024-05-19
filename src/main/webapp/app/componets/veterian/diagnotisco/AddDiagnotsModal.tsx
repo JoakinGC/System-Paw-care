@@ -115,7 +115,8 @@ const AddDiagnotsModal = ({veterinario}:
     setMedicamentosFiltrados(medicamentos)
   },[mascotas,medicamentos,enfermedads])
 
- 
+  console.log();
+  
    
     const handleSubmitDetalle = (values: any) => {
       if(values.diagnostico===null){
