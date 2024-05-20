@@ -12,6 +12,7 @@ import { getEntity,  reset, createEntity as createCita, updateEntity as updateCi
 import { IMascota } from 'app/shared/model/mascota.model';
 import dayjs from 'dayjs';
 import { getEntities as getAllCitas } from "app/entities/cita/cita.reducer";
+import { toast } from 'react-toastify';
 
 interface PropsAddCita{
     animales:any[];
@@ -84,7 +85,10 @@ const AddCita = ({toggleModal,selectedDate}) => {
       values.id = Number(values.id);
     }
 
-    
+    if(values.mascotas){
+      toast.error("NO puede estar vacio el campo animal")
+      return
+    }
    if(values.mascotas.length  >= 3) return
     console.log("citas ",citaList);
     
