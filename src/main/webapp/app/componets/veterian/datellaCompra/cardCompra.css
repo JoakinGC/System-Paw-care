@@ -16,7 +16,7 @@
 .card-compra {
     background: #0F0F11;
     background: linear-gradient(180deg, #0F0F11, #203E12);
-    width: 80vw;
+    width: 90vw;
     max-width: 200px;
     height: auto; /* Altura automática para ajustarse al contenido */
     max-height: none; /* Elimina la altura máxima para permitir que la tarjeta crezca según el contenido */
@@ -38,6 +38,7 @@
     padding: 10px; /* Añade un poco de espacio entre el borde y los botones */
 }
 
-.card-compra-footer button {
-    margin-left: 1vw; /* Elimina el margen de los botones */
+.card-compra-footer .button {
+    margin-left: 10px; /* Elimina el margen de los botones */
+    margin-right: 1vw;
 }

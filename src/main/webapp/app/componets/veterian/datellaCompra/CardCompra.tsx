@@ -64,7 +64,7 @@ const CardCompra = (
 
         <div className="card-compra-footer">
             <Button disabled={entregado} onClick={updateEntrega}>Confirmar entrega de producto</Button>
-            <Button  onClick={openDatilsCompra}>Detalle de compra</Button>
+            <Button  className="button" onClick={openDatilsCompra}>Detalle de compra</Button>
         </div>
     </div>)
 }
