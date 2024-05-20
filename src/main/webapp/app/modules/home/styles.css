@@ -1,22 +1,106 @@
-.content{
-    font-family: basic-sans, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.125em;
-    line-height: 1.6;
-    color: #ffffff;
-    background: #ddd;
-    background-size: 300%;
-    background-image: var(--gradient);
-    animation: bg-animation 25s infinite;
-    flex-direction: column;
-  }
+/* home.scss */
+
+/* General styles for the content */
+.content {
+  font-family: basic-sans, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.125em;
+  line-height: 1.6;
+  color: #ffffff;
+  background: #ddd;
+  
+}
 
 
-  @keyframes bg-animation {
-    0% {background-position: left}
-    50% {background-position: right}
-    100% {background-position: left}
+
+/* Styles for panel-home */
+.panel-home {
+  padding: 2rem 1rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+  width: 100%;
+  background-color: #333;
+}
+
+@media (min-width: 720px) {
+  .panel-home {
+    padding: 4rem 2rem;
+    margin: 3rem 0;
   }
+}
+
+/* Styles for panel-secondary */
+.panel-secondary {
+  padding: 2rem 1rem;
+  text-align: center;
+  background-color: #666;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+  width: 100%;
+  color: #fff;
+}
+
+@media (min-width: 720px) {
+  .panel-secondary {
+    padding: 4rem 2rem;
+    margin: 3rem 0;
+  }
+}
+
+/* Styles for services section */
+.services-section {
+  padding: 2rem 1rem;
+  margin: 2rem 0;
+  background-color: #999;
+  color: #000;
+}
+
+.service-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Styles for testimonials section */
+.testimonials-section {
+  padding: 2rem 1rem;
+  margin: 2rem 0;
+  color: #000;
+}
+
+.testimonial-box {
+  background-color: #ccc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Styles for contact section */
+.contact-section {
+  padding: 2rem 1rem;
+  margin: 2rem 0;
+  background-color: #eee;
+  color: #000;
+}
+
+.contact-section h4 {
+  margin-top: 1rem;
+}
+
+/* Styles for FAQ section */
+.faq-section {
+  padding: 2rem 1rem;
+  margin: 2rem 0;
+  background-color: #f0f0f0; 
+  color: #000;
+}
+
+.faq-section h5 {
+  margin-top: 1rem;
+}

@@ -102,7 +102,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
 
       useEffect(() => {
         if (updateSuccess) {
-            
+          
           toggle();
         }
       }, [updateSuccess]);
