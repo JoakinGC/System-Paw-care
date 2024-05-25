@@ -1,4 +1,4 @@
-import adapter from "@sveltejs/adapter-node";
+import adapter from "@sveltejs/adapter-vercel";
 import { vitePreprocess } from "@sveltejs/kit/vite";
 import dotenv from "dotenv";
 
@@ -9,18 +9,19 @@ process.env.PUBLIC_VERSION = process.env.npm_package_version;
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
-	// for more information about preprocessors
 	preprocess: vitePreprocess(),
-
 	kit: {
-		adapter: adapter(),
-
+		adapter: adapter({
+			// Puedes configurar las opciones del adaptador node aquí
+			out: "public", // Directorio de salida
+			precompress: false, // Habilitar o deshabilitar la compresión previa
+			envPrefix: "PUBLIC_", // Prefijo para variables de entorno expuestas públicamente
+			maxDuration: 160,
+		}),
 		paths: {
 			base: process.env.APP_BASE || "",
 		},
 		csrf: {
-			// handled in hooks.server.ts, because we can have multiple valid origins
 			checkOrigin: false,
 		},
 	},

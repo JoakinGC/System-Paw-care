@@ -7,9 +7,6 @@ import type { SvelteComponent } from "svelte";
 import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
 import { html } from "satori-html";
-
-import InterRegular from "../../../../../static/fonts/Inter-Regular.ttf";
-import InterBold from "../../../../../static/fonts/Inter-Bold.ttf";
 import sharp from "sharp";
 
 export const GET: RequestHandler = (async ({ params }) => {
@@ -55,18 +52,7 @@ export const GET: RequestHandler = (async ({ params }) => {
 	const svg = await satori(reactLike, {
 		width: 1200,
 		height: 648,
-		fonts: [
-			{
-				name: "Inter",
-				data: InterRegular as unknown as ArrayBuffer,
-				weight: 500,
-			},
-			{
-				name: "Inter",
-				data: InterBold as unknown as ArrayBuffer,
-				weight: 700,
-			},
-		],
+		fonts: [], // Provide an empty array if not using custom fonts
 	});
 
 	const png = new Resvg(svg, {

@@ -3,8 +3,6 @@
 	export let description: string = "";
 	export let createdByName: string | undefined;
 	export let avatar: string | undefined;
-
-	import logo from "../../../../../static/huggingchat/logo.svg?raw";
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center bg-black p-2">
@@ -14,10 +12,7 @@
 		{/if}
 		<div class="ml-10 flex flex-col items-start">
 			<p class="mb-2 mt-0 text-3xl font-normal text-gray-400">
-				<span class="mr-1.5 h-8 w-8">
-					<!-- eslint-disable-next-line -->
-					{@html logo}
-				</span>
+				<span class="mr-1.5 h-8 w-8" />
 				AI assistant
 			</p>
 			<h1 class="m-0 {name.length < 38 ? 'text-5xl' : 'text-4xl'} font-black">

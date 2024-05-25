@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { PUBLIC_APP_NAME, PUBLIC_VERSION } from "$env/static/public";
+	import { PUBLIC_APP_NAME } from "$env/static/public";
 	import { PUBLIC_ANNOUNCEMENT_BANNERS } from "$env/static/public";
 	import { PUBLIC_APP_DESCRIPTION } from "$env/static/public";
-	import Logo from "$lib/components/icons/Logo.svelte";
 	import { createEventDispatcher } from "svelte";
-	import IconGear from "~icons/bi/gear-fill";
-	import AnnouncementBanner from "../AnnouncementBanner.svelte";
 	import type { Model } from "$lib/types/Model";
-	import ModelCardMetadata from "../ModelCardMetadata.svelte";
 	import { findCurrentModel } from "$lib/utils/models";
-	import { base } from "$app/paths";
 	import { useSettingsStore } from "$lib/stores/settings";
 	import JSON5 from "json5";
 

@@ -12,6 +12,8 @@ const allowedUserEmails = z
 	.default([])
 	.parse(JSON5.parse(ALLOWED_USER_EMAILS));
 
+//const allowedUserEmails = ALLOWED_USER_EMAILS;
+
 export async function load({ url, locals, cookies, request, getClientAddress }) {
 	const { error: errorName, error_description: errorDescription } = z
 		.object({

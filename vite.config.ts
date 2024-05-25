@@ -3,15 +3,16 @@ import { defineConfig, type PluginOption } from "vite";
 import Icons from "unplugin-icons/vite";
 import { promises } from "fs";
 
-// used to load fonts server side for thumbnail generation
+// Plugin para cargar archivos TTF como ArrayBuffer
 function loadTTFAsArrayBuffer(): PluginOption {
 	return {
 		name: "load-ttf-as-array-buffer",
 		async transform(_src, id) {
 			if (id.endsWith(".ttf")) {
-				return `export default new Uint8Array([
-			${new Uint8Array(await promises.readFile(id))}
-		  ]).buffer`;
+				const buffer = await promises.readFile(id);
+				return `export default new Uint8Array([${Array.from(
+					new Uint8Array(buffer)
+				).toString()}]).buffer`;
 			}
 		},
 	};
@@ -27,5 +28,11 @@ export default defineConfig({
 	],
 	optimizeDeps: {
 		include: ["browser-image-resizer"],
+	},
+	build: {
+		outDir: "public", // Especifica el directorio de salida como 'public'
+		rollupOptions: {
+			external: ["sharp"],
+		},
 	},
 });
