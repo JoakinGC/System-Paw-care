@@ -1,111 +1,99 @@
-import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import './sliderCita.css';
-import { useAppDispatch, useAppSelector } from "app/config/store";
-import { getEntities } from "app/entities/mascota/mascota.reducer";
-import { IMascota } from "app/shared/model/mascota.model";
-import axios from "axios";
-import { getEntity } from "app/entities/dueno/dueno.reducer";
-import { IDueno } from "app/shared/model/dueno.model";
+import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities } from 'app/entities/mascota/mascota.reducer';
+import { IMascota } from 'app/shared/model/mascota.model';
+import axios from 'axios';
+import { getEntity } from 'app/entities/dueno/dueno.reducer';
+import { IDueno } from 'app/shared/model/dueno.model';
 
-const CardCita = ({ id,fecha, hora, mascotas, motivo,classname }) => {
-    const dispatch = useAppDispatch();
-    const mascotaList = useAppSelector(state => state.mascota.entities);
-    const [mascotasDeLaCita, setMascotasDeLaCita] = useState<IMascota[]>([]);
-    const [imageList, setImageList] = useState<string[]>([]);
-    const [dueno,setDueno] = useState<IDueno|null>(null);
+interface CardCitaProps {
+    id?: number;
+    fecha?: string;
+    hora?: string;
+    mascotas?: IMascota[];
+    motivo?: string;
+    classname?: string;
+  }
+  
 
-    useEffect(() => {
-        dispatch(getEntities({ page: 0, size: 999, sort: `id,asc` }))
-    }, []);
-    console.log(fecha);
-    console.log(hora);
-    
-    console.log("Mascotas actuales ",mascotas);
-    
+const CardCita: React.FC<CardCitaProps> = ({ id, fecha, hora, mascotas, motivo, classname }) => {
+  const dispatch = useAppDispatch();
+  const mascotaList = useAppSelector(state => state.mascota.entities);
+  const [mascotasDeLaCita, setMascotasDeLaCita] = useState<IMascota[]>([]);
+  const [imageList, setImageList] = useState<string[]>([]);
+  const [dueno, setDueno] = useState<IDueno | null>(null);
 
-    useEffect(() => {
-        if (mascotaList && mascotaList.length > 0) {
-            const currentMascotasDeLaCita = mascotaList.filter(mascota => 
-                mascota.citas && 
-                mascota.citas.some(cita => cita.id === id)
-            );
-            setMascotasDeLaCita(currentMascotasDeLaCita);
-        }
-    }, [mascotaList, mascotas]);
+  useEffect(() => {
+    dispatch(getEntities({ page: 0, size: 999, sort: 'id,asc' }));
+  }, [dispatch]);
 
-    useEffect(() => {
-        const fetchImages = async () => {
-            if (mascotasDeLaCita && mascotasDeLaCita.length > 0) {
-                const currentDueno = ((await dispatch(getEntity(mascotasDeLaCita[0].dueno.id))).payload as any).data;
-                setDueno(currentDueno)
-                console.log((currentDueno));
-                
+  useEffect(() => {
+    if (mascotaList && mascotaList.length > 0) {
+      const currentMascotasDeLaCita = mascotaList.filter(mascota => 
+        mascota.citas && mascota.citas.some(cita => cita.id === id)
+      );
+      setMascotasDeLaCita(currentMascotasDeLaCita);
+    }
+  }, [mascotaList, mascotas]);
 
-                const listImage: string[] = await Promise.all(
-                    mascotasDeLaCita.map(async (mascota) => {
-                        try {
-                            const response = await axios.get(`http://localhost:9000/api/images/${mascota.foto}`, {
-                                responseType: 'arraybuffer'
-                            });
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (mascotasDeLaCita && mascotasDeLaCita.length > 0) {
+        const currentDueno = ((await dispatch(getEntity(mascotasDeLaCita[0].dueno.id))).payload as any).data;
+        setDueno(currentDueno);
 
-                            if (response.status !== 200) {
-                                throw new Error('Error al obtener la imagen');
-                            }
+        const listImage: string[] = await Promise.all(
+          mascotasDeLaCita.map(async (mascota) => {
+            try {
+              const response = await axios.get(`http://localhost:9000/api/images/${mascota.foto}`, {
+                responseType: 'arraybuffer'
+              });
 
-                            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-                            const imageUrl = URL.createObjectURL(blob);
+              if (response.status !== 200) {
+                throw new Error('Error al obtener la imagen');
+              }
 
-                            return imageUrl;
-                        } catch (error) {
-                            console.error('Error:', error);
-                            return null;
-                        }
-                    })
-                );
-                setImageList(listImage);
+              const blob = new Blob([response.data], { type: response.headers['content-type'] });
+              const imageUrl = URL.createObjectURL(blob);
+
+              return imageUrl;
+            } catch (error) {
+              console.error('Error:', error);
+              return null;
             }
-        }
-        fetchImages();
-    }, [mascotasDeLaCita]);
+          })
+        );
+        setImageList(listImage);
+      }
+    };
+    fetchImages();
+  }, [mascotasDeLaCita, dispatch]);
 
-    return (
-        <div className={`cita-card-container ${classname}`}>
-            <div className="cita-head">
-                <span className="cita-date">
-                    <div className="cita-time">
-                        <FontAwesomeIcon icon={faClock} />
-                        {hora && hora}
-                    </div>
-                    <p>{fecha && fecha}</p>
-                </span>
-                <div className="cita-head-body">
-                    <h3>Cita</h3>
-                    <p>{motivo && motivo}</p>
-                </div>
-            </div>
-            <p className="cita-motivo">{dueno&&dueno.nombre} viene</p>
-            {(mascotasDeLaCita && mascotasDeLaCita.length > 0) ? (
-                    <div className="body-card-cita">
-                        {imageList.slice(0, 2).map((imageUrl, i) => (
-                            <div key={i} className="container-animal-card-cita">
-                                <img src={imageUrl} alt="imagen de mascota" />
-                                <p>{mascotasDeLaCita[i].nIdentificacionCarnet}</p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="body-card-cita">
-                        <div className="container-animal-card-cita">
-                         <img src="../../../content/images/cat.jpg" alt="imagen de mascota" />
-                         <p>Nueva mascota</p>
-                    </div>
-                </div>
-            )}
-
+  return (
+    <div className={`card ${classname}`}>
+      <div className="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <FontAwesomeIcon icon={faClock} /> {hora}
         </div>
-    )
-}
+        <div>{fecha}</div>
+      </div>
+      <div className="card-body">
+        <h5 className="card-title text-center">Cita</h5>
+        <p className="card-text text-center">{motivo}</p>
+        <p className="card-text text-center">{dueno && dueno.nombre} viene con:</p>
+        <div className="d-flex">
+          {imageList.slice(0, 2).map((imageUrl, i) => (
+            <div key={i} className="mr-2">
+              <img style={{width:40,height:40}} src={imageUrl} alt="imagen de mascota" className="img-fluid rounded" />
+              <p className='text-center'>{mascotasDeLaCita[i].nIdentificacionCarnet}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default CardCita;
