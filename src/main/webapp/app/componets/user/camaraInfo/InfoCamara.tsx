@@ -23,20 +23,20 @@ const InfoCamara = () => {
       </Button>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleShowModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Más información sobre tu mejor amigo</Modal.Title>
+          <Modal.Title>Seleccione el tipo de cámara</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Aquí puedes agregar más información sobre tu mejor amigo y fortalecer vuestro vínculo.
+          <div className="d-flex justify-content-around">
+            <Link to={`/camaraInfo/camara`} className="btn btn-primary">Ir a la cámara</Link>
+            <Link to="/camaraInfo/camaraAnimal">
+              <Button variant="warning" onClick={handleCloseModal}>
+                Animal
+              </Button>
+            </Link>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cerrar
-          </Button>
-          {/* Enlace dentro del modal */}
-          <Link to={`/camaraInfo/camara`} className="btn btn-primary">Ir a la cámara</Link>
-        </Modal.Footer>
       </Modal>
     </div>
   );

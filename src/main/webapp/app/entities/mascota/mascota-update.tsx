@@ -41,7 +41,7 @@ export const MascotaUpdate = () => {
   
 
   const handleClose = () => {
-   // navigate('/' + location.search);
+   navigate('/' + location.search);
   };
 
   useEffect(() => {
@@ -72,10 +72,6 @@ export const MascotaUpdate = () => {
     if (values.nIdentificacionCarnet !== undefined && typeof values.nIdentificacionCarnet !== 'number' &&values.nIdentificacionCarnet) {
       values.nIdentificacionCarnet = Number(values.nIdentificacionCarnet);
     }
-    
-
-    
-    
     
     const foto = mascotaEntity.foto;
     console.log(mascotaEntity.foto);
@@ -232,7 +228,7 @@ export const MascotaUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/mascotasUser" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/mascotasVeterian" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">

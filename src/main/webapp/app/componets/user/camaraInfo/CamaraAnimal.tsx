@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import { getCatBreedInfo,getDogBreedInfo, usePredictionsAnimal, usePredictionsBreedCat, usePredictionsBreedDog, usePredictionsDogsAndCats } from "app/shared/util/usePredictions";
+import { usePredictionsAnimal } from "app/shared/util/usePredictions";
 import { getEntities as getEnfermedads } from '../../../entities/enfermedad/enfermedad.reducer';
 import { useAppDispatch, useAppSelector } from "app/config/store";
 import { getEntities } from "app/entities/raza/raza.reducer";
-
 
 const CamaraAnimal = () => {
   const dispatch = useAppDispatch();
@@ -12,32 +11,28 @@ const CamaraAnimal = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const otroCanvasRef = useRef(null);
-  const [result, setResult] = useState<any>({"razaEncontrada":null});
+  const [result, setResult] = useState<any>(null);
   const [facingMode, setFacingMode] = useState("user");
   const [stream, setStream] = useState(null);
-  const enfermedades =  useAppSelector(state => state.enfermedad.entities)
-  const razas =  useAppSelector(state => state.raza.entities)
+  const enfermedades = useAppSelector(state => state.enfermedad.entities);
+  const razas = useAppSelector(state => state.raza.entities);
 
   useEffect(() => {
     const cargarModeloInterno = async () => {
-      console.log("Cargando modelo...");
       try {
         const modeloCargado = await tf.loadLayersModel("model.json");
         setModelo(modeloCargado);
-        console.log("Modelo cargado");
       } catch (error) {
         console.error("Error al cargar el modelo:", error);
       }
     };
 
     cargarModeloInterno();
-
-    return () => {};
   }, []);
 
   useEffect(() => {
-    dispatch(getEnfermedads({page:0,size:999,sort:`id,asc`}))
-    dispatch(getEntities({page:0,size:999,sort:`id,asc`}))
+    dispatch(getEnfermedads({ page: 0, size: 999, sort: `id,asc` }));
+    dispatch(getEntities({ page: 0, size: 999, sort: `id,asc` }));
     const mostrarCamara = async () => {
       try {
         const newStream = await navigator.mediaDevices.getUserMedia({
@@ -62,7 +57,7 @@ const CamaraAnimal = () => {
 
   useEffect(() => {
     if (!canvasRef.current || !videoRef.current) return;
-  
+
     const procesarCamara = () => {
       const ctx = canvasRef.current.getContext("2d");
       ctx.drawImage(
@@ -73,73 +68,32 @@ const CamaraAnimal = () => {
         canvasRef.current.height
       );
     };
-  
+
     const intervalId = setInterval(procesarCamara, 20);
-  
+
     return () => {
-      clearInterval(intervalId); // Limpiar el intervalo al desmontar el componente
+      clearInterval(intervalId);
     };
   }, [canvasRef, videoRef]);
-  
 
-  
-    const predecir = async () => {
-      console.log(razas);
-      console.log(enfermedades);
-      
-      const enfermedadesYRazas = razas.map(raza => {
-      const enfermedadesDeLaRaza = enfermedades.filter(enfermedad => enfermedad.razas.some(r => r.id === raza.id));
-        return {
-          ...raza,
-          enfermedades: enfermedadesDeLaRaza
-        };
-      });
-      console.log(enfermedadesYRazas);
-      
+  const predecir = async () => {
+    if (modelo != null && canvasRef.current && otroCanvasRef.current) {
+      resample_single(
+        canvasRef.current,
+        100,
+        100,
+        otroCanvasRef.current
+      );
 
-      if (modelo != null && canvasRef.current && otroCanvasRef.current) {
-        resample_single(
-          canvasRef.current,
-          100,
-          100,
-          otroCanvasRef.current
-        );
+      const image = canvasRef.current.toDataURL('image/jpeg');
+      const resultBAnimal:any = await usePredictionsAnimal(image);
+      setResult(resultBAnimal)
+    }
+  };
 
-        const image = canvasRef.current.toDataURL('image/jpeg');
-        const ctx2 = otroCanvasRef.current.getContext("2d");
-        const imgData = ctx2.getImageData(0, 0, 100, 100);
-        let arr = [];
-        let arr100 = [];
-
-        for (let p = 0; p < imgData.data.length; p += 4) {
-          const rojo = imgData.data[p] / 255;
-          const verde = imgData.data[p + 1] / 255;
-          const azul = imgData.data[p + 2] / 255;
-
-          const gris = (rojo + verde + azul) / 3;
-
-          arr100.push([gris]);
-          if (arr100.length === 100) {
-            arr.push(arr100);
-            arr100 = [];
-          }
-        }
-
-        arr = [arr];
-
-        const tensor = tf.tensor4d(arr);
-
-        const resultBAnimal = await usePredictionsAnimal(image);
-        console.log(resultBAnimal);
-
-        
-      }
-    };
-
-    
-    const handlePredictButtonClick = () => {
-      predecir();
-    };
+  const handlePredictButtonClick = () => {
+    predecir();
+  };
 
   const resample_single = (canvas, width, height, resizeCanvas) => {
     const widthSource = canvas.width;
@@ -213,7 +167,7 @@ const CamaraAnimal = () => {
 
     ctx2.putImageData(img2, 0, 0);
   };
-  
+
   const cambiarCamara = () => {
     if (videoRef.current.srcObject) {
       videoRef.current.srcObject.getTracks().forEach((track) => {
@@ -229,46 +183,32 @@ const CamaraAnimal = () => {
       .then((newStream) => {
         setStream(newStream);
         videoRef.current.srcObject = newStream;
+        setFacingMode(facingMode === "user" ? "environment" : "user");
       })
       .catch((error) => {
-        console.log("Oops, hubo un error", error);
+        console.error("No se pudo utilizar la cámara:", error);
       });
   };
-  
+
   return (
-    <div>
-      <div className="b-example-divider"></div>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-12 col-md-4 offset-md-4 text-center">
-            <video ref={videoRef} id="video" playsInline autoPlay style={{ width: "1px" }} />
-            <button className="btn btn-primary mb-2" id="cambiar-camara" onClick={cambiarCamara}>Cambiar cámara</button>
-            <button className="btn btn-primary mb-2" id="predecir" onClick={handlePredictButtonClick}>Predecir</button>
-            <canvas ref={canvasRef} id="canvas" width="400" height="400" style={{ maxWidth: "100%" }}></canvas>
-            <canvas ref={otroCanvasRef} id="otrocanvas" width="150" height="150" style={{ display: "none" }}></canvas>
-            <div id="resultado">
-              {result && result.especie}<br/>
-              {result && result.raza}<br/>
-              {(result.razaEncontrada && result.razaEncontrada.enfermedades) ? 
-                result.razaEncontrada.enfermedades.map((e, index) => 
-                  <p key={index}>{e.nombre}: {e.descripcion}</p>
-                  )  
-                : <p>{result.razaEncontrada}</p>
-                }
-            <br/>
-            Grupo: {result.informacion && result.informacion.breed_group}   <br/>
-            Caracteristicas: {result.informacion && result.informacion.temperament}
-            {result.informacionCat && result.informacionCat.temperament}
-            <br/>
-            weight: {result.informacion && result.informacion.weight.imperial}, 
-            height: {result.informacion && result.informacion.height.imperial}<br></br>
-            Life Span: {result.informacionCat && result.informacionCat.life_span}<br/>
-            Description: {result.informacionCat && result.informacionCat.description}<br/>
-            Origin: {result.informacionCat && result.informacionCat.origin}<br/>
-            </div>
-          </div>
-        </div>
+    <div className="container">
+      <h1 className="text-center">Predicción de Raza Animal</h1>
+      <div className="video-container text-center">
+        <video ref={videoRef} autoPlay playsInline muted width="400" height="400"></video>
+        <button className="btn btn-secondary" onClick={cambiarCamara}>Cambiar Cámara</button>
       </div>
+      <div className="canvas-container text-center">
+        <canvas ref={canvasRef} width="400" height="400" style={{ display: 'none' }}></canvas>
+        <canvas ref={otroCanvasRef} width="100" height="100" style={{ display: 'none' }}></canvas>
+      </div>
+      <div className="text-center">
+        <button className="btn btn-primary" onClick={handlePredictButtonClick}>Predecir</button>
+      </div>
+      {result && (
+        <div className="result-container text-center">
+          <h2>Resultado: {result}</h2>
+        </div>
+      )}
     </div>
   );
 };

@@ -12,7 +12,7 @@ import { getAccount } from 'app/shared/reducers/authentication';
 import { IDatelleCompra } from 'app/shared/model/datelle-compra.model';
 import ProductDetails from './ProductDetails';
 import "./productsDetails.css";
-import { IProducto } from 'app/shared/model/producto.model';
+
 
 interface PropsProduco {
   productos: any;
@@ -169,7 +169,7 @@ const FormCompra = ({ productos, isForm }: PropsProduco) => {
         <div className="d-flex justify-content-center mt-4"> {/* Clases de Bootstrap para centrar y añadir margen superior */}
           <Button type="submit" className="me-2">Compra</Button> {/* Clase me-2 para añadir margen a la derecha */}
           <Button onClick={() => isForm(false)}>Volver</Button>
-          <PayPalScriptProvider options={{ clientId: 'ASGgebZcJw9pRVtxCGTGJFgp71FbyiY-WSSANZlkrvfmZHW6IP28wEmRknua-9hU_nvQlA84BGPTGg0D' }}>
+          <PayPalScriptProvider options={{ clientId: 'ASGgebZ+cJw9pRVtxCGTGJFgp71FbyiY-WSSANZlkrvfmZHW6IP28wEmRknua-9hU_nvQlA84BGPTGg0D' }}>
       <PayPalButtons onApprove={(data, actions) => handleApprove(data, actions, totalProductos)} />
       </PayPalScriptProvider>
         </div>
