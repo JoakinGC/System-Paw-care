@@ -28,9 +28,9 @@ const CardProduct = ({ id, cardTitle, cardText, link, quantity, onQuantityChange
             <div className='card'>
                 <img src={link} className="card-img-top" alt="..." />
                 <div className="card-body">
-                    <Link to={`/datelle-compra/${id}`}>
+                    
                         <h5 className="card-text">{cardText}</h5>
-                    </Link>
+                   
                     <div className="d-flex justify-content-between align-items-center">
                         <p className="card-title">{cardTitle}€</p>
                         <div className="d-flex align-items-center">

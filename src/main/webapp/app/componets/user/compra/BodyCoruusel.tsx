@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 import { Translate, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+import {  ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities } from 'app/entities/producto/producto.reducer';
@@ -27,8 +27,6 @@ function checkNonZeroValues(obj) {
 }
 
 export const BodyCorousel = ({isForm,setProductos}:PropsBodyCorusel) => {
-
-
 
   const dispatch = useAppDispatch();
   const pageLocation = useLocation();
@@ -89,7 +87,7 @@ export const BodyCorousel = ({isForm,setProductos}:PropsBodyCorusel) => {
             ...prevProductQuantities,
             [productId]: quantity,
         };
-        setProductos(updatedProductQuantities); // Actualiza el estado y utiliza la versión actualizada
+        setProductos(updatedProductQuantities); 
         return updatedProductQuantities;
     });
 };
@@ -112,16 +110,13 @@ export const BodyCorousel = ({isForm,setProductos}:PropsBodyCorusel) => {
       <div className="card-container">
         {productoList && productoList.length > 0 && productoList.map((producto, index) => (
           <div style={{ display: 'flex', flexDirection: 'column' }} key={index}>
-            {/* Pasar la cantidad seleccionada como prop al componente CardProduct */}
             <CardProduct
               key={index}
               id={producto.id}
               cardText={producto.descripcion}
               cardTitle={producto.nombre}
               link={producto.ruta}
-              // Pasa la cantidad almacenada en el estado como prop
               quantity={productQuantities[producto.id] || 0}
-              // Pasa la función de cambio de cantidad como prop
               onQuantityChange={(quantity) => handleQuantityChange(producto.id, quantity)}
             />
           </div>

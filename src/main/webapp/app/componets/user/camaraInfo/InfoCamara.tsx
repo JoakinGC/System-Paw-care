@@ -25,11 +25,11 @@ const InfoCamara = () => {
       {/* Modal */}
       <Modal show={showModal} onHide={handleShowModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Seleccione el tipo de cámara</Modal.Title>
+          <Modal.Title>Seleccione la opción que quieras:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-around">
-            <Link to={`/camaraInfo/camara`} className="btn btn-primary">Ir a la cámara</Link>
+            <Link to={`/camaraInfo/camara`} className="btn btn-primary">Gato/Perro</Link>
             <Link to="/camaraInfo/camaraAnimal">
               <Button variant="warning" onClick={handleCloseModal}>
                 Animal

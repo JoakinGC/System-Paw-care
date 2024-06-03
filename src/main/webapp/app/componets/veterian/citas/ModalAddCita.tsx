@@ -9,16 +9,12 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap'; 
 import { ValidatedField, ValidatedForm, isEmail, isNumber, translate } from 'react-jhipster';
 import AddMascotaForm from './AddMascotaForm';
-import axios from 'axios';
-import { IMascota } from 'app/shared/model/mascota.model';
 import './sliderCita.css';
 import dayjs from 'dayjs';
 import { createEntity as createNewUsuario, getEntities} from 'app/entities/usuario/usuario.reducer';
 import { IUsuario } from 'app/shared/model/usuario.model';
-import { IUser } from 'app/shared/model/user.model';
 import { handleRegister, reset } from 'app/modules/account/register/register.reducer';
 import { toast } from 'react-toastify';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import CitaPDF from './PDFCita';
 
@@ -326,7 +322,7 @@ const handleNext = (values) => {
                             <ValidatedForm onSubmit={handleNext2of3}>
                             {/* Campo para ingresar el nombre del dueño */}
                             <ValidatedField
-                                label={translate('veterinarySystemApp.cita.nombreDeDueno')}
+                                label={"Nombre del dueño de la mascota"}
                                 id="nombreDeDueno"
                                 name="nombreDeDueno"
                                 data-cy="nombre"

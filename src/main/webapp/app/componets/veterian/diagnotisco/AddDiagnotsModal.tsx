@@ -322,7 +322,7 @@ const AddDiagnotsModal = ({veterinario}:
 
             {(parteForm===1)&&(
               <ValidatedForm onSubmit={onSubmitMascota}>
-                <input type='text' placeholder='coloca el nombre del medicamento aqui' 
+                <input type='text' placeholder='coloca el Nº de carnet' 
                   onChange={handleMascotaChange}
                 />
                 <ValidatedField

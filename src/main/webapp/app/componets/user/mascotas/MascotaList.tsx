@@ -9,14 +9,11 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { AppDispatch, useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUsuarios, getEntity as getUsuario} from 'app/entities/usuario/usuario.reducer';
-import { createEntity, getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
+import {  getEntities as getMascotas} from '../../../entities/mascota/mascota.reducer';
 import CardMascota from './CardMascota';
 import { getAccount } from 'app/shared/reducers/authentication';
 import { getEntity as getDueno} from 'app/entities/dueno/dueno.reducer';
 import { IMascota } from 'app/shared/model/mascota.model';
-import axios from 'axios';
-import ImageUploadForm from 'app/entities/image/ImageUploadForm';
-import AddMascotaModal from '../../veterian/mascotas/AddMascotaModal';
 import { IDueno } from 'app/shared/model/dueno.model';
 
 
@@ -82,7 +79,7 @@ const MascotaList = () =>{
     
     return (
       <div >
-      <div>
+      <div className='text-center'>
           <h1>Tus Mascotas</h1>
       </div>
       <div className="grid-container">

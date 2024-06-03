@@ -195,7 +195,9 @@ const CamaraAnimal = () => {
       <h1 className="text-center">Predicción de Raza Animal</h1>
       <div className="video-container text-center">
         <video ref={videoRef} autoPlay playsInline muted width="400" height="400"></video>
-        <button className="btn btn-secondary" onClick={cambiarCamara}>Cambiar Cámara</button>
+        <div>
+          <button className="btn btn-secondary" onClick={cambiarCamara}>Cambiar Cámara</button>
+        </div>
       </div>
       <div className="canvas-container text-center">
         <canvas ref={canvasRef} width="400" height="400" style={{ display: 'none' }}></canvas>

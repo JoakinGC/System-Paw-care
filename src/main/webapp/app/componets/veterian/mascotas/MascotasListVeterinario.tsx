@@ -70,13 +70,14 @@ const MascotaListVeterinario = () => {
     setCurrentPage(newPage);
   };
 
-  const renderMascotaGrid = (mascotas) => {
+  const renderMascotaGrid = (mascotas,title:string) => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = mascotas.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
       <div className="row">
+        <h2>{title}</h2>
         {currentItems.map((mascota, index) => (
           <div className="col-md-4" key={index}>
             <FichaMascota
@@ -112,11 +113,11 @@ const MascotaListVeterinario = () => {
         </Collapse>
         <Button color="primary" onClick={filterMascotas}>Filtrar</Button>
       </div>
-      {renderMascotaGrid(mascotaList)}
-      {gatos.length > 0 && renderMascotaGrid(gatos)}
-      {perros.length > 0 && renderMascotaGrid(perros)}
-      {animales.length > 0 && renderMascotaGrid(animales)}
-      {razaFiltrada.length > 0 && renderMascotaGrid(razaFiltrada)}
+      {renderMascotaGrid(mascotaList,"Todos")}
+      {gatos.length > 0 && renderMascotaGrid(gatos,"Gatos")}
+      {perros.length > 0 && renderMascotaGrid(perros,"Perros")}
+      {animales.length > 0 && renderMascotaGrid(animales,"Animales")}
+      {razaFiltrada.length > 0 && renderMascotaGrid(razaFiltrada,"Razas Filtradas")}
 
       <div className="pagination">
         <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Anterior</Button>

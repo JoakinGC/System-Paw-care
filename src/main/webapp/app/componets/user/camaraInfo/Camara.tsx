@@ -318,8 +318,10 @@ const CamaraUser = () => {
         <div className="row">
           <div className="col-12 col-md-4 offset-md-4 text-center">
             <video ref={videoRef} id="video" playsInline autoPlay style={{ width: "1px" }} />
-            <button className="btn btn-primary mb-2" id="cambiar-camara" onClick={cambiarCamara}>Cambiar cámara</button>
-            <button className="btn btn-primary mb-2" id="predecir" onClick={handlePredictButtonClick}>Predecir</button>
+            <div>
+              <button className="btn btn-primary mb-2" id="cambiar-camara" onClick={cambiarCamara}>Cambiar cámara</button>
+              <button className="btn btn-primary mb-2" id="predecir" onClick={handlePredictButtonClick}>Predecir</button>
+            </div>
             <canvas ref={canvasRef} id="canvas" width="400" height="400" style={{ maxWidth: "100%" }}></canvas>
             <canvas ref={otroCanvasRef} id="otrocanvas" width="150" height="150" style={{ display: "none" }}></canvas>
             <div id="resultado">

@@ -1,18 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
+import { ValidatedField, ValidatedForm, isEmail, isNumber, translate } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getCitas } from 'app/entities/cita/cita.reducer';
-import { createEntity, getEntities as getDuenos } from 'app/entities/dueno/dueno.reducer';
+import {  getEntities as getDuenos, getEntity as getDueno, updateEntity } from 'app/entities/dueno/dueno.reducer';
 import { getEntities as getEspecies } from 'app/entities/especie/especie.reducer';
 import { getEntities as getRazas } from 'app/entities/raza/raza.reducer';
 import { IDueno } from 'app/shared/model/dueno.model';
-import { createEntity as createMascota, getMascota, getEntities as getMascotas, reset, updateEntity} from '../../../entities/mascota/mascota.reducer';
+import { createEntity as createMascota, getMascota, getEntities as getMascotas, reset, updateEntity as updateMascota} from '../../../entities/mascota/mascota.reducer';
 import { useNavigate, useParams } from 'react-router';
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { IMascota } from 'app/shared/model/mascota.model';
 import { toast } from 'react-toastify';
+import { handleRegister } from 'app/modules/account/register/register.reducer';
+import { getEntities  as getUsuarios} from 'app/entities/usuario/usuario.reducer';
+import { IUsuario } from 'app/shared/model/usuario.model';
 
 const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
     const dispatch = useAppDispatch();
@@ -29,6 +32,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
     const updateSuccess = useAppSelector(state => state.mascota.updateSuccess);
     const duenoList = useAppSelector(state => state.dueno.entities);
     const [newMascota,setNewMascota] = useState<IMascota>({})
+    const currentLocale = useAppSelector(state => state.locale.currentLocale);
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedDueno,setSeletedDueno] = useState<IDueno>({});
@@ -58,7 +62,6 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
         setPart(part + 1);
       };
     
-      // Función para manejar el cambio de parte hacia atrás (-1)
       const handlePrev = () => {
         setPart(part - 1);
       };
@@ -80,7 +83,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
             setSeletedDueno(dueñoEncontrado);
             handleNext(); 
         } else {
-            alert("Ese dueño NO existe")
+            toast.error("Ese dueño NO existe")
         }
     }
    
@@ -116,16 +119,49 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
         if(values.nombre.length===0)return
         if(!values.telefono) return 
         if(values.telefono.length===0)return
+        if(!values.email) return 
+        if(values.email.length===0)return
 
-        const newDueno = {
+
+        const newUser = await (await dispatch(handleRegister({
+            login: values.nombre,
+            email: values.email,
+            password: '1234',
+            langKey: currentLocale,
+          })));
+        
+          const allusuarios = ((await dispatch(getUsuarios({ page: 0, size: 999, sort: 'id,asc' }))).payload as any).data;
+      
+          const promises = allusuarios.map(async (u: IUsuario) => {
+              if (u.dueno && u.dueno.id) {
+                  const response = await dispatch(getDueno(u.dueno.id));
+                  return (response.payload as any).data;
+              }
+              return null;
+          });
+      
+          const duenoActual = await Promise.all(promises);
+          console.log(duenoActual);
+          
+          let duenoFiltrado = duenoActual.filter((dueno: IDueno) => {
+            return dueno !== null && dueno.nombre.toLowerCase() === values.nombre.toLowerCase();
+        });
+        
+        console.log(duenoFiltrado);
+        
+         
+          const newduenoFiltrado:IDueno = {
+            'id':duenoFiltrado[0].id,
+            'nombre':duenoFiltrado[0].nombre,
+            'telefono':values.telefono,
             'apellido':values.apellido,
             'direccion':values.direccion,
-            'nombre':values.nombre,
-            'telefono':values.telefono,
-        }
+          }
 
-        const duenoEntity = ((await dispatch(createEntity(newDueno))).payload as any).data;
-        setSeletedDueno(duenoEntity);
+          dispatch(updateEntity(newduenoFiltrado));
+          
+        
+        setSeletedDueno(newduenoFiltrado);
         setPart(3);
     }
 
@@ -170,10 +206,10 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
           const imageUrl = response.data.url;
           console.log('URL de la imagen:', imageUrl);
           console.log('Respuesta del servidor:', response.data);
-          alert('Imagen subida con éxito.');
+          toast.success('Imagen subida con éxito.');
         } catch (error) {
           console.error('Error al subir la imagen:', error);
-          alert('Error al subir la imagen. Por favor intenta de nuevo.');
+          toast.error('Error al subir la imagen. Por favor intenta de nuevo.');
         }
         //window.location.reload()
       };
@@ -284,7 +320,7 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
                   <ValidatedForm onSubmit={handleNext2of3}>
                     {/* Campo para ingresar el nombre del dueño */}
                     <ValidatedField
-                      label={translate('veterinarySystemApp.cita.nombreDeDueno')}
+                      label={'Ingresa el nombre del dueño de la mascota'}
                       id="nombreDeDueno"
                       name="nombreDeDueno"
                       data-cy="nombre"
@@ -306,56 +342,69 @@ const AddMascotaModal = ({ isOpen, toggle }: { isOpen: any; toggle: any;}) => {
     
               {part === 4 && (
                 <>
-                  <ValidatedForm onSubmit={formAddNewDueno}>   
-                    <ValidatedField
-                      label={translate('veterinarySystemApp.dueno.nombre')}
-                      id="dueno-nombre"
-                      name="nombre"
-                      data-cy="nombre"
-                      type="text"
-                      required={true}
-                      validate={{
-                        maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
-                      }}
-                    />
-                    <ValidatedField
-                      label={translate('veterinarySystemApp.dueno.apellido')}
-                      id="dueno-apellido"
-                      name="apellido"
-                      data-cy="apellido"
-                      type="text"
-                      required={true}
-                      validate={{
-                        maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
-                      }}
-                    />
-                    <ValidatedField
-                      label={translate('veterinarySystemApp.dueno.direccion')}
-                      id="dueno-direccion"
-                      name="direccion"
-                      data-cy="direccion"
-                      type="text"
-                      required={true}
-                      validate={{
-                        maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
-                      }}
-                    />
-                    <ValidatedField
-                      label={translate('veterinarySystemApp.dueno.telefono')}
-                      id="dueno-telefono"
-                      name="telefono"
-                      data-cy="telefono"
-                      type="text"
-                      required={true}
-                      validate={{
-                        maxLength: { value: 9, message: translate('entity.validation.maxlength', { max: 9 }) },
-                      }}
-                    />
-                    <Button variant="primary" type="submit">
-                      Siguiente
-                    </Button>
-                  </ValidatedForm>
-                </>
+                <ValidatedForm onSubmit={formAddNewDueno}>
+                  <ValidatedField
+                    label={translate('veterinarySystemApp.dueno.nombre')}
+                    id="dueno-nombre"
+                    name="nombre"
+                    data-cy="nombre"
+                    type="text"
+                    required={true}
+                    validate={{
+                      maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
+                    }}
+                  />
+                  <ValidatedField
+                    label={translate('veterinarySystemApp.dueno.apellido')}
+                    id="dueno-apellido"
+                    name="apellido"
+                    data-cy="apellido"
+                    type="text"
+                    required={true}
+                    validate={{
+                      maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
+                    }}
+                  />
+                  <ValidatedField
+                    name="email"
+                    label={translate('global.form.email.label')}
+                    placeholder={translate('global.form.email.placeholder')}
+                    type="email"
+                    validate={{
+                      required: { value: true, message: translate('global.messages.validate.email.required') },
+                      minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
+                      maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
+                      validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
+                    }}
+                    data-cy="email"
+                  />
+                  <ValidatedField
+                    label={translate('veterinarySystemApp.dueno.direccion')}
+                    id="dueno-direccion"
+                    name="direccion"
+                    data-cy="direccion"
+                    type="text"
+                    required={true}
+                    validate={{
+                      maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
+                    }}
+                  />
+                  <ValidatedField
+                    label={translate('veterinarySystemApp.dueno.telefono')}
+                    id="dueno-telefono"
+                    name="telefono"
+                    data-cy="telefono"
+                    type="text"
+                    required={true}
+                    validate={{
+                      maxLength: { value: 9, message: translate('entity.validation.maxlength', { max: 9 }) },
+                    }}
+                  />
+                  <Button variant="primary" type="submit">
+                    Siguiente
+                  </Button>
+                </ValidatedForm>
+              </>
               )}
             </>
           )}
