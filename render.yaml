@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: veterinarysystem-app
+    env: docker
+    plan: starter
+    dockerCompose:
+      filePath: ./app.yml
+      service: app
