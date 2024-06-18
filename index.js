@@ -1,8 +1,10 @@
 import express from 'express';
 import { promises as fsPromises, readFileSync } from 'fs';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
-const PORT = 8088; // Cambiamos el puerto a 8080
+const PORT = process.env.PORT||8088; 
 let solitud = 0;
 let solitudAnimal = 0;
 let solitudRazaPerro = 0;
@@ -12,12 +14,13 @@ async function queryDogsAndCat(filename) {
 	const response = await fetch(
 		"https://api-inference.huggingface.co/models/omarques/autotrain-dogs-and-cats-1527055142",
 		{
-			headers: { Authorization: "Bearer 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" },
+			headers: { Authorization: `Bearer ${process.env.tokenHuggingface}`  },
 			method: "POST",
 			body: data,
 		}
 	);
 	const result = await response.json();
+  console.log(result);
 	return result;
 }
 
@@ -26,12 +29,13 @@ async function queryAnymalT(filename) {
   const response = await fetch(
     "https://api-inference.huggingface.co/models/victor/animals-classifier",
     {
-      headers: { Authorization: "Bearer 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" },
+      headers: { Authorization: `Bearer ${process.env.tokenHuggingface}`  },
       method: "POST",
       body: data,
     }
   );
   const result = await response.json();
+  console.log(result);
   return result;
 }
 
@@ -42,6 +46,7 @@ async function fetchResultWithRetry(filename, maxRetries = 3) {
 
     if (response.hasOwnProperty("estimated_time") && response.estimated_time > 0) {
       await new Promise(resolve => setTimeout(resolve, response.estimated_time * 1000));
+      
       return fetchResultWithRetry(filename, maxRetries - 1);
     } else {
       console.log("No hay tiempo estimado o ha terminado el proceso.");
@@ -59,12 +64,13 @@ async function queryFetchBredDog(filename) {
 	const response = await fetch(
 		"https://api-inference.huggingface.co/models/skyau/dog-breed-classifier-vit",
 		{
-			headers: { Authorization: "Bearer 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" },
+			headers: { Authorization: `Bearer ${process.env.tokenHuggingface}`  },
 			method: "POST",
 			body: data,
 		}
 	);
 	const result = await response.json();
+  console.log(result);
 	return result;
 }
 
@@ -74,12 +80,13 @@ async function queryFetchBreedCat(filename) {
 	const response = await fetch(
 		"https://api-inference.huggingface.co/models/dima806/67_cat_breeds_image_detection",
 		{
-			headers: { Authorization: "Bearer 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" },
+			headers: { Authorization: `Bearer ${process.env.tokenHuggingface}`  },
 			method: "POST",
 			body: data,
 		}
 	);
 	const result = await response.json();
+  console.log(result);
 	return result;
 }
 
@@ -270,3 +277,6 @@ function AllClean(){
 
 
 setInterval(AllClean, 120000);
+
+
+
