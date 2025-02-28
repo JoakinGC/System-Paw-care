@@ -41,7 +41,7 @@ Clone the repository and navigate to the project folder:
 
 ```sh
 git clone https://github.com/JoakinGC/System-Paw-care.git
-cd veterinarySystem
+cd .\System-Paw-care\
 ```
 
 ### **Start the Backend**
