@@ -40,7 +40,7 @@ Before starting, make sure you have the following installed:
 Clone the repository and navigate to the project folder:
 
 ```sh
-git clone https://github.com/user/veterinarySystem.git
+git clone https://github.com/JoakinGC/System-Paw-care.git
 cd veterinarySystem
 ```
 
