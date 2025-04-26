@@ -151,3 +151,8 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
+
+##########
+#Properties
+###########
+/src/resources/config/application-dev.yml

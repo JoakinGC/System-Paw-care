@@ -56,8 +56,8 @@ public class ImageController {
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
             // Obtener el archivo del directorio de subida
-            File file = new File(UPLOAD_DIR + "/" + fileName);
-            byte[] imageBytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
+            File file = new File(UPLOAD_DIR, fileName);
+            byte[] imageBytes = Files.readAllBytes(file.toPath());
             return ResponseEntity.ok().body(imageBytes);
         } catch (IOException e) {
             System.out.println("Error image: " +e.getMessage());
