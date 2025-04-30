@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
   render() {
     const { error, errorInfo } = this.state;
     if (errorInfo) {
-      const errorDetails = DEVELOPMENT ? (
+      const errorDetails = import.meta.env.DEV ? (
         <details className="preserve-space">
           {error && error.toString()}
           <br />

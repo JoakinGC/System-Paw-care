@@ -1,6 +1,6 @@
 /* eslint no-console: off */
 export default () => next => action => {
-  if (DEVELOPMENT) {
+  if (import.meta.env.DEV) {
     const { type, payload, meta, error } = action;
 
     console.groupCollapsed(type);

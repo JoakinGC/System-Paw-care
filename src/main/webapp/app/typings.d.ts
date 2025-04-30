@@ -1,6 +1,5 @@
 declare const VERSION: string;
-declare const SERVER_API_URL: string;
-declare const DEVELOPMENT: string;
+declare const __SERVER_API_URL__: string;
 declare const I18N_HASH: string;
 
 declare module '*.json' {

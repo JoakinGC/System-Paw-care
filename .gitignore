@@ -156,3 +156,7 @@ Desktop.ini
 #Properties
 ###########
 /src/main/resources/config/application-dev.yml
+
+### Env
+.env.development
+.env.production

@@ -14,7 +14,7 @@ export default () => next => action => {
    * The error middleware serves to log error messages from dispatch
    * It need not run in production
    */
-  if (DEVELOPMENT) {
+  if (import.meta.env.DEV) {
     const { error } = action;
     if (error) {
       console.error(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message)}.`);

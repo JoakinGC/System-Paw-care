@@ -3,7 +3,7 @@ import { Storage } from 'react-jhipster';
 
 const TIMEOUT = 1 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
-axios.defaults.baseURL = SERVER_API_URL;
+axios.defaults.baseURL = __SERVER_API_URL__;
 
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {

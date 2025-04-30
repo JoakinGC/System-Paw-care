@@ -12,7 +12,7 @@
     <link rel="manifest" href="manifest.webapp" />
     <link rel="stylesheet" href="content/css/loading.css" />
     <script src="https://www.paypal.com/sdk/js?client-id=ASGgebZcJw9pRVtxCGTGJFgp71FbyiY-WSSANZlkrvfmZHW6IP28wEmRknua-9hU_nvQlA84BGPTGg0D"></script>
-
+    <base href="/" />
     <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
   </head>
   <body>
@@ -105,6 +105,7 @@
     <noscript>
       <h1>You must enable JavaScript to view this page.</h1>
     </noscript>
+
     <script type="text/javascript">
       // show an error message if the app loading takes more than 4 sec
       window.onload = function () {
@@ -118,5 +119,6 @@
       }
     </script>
 
+    <script type="module" src="/app/index.tsx"></script>
   </body>
 </html>

@@ -46,7 +46,15 @@ public class SecurityConfiguration {
             .headers(
                 headers ->
                     headers
-                        .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                        .contentSecurityPolicy(csp -> csp.policyDirectives(
+                            "default-src 'self'; " +
+                            "connect-src 'self'; " +
+                            "img-src 'self' data: https://www.paypalobjects.com https://www.paypal.com; " +
+                            "font-src 'self' data:; " +
+                            "style-src 'self' 'unsafe-inline'; " +
+                            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.paypal.com; " +
+                            "object-src 'none'; "
+                            ))
                         .frameOptions(FrameOptionsConfig::sameOrigin)
                         .referrerPolicy(
                             referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
@@ -63,10 +71,10 @@ public class SecurityConfiguration {
                     // prettier-ignore
                 authz
                     .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/**")).permitAll()
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
