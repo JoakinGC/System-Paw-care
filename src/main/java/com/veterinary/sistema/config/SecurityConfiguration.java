@@ -47,14 +47,14 @@ public class SecurityConfiguration {
                 headers ->
                     headers
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
-                            "default-src 'self'; " +
-                            "connect-src 'self'; " +
-                            "img-src 'self' data: https://www.paypalobjects.com https://www.paypal.com; " +
-                            "font-src 'self' data:; " +
-                            "style-src 'self' 'unsafe-inline'; " +
-                            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.paypal.com; " +
-                            "object-src 'none'; "
-                            ))
+                                "default-src 'self'; " +
+                                "script-src  'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.paypal.com; " +
+                                "style-src   'self' 'unsafe-inline'; " +
+                                "img-src     'self' data: https://www.paypalobjects.com https://www.paypal.com; " +
+                                "connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com; " +
+                                "font-src    'self' data:; " +
+                                "object-src  'none'; "  
+                        ))
                         .frameOptions(FrameOptionsConfig::sameOrigin)
                         .referrerPolicy(
                             referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)

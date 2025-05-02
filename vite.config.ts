@@ -6,6 +6,8 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 import type { Plugin } from 'rollup';
+import i18nMergePlugin from './src/main/webapp/app/config/i18nMergePlugin';
+
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -13,12 +15,13 @@ export default defineConfig(({ mode }) => {
 
   return {
     root: resolve(__dirname, 'src/main/webapp'),
-
-    plugins: [react(), tsconfigPaths()],
+    
+    plugins: [react(), tsconfigPaths(),i18nMergePlugin(), ],
 
     define: {
       __SERVER_API_URL__: JSON.stringify(SERVER_API_URL),
       process: { env: {} },          // tiny shim
+      I18N_HASH: JSON.stringify(Date.now()),
     },
 
     resolve: {
