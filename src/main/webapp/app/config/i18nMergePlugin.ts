@@ -1,12 +1,12 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { resolve, dirname }       from 'node:path';
-import { fileURLToPath }          from 'node:url';
-import type { Plugin }            from 'vite';
+import { resolve, dirname }         from 'node:path';
+import { fileURLToPath }            from 'node:url';
+import type { Plugin, ViteDevServer } from 'vite';
 
 function mergeLang(dir: string) {
   const merged: Record<string, unknown> = {};
-  for (const file of readdirSync(dir).filter(f => f.endsWith('.json'))) {
-    Object.assign(merged, JSON.parse(readFileSync(resolve(dir, file), 'utf8')));
+  for (const f of readdirSync(dir).filter(f => f.endsWith('.json'))) {
+    Object.assign(merged, JSON.parse(readFileSync(resolve(dir, f), 'utf8')));
   }
   return JSON.stringify(merged);
 }
@@ -18,8 +18,25 @@ export default function jhipsterI18nMerge(): Plugin {
 
   return {
     name: 'jhipster-i18n-merge',
+
+    /* --- DEV ---------------------------------------------------------------- */
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use('/i18n', (req, res, next) => {
+        const m = req.url?.match(/^\/([a-z-]+)\.json/);
+        if (!m) return next();
+
+        try {
+          const json = mergeLang(resolve(base, m[1]));
+          res.setHeader('Content-Type', 'application/json');
+          res.end(json);
+        } catch (e) {
+          next(e);
+        }
+      });
+    },
+
     resolveId(id) {
-      if (id.startsWith('/i18n/') && id.endsWith('.json')) return id; 
+      if (id.startsWith('/i18n/') && id.endsWith('.json')) return id;
     },
     load(id) {
       if (id.startsWith('/i18n/') && id.endsWith('.json')) {
@@ -30,11 +47,10 @@ export default function jhipsterI18nMerge(): Plugin {
 
     generateBundle() {
       for (const lang of readdirSync(base)) {
-        const json = mergeLang(resolve(base, lang));
         this.emitFile({
           type: 'asset',
           fileName: `i18n/${lang}.json`,
-          source: json,
+          source: mergeLang(resolve(base, lang)),
         });
       }
     },
